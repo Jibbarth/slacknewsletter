@@ -1,0 +1,45 @@
+parameters:
+    exclude_dir: &exclude_dir
+        - 'src/vendor'
+        - 'src/var'
+        - 'src/bin'
+        - 'src/vendor'
+        - 'vendor'
+    ascii:
+        failed: ~
+        succeeded: ~
+    tasks:
+        composer:
+            file: ./src/composer.json
+        git_blacklist:
+            keywords:
+                - "die("
+                - "var_dump("
+                - "|var_dump"
+                - "dump("
+                - "exit;"
+                - "exit("
+                - "console.log("
+            triggered_by: [php, js, twig]
+        jsonlint: ~
+        phpcs:
+            standard: PSR2
+            show_warnings: true
+            triggered_by: [php]
+        phpcpd:
+            directory: 'src/src'
+            names_exclude: []
+            fuzzy: false
+            min_lines: 5
+            min_tokens: 70
+            triggered_by: ['php']
+        phplint:
+            exclude: *exclude_dir
+            triggered_by: ['php']
+        phpmd:
+            exclude: *exclude_dir
+            ruleset: ['cleancode', 'codesize', 'naming']
+            triggered_by: [php]
+        securitychecker:
+            lockfile: ./src/composer.lock
+        yamllint: ~

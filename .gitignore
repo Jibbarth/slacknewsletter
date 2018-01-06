@@ -18,3 +18,4 @@ src/vendor/
 src/.phpunit
 src/phpunit.xml
 ###< symfony/phpunit-bridge ###
+cghooks.lock

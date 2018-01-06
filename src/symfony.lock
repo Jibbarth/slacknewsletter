@@ -137,9 +137,6 @@
     "symfony/stopwatch": {
         "version": "v4.0.3"
     },
-    "symfony/thanks": {
-        "version": "v1.0.1"
-    },
     "symfony/twig-bridge": {
         "version": "v4.0.3"
     },
