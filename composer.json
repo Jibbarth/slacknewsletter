@@ -1,0 +1,13 @@
+{
+    "name": "barth/slacknewsletter",
+    "type": "project",
+    "require": {
+        "phpro/grumphp": "^0.12.1"
+    },
+    "authors": [
+        {
+            "name": "Jibé Barth",
+            "email": "barth.jib@gmail.com"
+        }
+    ]
+}
