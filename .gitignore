@@ -9,6 +9,7 @@ vendor
 
 ###> symfony/framework-bundle ###
 src/.env
+src/config/channels.json
 src/public/bundles/
 src/var/
 src/vendor/
