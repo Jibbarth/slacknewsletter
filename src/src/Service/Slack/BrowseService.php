@@ -58,9 +58,11 @@ class BrowseService
      * @param string $channel
      * @param int $from nb days to retrieve
      * @param int $max
+     * @param array $messages
+     * @param $latest
      * @return array
      */
-    public function getPublicChannel(string $channel, int $from = 1, $max = 100) : array
+    public function getPublicChannel(string $channel, int $from, $max = 1000, $messages = [], $latest = null) : array
     {
         $commandOption = [
             'channel' => $channel,
@@ -69,7 +71,10 @@ class BrowseService
         ];
 
         if (!is_null($from)) {
-            $commandOption['oldest'] = Carbon::now()->subDays($from)->getTimestamp();
+            $commandOption['oldest'] = $from;
+        }
+        if (!is_null($latest)) {
+            $commandOption['latest'] = $latest;
         }
 
         $response = $this->commander->execute('channels.history', $commandOption);
@@ -80,21 +85,66 @@ class BrowseService
         if (!$body['ok']) {
             throw new NotFoundHttpException($body['error']);
         }
-
-        $messages = [];
         foreach ($body['messages'] as $message) {
             try {
-                if (isset($message['attachments'])) {
-                    $messages[] = $this->getAttachmentDetail($message);
-                    continue;
+                if ($body['has_more']) {
+                    $lastTimeStamp = $message['ts'];
                 }
 
-                $messages[] = $this->getMessageContent($message);
+                if (isset($message['attachments'])) {
+                    $newMessage = $this->getAttachmentDetail($message);
+                } else {
+                    $newMessage = $this->getMessageContent($message);
+                }
+
+                $newMessage['ts'] = $message['ts'];
+                $newMessage['author'] = $message['user'];
+                $messages[] = $newMessage;
             } catch (\Throwable $throwable) {
             }
         }
 
+        if ($body['has_more']) {
+            $messages = $this->getPublicChannel($channel, $from, $max, $messages, $lastTimeStamp);
+        }
+
         return $messages;
+    }
+
+    /**
+     * @param array $messages
+     * @param int $max
+     * @return array
+     */
+    public function getTopContributors(array $messages, $max = 5)
+    {
+        $authors = [];
+        foreach ($messages as $message) {
+            $authors[] = $message['author'];
+        }
+
+        $contributorList = \array_count_values($authors);
+        arsort($contributorList, SORT_NUMERIC);
+        $topContributors = [];
+
+        $count = 0;
+        foreach ($contributorList as $contributor => $nbContribution) {
+            if ($count >= $max) {
+                break;
+            }
+
+            $response = $this->commander->execute('users.info', ['user' => $contributor]);
+            /** @var array $body */
+            $body = $response->getBody();
+            $topContributors[] = [
+                'author' => $body['user']['profile']['real_name'],
+                'avatar' => $body['user']['profile']['image_32'],
+                'nbContribution' => $nbContribution,
+            ];
+            $count++;
+        }
+
+        return $topContributors;
     }
 
     /**
