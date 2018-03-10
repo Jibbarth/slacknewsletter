@@ -4,6 +4,12 @@ parameters:
     slack_token: '%env(SLACK_TOKEN)%'
     env(CHANNELS_FILE): 'config/channels.json'
     slack_channels: '%env(json:file:CHANNELS_FILE)%'
+    locale: 'en'
+
+    blacklist_urls:
+        - "slack.com/?redir="
+        - "slack.com/files/"
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -15,6 +21,7 @@ services:
         bind:
             $slackToken: '%slack_token%'
             $slackChannels: '%slack_channels%'
+            $blacklistUrls: '%blacklist_urls%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
