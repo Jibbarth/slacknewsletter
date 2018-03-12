@@ -6,6 +6,7 @@
         "ext-iconv": "*",
         "embed/embed": "^3.3",
         "frlnc/php-slack": "^1.0",
+        "league/flysystem": "^1.0",
         "nesbot/carbon": "^1.24",
         "symfony/console": "^4.0",
         "symfony/flex": "^1.0",

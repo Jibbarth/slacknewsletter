@@ -2,14 +2,9 @@
 .idea
 ###< IDE ###
 
-###> PROJECT ###
-vendor
-
-###< PROJECT ###
 
 ###> symfony/framework-bundle ###
 src/.env
-src/config/channels.json
 src/public/bundles/
 src/var/
 src/vendor/
@@ -19,4 +14,11 @@ src/vendor/
 src/.phpunit
 src/phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> PROJECT ###
+vendor
 cghooks.lock
+/src/public/current/
+/src/public/archive/
+/src/config/channels.json
+###< PROJECT ###

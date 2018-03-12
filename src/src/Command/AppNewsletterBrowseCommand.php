@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Service\Slack\BrowseService;
+use App\Service\StoreMessageService;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -32,21 +33,28 @@ class AppNewsletterBrowseCommand extends Command
      * @var int
      */
     private $daysToBrowse;
+    /**
+     * @var StoreMessageService
+     */
+    private $storeMessageService;
 
     /**
      * AppNewsletterBuildCommand constructor.
      * @param \App\Service\Slack\BrowseService $browseService
+     * @param StoreMessageService $storeMessageService
      * @param array $slackChannels
      * @param int $daysToBrowse
      */
     public function __construct(
         BrowseService $browseService,
+        StoreMessageService $storeMessageService,
         array $slackChannels,
         int $daysToBrowse
     ) {
         $this->browseService = $browseService;
         $this->slackChannels = $slackChannels;
         $this->daysToBrowse = $daysToBrowse;
+        $this->storeMessageService = $storeMessageService;
         parent::__construct();
     }
 
@@ -62,7 +70,6 @@ class AppNewsletterBrowseCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -73,17 +80,26 @@ class AppNewsletterBrowseCommand extends Command
 
         $messages = [];
         foreach ($this->slackChannels as $channel) {
-            $messages[$channel['name']]['messages'] = $this->browseService->getPublicChannel(
-                $channel['link'],
-                $timestamp
-            );
+            $messages[$channel['name']] = $this->browseService->getPublicChannel($channel['link'], $timestamp);
         }
 
-        foreach ($messages as $channel => $section) {
+        foreach ($messages as $channel => &$section) {
+            try {
+                if (\count($section) > 0) {
+                    $this->storeMessageService->saveChannel($channel, $section);
+                    $consoleInteract->success([
+                        'Successfully parse channel ' . $channel,
+                        count($section) . ' messages saved',
+                    ]);
+                }
+            } catch (\Throwable $throwable) {
+                $consoleInteract->error('Unable to save channel ' . $channel . ' : ' . $throwable->getMessage());
+            }
+        }
+
+        // TODO : retrieves top contributors during build newsletter
+        /**foreach ($messages as $channel => &$section) {
             $section['topContributors'] = $this->browseService->getTopContributors($section['messages']);
-        }
-
-        // TODO : store $messages
-        $consoleInteract->success('');
+        }*/
     }
 }
