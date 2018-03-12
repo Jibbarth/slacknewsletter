@@ -7,6 +7,7 @@ use Embed\Embed;
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -34,15 +35,21 @@ class BrowseService
      * @var array
      */
     private $blacklistUrls;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * BrowseChannel constructor.
      * @param string $slackToken
      * @param array $blacklistUrls
+     * @param LoggerInterface $logger
      */
     public function __construct(
         string $slackToken,
-        array $blacklistUrls
+        array $blacklistUrls,
+        LoggerInterface $logger
     ) {
 
         $this->slackToken = $slackToken;
@@ -52,28 +59,34 @@ class BrowseService
 
         $this->commander = new Commander($this->slackToken, $this->interactor);
         $this->blacklistUrls = $blacklistUrls;
+        $this->logger = $logger;
     }
 
     /**
      * @param string $channel
-     * @param int $from nb days to retrieve
+     * @param int $oldest timestamp to begin retrieve
      * @param int $max
      * @param array $messages
-     * @param $latest
+     * @param int|null $latest
      * @return array
      */
-    public function getPublicChannel(string $channel, int $from, $max = 1000, $messages = [], $latest = null) : array
-    {
+    public function getPublicChannel(
+        string $channel,
+        int $oldest,
+        int $max = 1000,
+        array $messages = [],
+        int $latest = null
+    ) : array {
         $commandOption = [
             'channel' => $channel,
             'count' => $max,
             'inclusive' => true,
         ];
 
-        if (!is_null($from)) {
-            $commandOption['oldest'] = $from;
+        if (!\is_null($oldest)) {
+            $commandOption['oldest'] = $oldest;
         }
-        if (!is_null($latest)) {
+        if (!\is_null($latest)) {
             $commandOption['latest'] = $latest;
         }
 
@@ -85,27 +98,26 @@ class BrowseService
         if (!$body['ok']) {
             throw new NotFoundHttpException($body['error']);
         }
+
+        $lastTimeStamp = $oldest;
         foreach ($body['messages'] as $message) {
             try {
                 if ($body['has_more']) {
                     $lastTimeStamp = $message['ts'];
                 }
 
-                if (isset($message['attachments'])) {
-                    $newMessage = $this->getAttachmentDetail($message);
-                } else {
-                    $newMessage = $this->getMessageContent($message);
-                }
+                $newMessage = $this->getParsedMessage($message);
 
                 $newMessage['ts'] = $message['ts'];
                 $newMessage['author'] = $message['user'];
                 $messages[] = $newMessage;
             } catch (\Throwable $throwable) {
+                $this->logger->notice($throwable->getMessage());
             }
         }
 
         if ($body['has_more']) {
-            $messages = $this->getPublicChannel($channel, $from, $max, $messages, $lastTimeStamp);
+            $messages = $this->getPublicChannel($channel, $oldest, $max, $messages, $lastTimeStamp);
         }
 
         return $messages;
@@ -150,6 +162,19 @@ class BrowseService
     /**
      * @param array $message
      * @return array
+     */
+    protected function getParsedMessage(array $message) : array
+    {
+        if (isset($message['attachments'])) {
+            return $this->getAttachmentDetail($message);
+        }
+
+        return $this->getMessageContent($message);
+    }
+
+    /**
+     * @param array $message
+     * @return array
      * @SuppressWarnings(PHPMD.StaticAccess)
 s     */
     protected function getMessageContent(array $message) : array
@@ -177,6 +202,10 @@ s     */
         return $content;
     }
 
+    /**
+     * @param $link
+     * @return bool
+     */
     protected function isLinkBlackListed($link)
     {
         foreach ($this->blacklistUrls as $blacklistUrl) {
@@ -184,6 +213,7 @@ s     */
                 return true;
             }
         }
+        return false;
     }
 
     /**
