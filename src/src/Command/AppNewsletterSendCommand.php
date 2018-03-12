@@ -76,5 +76,8 @@ class AppNewsletterSendCommand extends Command
 
         $message->setBody($this->newsStoreService->getNewsContent(), 'text/html');
         $this->mailer->send($message);
+
+        $this->newsStoreService->archiveNews();
+        $output->writeln('<info>OK</info>');
     }
 }
