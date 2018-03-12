@@ -112,13 +112,16 @@ class AppNewsletterBuildCommand extends Command
         foreach ($this->slackChannels as $channel) {
             try {
                 $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel['name']);
+                $this->storeMessageService->archiveChannel($channel['name']);
 
                 if (\count($channelMessages) > 0) {
                     $messages[$channel['name']] = [
                         'messages' => $channelMessages,
                         'title' => $channel['name'],
-                        'description' => $channel['description'],
                     ];
+                    if (isset($channel['description'])) {
+                        $messages[$channel['name']]['description'] = $channel['description'];
+                    }
 
                     if (isset($channel['image'])) {
                         $messages[$channel['name']]['image'] = $channel['image'];

@@ -11,6 +11,7 @@
                         </span>
                     </td>
                 </tr>
+                {% if section.description is defined %}
                 <tr>
                     <td class="resp-full-td" valign="top" style="padding:20px; text-align:center;">
                         <span style="font-size:18px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}">
@@ -18,6 +19,7 @@
                         </span>
                     </td>
                 </tr>
+                {% endif %}
             </table>
         </td>
     </tr>

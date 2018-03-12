@@ -79,6 +79,7 @@ class StoreMessageService
             $this->getMessageFilePath($channel),
             $channelArchive . \DIRECTORY_SEPARATOR . date('Y') . \DIRECTORY_SEPARATOR . date('Y-m-d_hi') . '.json'
         );
+        $this->filesystem->delete($this->getMessageFilePath($channel));
     }
 
     /**

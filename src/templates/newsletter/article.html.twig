@@ -36,7 +36,9 @@
                                 <hr align="left"
                                     style="width:100px; margin-left:0px; text-align:left; background-color:{{ tpl.main_color }}; color:{{ tpl.main_color }}; height: 2px; border: 0 none;"/>
                                 <span style="font-size:14px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#313131">
-                                    {{ article.text }}
+                                    {% if article.text is defined %}
+                                        {{ article.text }}
+                                    {% endif %}
                                 </span>
                             </td>
                         </tr>
