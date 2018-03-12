@@ -49,6 +49,17 @@ class StoreService
     }
 
     /**
+     * @return bool|false|string
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    public function getNewsContent()
+    {
+        $newsPath = $this->getNewsPath();
+
+        return $this->filesystem->read($newsPath);
+    }
+
+    /**
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
      * @SuppressWarnings(PHPMD.StaticAccess)

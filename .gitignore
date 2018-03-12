@@ -21,4 +21,5 @@ cghooks.lock
 /src/public/messages/
 /src/public/news/
 /src/config/channels.json
+/src/config/receivers.json
 ###< PROJECT ###
