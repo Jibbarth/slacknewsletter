@@ -11,8 +11,8 @@ use League\Flysystem\Filesystem;
  */
 class StoreMessageService
 {
-    const CURRENT_FOLDER = 'current/';
-    const ARCHIVE_FOLDER = 'archive/';
+    const CURRENT_FOLDER = 'messages/current/';
+    const ARCHIVE_FOLDER = 'messages/archive/';
 
     /**
      * @var string
@@ -64,7 +64,7 @@ class StoreMessageService
             $this->filesystem->write($messagesFile, \json_encode([]));
         }
 
-        return \json_decode($this->filesystem->read($messagesFile));
+        return \json_decode($this->filesystem->read($messagesFile), true);
     }
 
     /**
@@ -87,7 +87,7 @@ class StoreMessageService
      */
     private function getChannelDirectoryPath($channel) : string
     {
-        return $this->publicDirectory . static::CURRENT_FOLDER . $channel;
+        return static::CURRENT_FOLDER . $channel;
     }
 
     /**

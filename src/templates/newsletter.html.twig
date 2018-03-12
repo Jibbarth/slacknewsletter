@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <style type="text/css" media="screen">
+
+        .ExternalClass * {line-height: 100%}
+
+        @media only screen and (max-width: 480px) {
+            *[id=email-container] {
+                width: 100% !important;
+            }
+            table[class=resp-full-table] {
+                width: 100%!important;
+                clear: both;
+            }
+            td[class=resp-full-td] {
+                width: 100%!important;
+                clear: both;
+            }
+            img[class="email-img-header"] {
+                width:100% !important;
+                max-width: 340px !important;
+            }
+        }
+
+    </style>
+{% endblock %}
+
+
+{% block body %}
+<div align="center" style="background-color:{{ tpl.background_color }};">
+    {% include 'newsletter/header.html.twig' with {'tpl' : tpl} only %}
+
+    {% for section in messages %}
+        {% include 'newsletter/section.html.twig' with {'section' : section, 'tpl' : tpl } only %}
+    {% endfor %}
+
+    {% include 'newsletter/footer.html.twig' with {'tpl' : tpl} only  %}
+</div>
+{% endblock body %}

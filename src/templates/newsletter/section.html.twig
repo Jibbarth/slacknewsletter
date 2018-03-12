@@ -1,0 +1,34 @@
+<br>
+<table id="email-container" width="660" align="center" style="border-right:1px solid #e2e8ea; border-bottom:1px solid #e2e8ea; border-left:1px solid #e2e8ea; background-color:#ffffff;" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td style="background-color:{{ tpl.main_color }};
+            {% if section.image is defined %} background-image: url({{ section.image }}){% endif %}">
+            <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td class="resp-full-td" valign="top" style="padding:20px; text-align:center;">
+                        <span style="font-size:36px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}">
+                            {{ section.title }}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="resp-full-td" valign="top" style="padding:20px; text-align:center;">
+                        <span style="font-size:18px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}">
+                            {{ section.description | nl2br }}
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    {% for article in section.messages  %}
+        {% include 'newsletter/article.html.twig' with {'article' : article, 'tpl' : tpl} only %}
+    {% endfor %}
+    <tr>
+        {% if section.topContributors %}
+            {% include 'newsletter/contributor.html.twig' with {'contributors' : section.topContributors, 'tpl' : tpl} only %}
+        {% endif %}
+    </tr>
+</table>
+<br>

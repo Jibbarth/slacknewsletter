@@ -18,7 +18,7 @@ src/phpunit.xml
 ###> PROJECT ###
 vendor
 cghooks.lock
-/src/public/current/
-/src/public/archive/
+/src/public/messages/
+/src/public/news/
 /src/config/channels.json
 ###< PROJECT ###

@@ -7,7 +7,12 @@ parameters:
     days_to_browse: 1
     locale: 'en'
 
-
+    mail_template:
+        main_color: "#bb2280"
+        background_color: "#f7f7f7"
+        section_title_color: "#FFF"
+        logo: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Slack_Technologies_Logo.svg"
+        company_name: 'Awesome Company Name'
     blacklist_urls:
         - "slack.com/?redir="
         - "slack.com/files/"
@@ -25,6 +30,7 @@ services:
             $slackChannels: '%slack_channels%'
             $blacklistUrls: '%blacklist_urls%'
             $daysToBrowse: '%days_to_browse%'
+            $publicDir: '%kernel.project_dir%/public/'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -38,9 +44,10 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    App\Service\StoreMessageService:
+    App\Service\Newsletter\RenderService:
         arguments:
-            - '%kernel.project_dir%/public/'
+            - '@twig'
+            - '%mail_template%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

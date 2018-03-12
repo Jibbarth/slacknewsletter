@@ -150,7 +150,7 @@ class BrowseService
             $body = $response->getBody();
             $topContributors[] = [
                 'author' => $body['user']['profile']['real_name'],
-                'avatar' => $body['user']['profile']['image_32'],
+                'avatar' => $body['user']['profile']['image_72'],
                 'nbContribution' => $nbContribution,
             ];
             $count++;
