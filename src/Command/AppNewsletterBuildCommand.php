@@ -59,11 +59,8 @@ class AppNewsletterBuildCommand extends Command
         $consoleInteract = new SymfonyStyle($input, $output);
 
         try {
-            if ($input->getOption('no-archive')) {
-                $newsletter = $this->buildService->build();
-            } else {
-                $newsletter = $this->buildService->buildAndArchive();
-            }
+            $newsletter = $this->getNewsLetter($input);
+
             $this->storeService->saveNews($newsletter);
             $consoleInteract->success('News correctly saved');
         } catch (\Throwable $throwable) {
@@ -72,5 +69,20 @@ class AppNewsletterBuildCommand extends Command
                 $throwable->getMessage()
             ]);
         }
+    }
+
+    /**
+     * @param $input
+     * @return string
+     * @throws \League\Flysystem\FileExistsException
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    private function getNewsLetter($input)
+    {
+        if ($input->getOption('no-archive')) {
+            return $this->buildService->build();
+        }
+
+        return $this->buildService->buildAndArchive();
     }
 }

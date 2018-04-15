@@ -2,24 +2,27 @@
 .idea
 ###< IDE ###
 
-
 ###> symfony/framework-bundle ###
-src/.env
-src/public/bundles/
-src/var/
-src/vendor/
+.env
+public/bundles/
+var/
+vendor/
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
-src/.phpunit
-src/phpunit.xml
+.phpunit
+phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
 
 ###> PROJECT ###
 vendor
 cghooks.lock
-/src/public/messages/
-/src/public/news/
-/src/config/channels.json
-/src/config/receivers.json
+/public/messages/
+/public/news/
+/config/channels.json
+/config/receivers.json
 ###< PROJECT ###
