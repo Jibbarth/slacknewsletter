@@ -28,7 +28,7 @@
         {% include 'newsletter/article.html.twig' with {'article' : article, 'tpl' : tpl} only %}
     {% endfor %}
     <tr>
-        {% if section.topContributors %}
+        {% if section.topContributors is defined %}
             {% include 'newsletter/contributor.html.twig' with {'contributors' : section.topContributors, 'tpl' : tpl} only %}
         {% endif %}
     </tr>

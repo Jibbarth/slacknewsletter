@@ -5,23 +5,9 @@ parameters:
     env(CHANNELS_FILE): '%kernel.project_dir%/config/channels.json'
     env(RECEIVERS_FILE): '%kernel.project_dir%/config/receivers.json'
     slack_channels: '%env(json:file:CHANNELS_FILE)%'
-    days_to_browse: 1
     locale: 'en'
-
-    mail_template:
-        main_color: "#bb2280"
-        background_color: "#f7f7f7"
-        section_title_color: "#FFF"
-        logo: "http://directorofawesome.com/wp-content/uploads/2017/09/slacklogo.png"
-        company_name: 'Awesome Company'
-
-    blacklist_urls:
-        - "slack.com/?redir="
-        - "slack.com/files/"
-        - "giphy.com/"
-
     news_receivers: '%env(json:file:RECEIVERS_FILE)%'
-    mail_sender: "news@example.com"
+
 
 services:
     # default configuration for services in *this* file
