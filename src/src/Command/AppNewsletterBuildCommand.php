@@ -6,6 +6,7 @@ use App\Service\Newsletter\BuildService;
 use App\Service\Newsletter\StoreService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -44,6 +45,7 @@ class AppNewsletterBuildCommand extends Command
     protected function configure()
     {
         $this
+            ->addOption('no-archive', null, InputOption::VALUE_NONE, 'no archive message after build')
             ->setDescription('Build the newsletter on parsed channels located in public/current')
         ;
     }
@@ -57,7 +59,11 @@ class AppNewsletterBuildCommand extends Command
         $consoleInteract = new SymfonyStyle($input, $output);
 
         try {
-            $newsletter = $this->buildService->buildAndArchive();
+            if ($input->getOption('no-archive')) {
+                $newsletter = $this->buildService->build();
+            } else {
+                $newsletter = $this->buildService->buildAndArchive();
+            }
             $this->storeService->saveNews($newsletter);
             $consoleInteract->success('News correctly saved');
         } catch (\Throwable $throwable) {
