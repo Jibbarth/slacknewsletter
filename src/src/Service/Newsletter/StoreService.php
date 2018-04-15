@@ -41,11 +41,21 @@ class StoreService
     {
         $newsPath = $this->getNewsPath();
 
-        if ($this->filesystem->has($newsPath)) {
+        if ($this->hasNewsReady()) {
             $this->filesystem->delete($newsPath);
         }
 
         $this->filesystem->write($newsPath, $content);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNewsReady()
+    {
+        $newsPath = $this->getNewsPath();
+
+        return $this->filesystem->has($newsPath);
     }
 
     /**
@@ -69,7 +79,7 @@ class StoreService
         $now = Carbon::now();
         $newsName = $now->format('Y-W') . '.html';
 
-        if (!$this->filesystem->has($this->getNewsPath())) {
+        if (!$this->hasNewsReady()) {
             throw new \LogicException('No newsletter to archive');
         }
 

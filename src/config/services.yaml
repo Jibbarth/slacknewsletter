@@ -2,8 +2,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     slack_token: '%env(SLACK_TOKEN)%'
-    env(CHANNELS_FILE): 'config/channels.json'
-    env(RECEIVERS_FILE): 'config/receivers.json'
+    env(CHANNELS_FILE): '%kernel.project_dir%/config/channels.json'
+    env(RECEIVERS_FILE): '%kernel.project_dir%/config/receivers.json'
     slack_channels: '%env(json:file:CHANNELS_FILE)%'
     days_to_browse: 1
     locale: 'en'
