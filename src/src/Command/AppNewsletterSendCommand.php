@@ -7,7 +7,9 @@ use Carbon\Carbon;
 use Swift_Mailer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class AppNewsletterBrowseCommand
@@ -57,6 +59,7 @@ class AppNewsletterSendCommand extends Command
     protected function configure()
     {
         $this
+            ->addOption('no-archive', null, InputOption::VALUE_NONE, 'no archive news after send')
             ->setDescription('Send a mail with the generated news')
         ;
     }
@@ -69,6 +72,7 @@ class AppNewsletterSendCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $consoleInteract = new SymfonyStyle($input, $output);
         $subject = 'Newsletter ' . Carbon::now()->format('#W // Y');
         $message = (new \Swift_Message($subject))
             ->setFrom($this->mailSender, "NewsLetters")
@@ -77,7 +81,9 @@ class AppNewsletterSendCommand extends Command
         $message->setBody($this->newsStoreService->getNewsContent(), 'text/html');
         $this->mailer->send($message);
 
-        $this->newsStoreService->archiveNews();
-        $output->writeln('<info>OK</info>');
+        if (!$input->getOption('no-archive')) {
+            $this->newsStoreService->archiveNews();
+        }
+        $consoleInteract->success('Message sended to ' . \implode(',', $this->newsReceivers));
     }
 }
