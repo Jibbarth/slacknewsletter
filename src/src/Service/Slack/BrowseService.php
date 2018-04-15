@@ -140,7 +140,7 @@ class BrowseService
         $topContributors = [];
 
         $count = 0;
-        foreach ($contributorList as $contributor => $nbContribution) {
+        foreach ($contributorList as $contributor => $nbContributions) {
             if ($count >= $max) {
                 break;
             }
@@ -151,7 +151,7 @@ class BrowseService
             $topContributors[] = [
                 'author' => $body['user']['profile']['real_name'],
                 'avatar' => $body['user']['profile']['image_72'],
-                'nbContribution' => $nbContribution,
+                'nbContributions' => $nbContributions,
             ];
             $count++;
         }
