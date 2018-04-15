@@ -96,10 +96,5 @@ class AppNewsletterBrowseCommand extends Command
                 $consoleInteract->error('Unable to save channel ' . $channel . ' : ' . $throwable->getMessage());
             }
         }
-
-        // TODO : retrieves top contributors during build newsletter
-        /**foreach ($messages as $channel => &$section) {
-            $section['topContributors'] = $this->browseService->getTopContributors($section['messages']);
-        }*/
     }
 }
