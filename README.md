@@ -87,9 +87,11 @@ Also, while creating your PR, please write a description which gives the context
 ## TODOs
 
 - [ ] Make installation as simple as a `composer create-project jibbarth/slacknewsletter`
+- [ ] Browse private channel
 - [ ] Write Tests Suite
 - [ ] Make sure it'll work with [Slack App](https://api.slack.com/apps) and provide a configuration guide
 - [ ] Add translations
 - [ ] Easily extend with other Team Collaboration Software (HipChat...)
+
 
 
