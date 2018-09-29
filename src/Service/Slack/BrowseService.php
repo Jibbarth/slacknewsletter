@@ -2,6 +2,7 @@
 
 namespace App\Service\Slack;
 
+use App\Constant\SlackCommand;
 use Embed\Embed;
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
@@ -71,13 +72,15 @@ class BrowseService
      *
      * @return array
      */
-    public function getPublicChannel(
+    public function getChannelHistory(
         string $channel,
         int $oldest,
         int $max = 1000,
         array $messages = [],
         int $latest = null
     ): array {
+        $channelCommand = $this->retrieveCommandForChannel($channel);
+
         $commandOption = [
             'channel' => $channel,
             'count' => $max,
@@ -91,7 +94,7 @@ class BrowseService
             $commandOption['latest'] = $latest;
         }
 
-        $response = $this->commander->execute('channels.history', $commandOption);
+        $response = $this->commander->execute($channelCommand, $commandOption);
 
         /** @var array $body */
         $body = $response->getBody();
@@ -118,7 +121,7 @@ class BrowseService
         }
 
         if ($body['has_more']) {
-            $messages = $this->getPublicChannel($channel, $oldest, $max, $messages, $lastTimeStamp);
+            $messages = $this->getChannelHistory($channel, $oldest, $max, $messages, $lastTimeStamp);
         }
 
         return $messages;
@@ -159,6 +162,20 @@ class BrowseService
         }
 
         return $topContributors;
+    }
+
+    protected function retrieveCommandForChannel(string $channel): string
+    {
+        $firstChannelLetter = \mb_substr($channel, 0, 1);
+
+        switch ($firstChannelLetter) {
+            case 'C':
+                return SlackCommand::CHANNEL_HISTORY;
+            case 'G':
+                return SlackCommand::GROUP_HISTORY;
+            default:
+                throw new \InvalidArgumentException('Unknow channel type for ' . $channel);
+        }
     }
 
     /**

@@ -80,7 +80,7 @@ class AppNewsletterBrowseCommand extends Command
 
         $messages = [];
         foreach ($this->slackChannels as $channel) {
-            $messages[$channel['name']] = $this->browseService->getPublicChannel($channel['link'], $timestamp);
+            $messages[$channel['name']] = $this->browseService->getChannelHistory($channel['link'], $timestamp);
         }
 
         foreach ($messages as $channel => &$section) {
