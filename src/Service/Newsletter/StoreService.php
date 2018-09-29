@@ -8,6 +8,7 @@ use League\Flysystem\Filesystem;
 
 /**
  * Class StoreService
+ *
  * @package App\Service\Newsletter
  */
 class StoreService
@@ -34,6 +35,7 @@ class StoreService
 
     /**
      * @param string $content
+     *
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
      */
@@ -59,8 +61,9 @@ class StoreService
     }
 
     /**
-     * @return bool|false|string
      * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return bool|false|string
      */
     public function getNewsContent()
     {

@@ -6,6 +6,7 @@ use Twig\Environment;
 
 /**
  * Class RenderService
+ *
  * @package App\Service\Newsletter
  */
 class RenderService

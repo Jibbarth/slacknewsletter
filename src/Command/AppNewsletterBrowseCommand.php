@@ -6,7 +6,6 @@ use App\Service\Slack\BrowseService;
 use App\Service\StoreMessageService;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -40,6 +39,7 @@ class AppNewsletterBrowseCommand extends Command
 
     /**
      * AppNewsletterBuildCommand constructor.
+     *
      * @param \App\Service\Slack\BrowseService $browseService
      * @param StoreMessageService $storeMessageService
      * @param array $slackChannels
@@ -89,7 +89,7 @@ class AppNewsletterBrowseCommand extends Command
                     $this->storeMessageService->saveChannel($channel, $section);
                     $consoleInteract->success([
                         'Successfully parse channel ' . $channel,
-                        count($section) . ' messages saved',
+                        \count($section) . ' messages saved',
                     ]);
                 }
             } catch (\Throwable $throwable) {

@@ -7,6 +7,7 @@ use League\Flysystem\Filesystem;
 
 /**
  * Class StoreMessageService
+ *
  * @package App\Service
  */
 class StoreMessageService
@@ -34,6 +35,7 @@ class StoreMessageService
     /**
      * @param string $channel
      * @param array $messages
+     *
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
      */
@@ -53,11 +55,13 @@ class StoreMessageService
 
     /**
      * @param string $channel
-     * @return array
+     *
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return array
      */
-    public function retrieveMessagesForChannel(string $channel) : array
+    public function retrieveMessagesForChannel(string $channel): array
     {
         $messagesFile = $this->getMessageFilePath($channel);
         if (!$this->filesystem->has($messagesFile)) {
@@ -69,6 +73,7 @@ class StoreMessageService
 
     /**
      * @param string $channel
+     *
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
      */
@@ -77,25 +82,27 @@ class StoreMessageService
         $channelArchive = static::ARCHIVE_FOLDER . $channel;
         $this->filesystem->copy(
             $this->getMessageFilePath($channel),
-            $channelArchive . \DIRECTORY_SEPARATOR . date('Y') . \DIRECTORY_SEPARATOR . date('Y-m-d_hi') . '.json'
+            $channelArchive . \DIRECTORY_SEPARATOR . \date('Y') . \DIRECTORY_SEPARATOR . \date('Y-m-d_hi') . '.json'
         );
         $this->filesystem->delete($this->getMessageFilePath($channel));
     }
 
     /**
      * @param $channel
+     *
      * @return string
      */
-    private function getChannelDirectoryPath($channel) : string
+    private function getChannelDirectoryPath($channel): string
     {
         return static::CURRENT_FOLDER . $channel;
     }
 
     /**
      * @param string $channel
+     *
      * @return string
      */
-    private function getMessageFilePath(string $channel) : string
+    private function getMessageFilePath(string $channel): string
     {
         $channelDirectory = $this->getChannelDirectoryPath($channel);
 

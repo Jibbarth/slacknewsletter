@@ -7,6 +7,7 @@ use App\Service\StoreMessageService;
 
 /**
  * Class BuildService
+ *
  * @package App\Service\Newsletter
  */
 class BuildService
@@ -57,9 +58,10 @@ class BuildService
     }
 
     /**
-     * @return string
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return string
      */
     public function buildAndArchive()
     {
@@ -110,11 +112,12 @@ class BuildService
 
     /**
      * @param array $messages
+     *
      * @return array
      */
     protected function addTopContributors(array $messages)
     {
-        foreach ($messages as $channel => &$section) {
+        foreach ($messages as $section) {
             $section['topContributors'] = $this->browseService->getTopContributors($section['messages']);
         }
 

@@ -2,7 +2,6 @@
 
 namespace App\Service\Slack;
 
-use Carbon\Carbon;
 use Embed\Embed;
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
@@ -13,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class BrowseService
+ *
  * @package App\Service\Slack
  */
 class BrowseService
@@ -42,6 +42,7 @@ class BrowseService
 
     /**
      * BrowseChannel constructor.
+     *
      * @param string $slackToken
      * @param array $blacklistUrls
      * @param LoggerInterface $logger
@@ -51,7 +52,6 @@ class BrowseService
         array $blacklistUrls,
         LoggerInterface $logger
     ) {
-
         $this->slackToken = $slackToken;
 
         $this->interactor = new CurlInteractor();
@@ -68,6 +68,7 @@ class BrowseService
      * @param int $max
      * @param array $messages
      * @param int|null $latest
+     *
      * @return array
      */
     public function getPublicChannel(
@@ -76,7 +77,7 @@ class BrowseService
         int $max = 1000,
         array $messages = [],
         int $latest = null
-    ) : array {
+    ): array {
         $commandOption = [
             'channel' => $channel,
             'count' => $max,
@@ -126,6 +127,7 @@ class BrowseService
     /**
      * @param array $messages
      * @param int $max
+     *
      * @return array
      */
     public function getTopContributors(array $messages, $max = 5)
@@ -136,7 +138,7 @@ class BrowseService
         }
 
         $contributorList = \array_count_values($authors);
-        arsort($contributorList, SORT_NUMERIC);
+        \arsort($contributorList, SORT_NUMERIC);
         $topContributors = [];
 
         $count = 0;
@@ -161,9 +163,10 @@ class BrowseService
 
     /**
      * @param array $message
+     *
      * @return array
      */
-    protected function getParsedMessage(array $message) : array
+    protected function getParsedMessage(array $message): array
     {
         if (isset($message['attachments'])) {
             return $this->getAttachmentDetail($message);
@@ -174,15 +177,16 @@ class BrowseService
 
     /**
      * @param array $message
+     *
      * @return array
      * @SuppressWarnings(PHPMD.StaticAccess)
 s     */
-    protected function getMessageContent(array $message) : array
+    protected function getMessageContent(array $message): array
     {
         // The Regular Expression filter
         $regexUrl = '#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#';
 
-        if (!preg_match($regexUrl, $message['text'], $url)) {
+        if (!\preg_match($regexUrl, $message['text'], $url)) {
             throw new NotFoundHttpException('No link found in "' . $message['text'] . '"');
         }
 
@@ -204,6 +208,7 @@ s     */
 
     /**
      * @param $link
+     *
      * @return bool
      */
     protected function isLinkBlackListed($link)
@@ -213,14 +218,16 @@ s     */
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * @param array $message
+     *
      * @return array
      */
-    private function getAttachmentDetail(array $message) : array
+    private function getAttachmentDetail(array $message): array
     {
         $attachment = $message['attachments'][0];
         if (!isset($attachment['title'], $attachment['title_link'])) {
