@@ -1,14 +1,11 @@
 parameters:
-    exclude_dir: &exclude_dir
-        - 'var'
-        - 'bin'
-        - 'vendor'
     ascii:
         failed: ~
         succeeded: ~
     tasks:
         composer:
-            file: ./composer.json
+            file: "./composer.json"
+            no_check_all: true
         git_blacklist:
             keywords:
                 - "die("
@@ -17,26 +14,26 @@ parameters:
                 - "dump("
                 - "exit;"
                 - "exit("
-            triggered_by: [php, js, twig]
-        jsonlint: ~
-        phpcs:
-            standard: PSR2
-            warning_severity: 0
-            triggered_by: [php]
+                - "print_r"
+            triggered_by: [php, twig]
+        jsonlint:
+            detect_key_conflicts: true
         phpcpd:
-            directory: 'src/'
-            names_exclude: []
-            fuzzy: false
-            min_lines: 5
-            min_tokens: 70
+            directory: 'src'
+        phpcs:
+            standard: "PSR2"
+        phpcsfixer2:
+            config: '.php_cs'
+            verbose: true
+            diff: true
             triggered_by: ['php']
         phplint:
-            exclude: *exclude_dir
+            exclude: ['vendor']
             triggered_by: ['php']
         phpmd:
-            exclude: *exclude_dir
-            ruleset: ['cleancode', 'codesize', 'naming']
-            triggered_by: [php]
-        securitychecker:
-            lockfile: ./composer.lock
+            ruleset: [".php_md.xml"]
+        phpstan:
+            configuration: phpstan.neon
+        securitychecker: ~
+        xmllint: ~
         yamllint: ~

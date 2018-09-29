@@ -2,7 +2,7 @@
 
 namespace App\Service\Slack;
 
-use Carbon\Carbon;
+use App\Constant\SlackCommand;
 use Embed\Embed;
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class BrowseService
+ *
  * @package App\Service\Slack
  */
 class BrowseService
@@ -42,6 +43,7 @@ class BrowseService
 
     /**
      * BrowseChannel constructor.
+     *
      * @param string $slackToken
      * @param array $blacklistUrls
      * @param LoggerInterface $logger
@@ -51,7 +53,6 @@ class BrowseService
         array $blacklistUrls,
         LoggerInterface $logger
     ) {
-
         $this->slackToken = $slackToken;
 
         $this->interactor = new CurlInteractor();
@@ -68,15 +69,18 @@ class BrowseService
      * @param int $max
      * @param array $messages
      * @param int|null $latest
+     *
      * @return array
      */
-    public function getPublicChannel(
+    public function getChannelHistory(
         string $channel,
         int $oldest,
         int $max = 1000,
         array $messages = [],
         int $latest = null
-    ) : array {
+    ): array {
+        $channelCommand = $this->retrieveCommandForChannel($channel);
+
         $commandOption = [
             'channel' => $channel,
             'count' => $max,
@@ -90,7 +94,7 @@ class BrowseService
             $commandOption['latest'] = $latest;
         }
 
-        $response = $this->commander->execute('channels.history', $commandOption);
+        $response = $this->commander->execute($channelCommand, $commandOption);
 
         /** @var array $body */
         $body = $response->getBody();
@@ -117,7 +121,7 @@ class BrowseService
         }
 
         if ($body['has_more']) {
-            $messages = $this->getPublicChannel($channel, $oldest, $max, $messages, $lastTimeStamp);
+            $messages = $this->getChannelHistory($channel, $oldest, $max, $messages, $lastTimeStamp);
         }
 
         return $messages;
@@ -126,6 +130,7 @@ class BrowseService
     /**
      * @param array $messages
      * @param int $max
+     *
      * @return array
      */
     public function getTopContributors(array $messages, $max = 5)
@@ -136,7 +141,7 @@ class BrowseService
         }
 
         $contributorList = \array_count_values($authors);
-        arsort($contributorList, SORT_NUMERIC);
+        \arsort($contributorList, SORT_NUMERIC);
         $topContributors = [];
 
         $count = 0;
@@ -159,11 +164,26 @@ class BrowseService
         return $topContributors;
     }
 
+    protected function retrieveCommandForChannel(string $channel): string
+    {
+        $firstChannelLetter = \mb_substr($channel, 0, 1);
+
+        switch ($firstChannelLetter) {
+            case 'C':
+                return SlackCommand::CHANNEL_HISTORY;
+            case 'G':
+                return SlackCommand::GROUP_HISTORY;
+            default:
+                throw new \InvalidArgumentException('Unknow channel type for ' . $channel);
+        }
+    }
+
     /**
      * @param array $message
+     *
      * @return array
      */
-    protected function getParsedMessage(array $message) : array
+    protected function getParsedMessage(array $message): array
     {
         if (isset($message['attachments'])) {
             return $this->getAttachmentDetail($message);
@@ -174,15 +194,16 @@ class BrowseService
 
     /**
      * @param array $message
+     *
      * @return array
      * @SuppressWarnings(PHPMD.StaticAccess)
-s     */
-    protected function getMessageContent(array $message) : array
+     */
+    protected function getMessageContent(array $message): array
     {
         // The Regular Expression filter
         $regexUrl = '#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#';
 
-        if (!preg_match($regexUrl, $message['text'], $url)) {
+        if (!\preg_match($regexUrl, $message['text'], $url)) {
             throw new NotFoundHttpException('No link found in "' . $message['text'] . '"');
         }
 
@@ -204,6 +225,7 @@ s     */
 
     /**
      * @param $link
+     *
      * @return bool
      */
     protected function isLinkBlackListed($link)
@@ -213,14 +235,16 @@ s     */
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * @param array $message
+     *
      * @return array
      */
-    private function getAttachmentDetail(array $message) : array
+    private function getAttachmentDetail(array $message): array
     {
         $attachment = $message['attachments'][0];
         if (!isset($attachment['title'], $attachment['title_link'])) {

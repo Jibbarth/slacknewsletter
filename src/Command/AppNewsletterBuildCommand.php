@@ -30,6 +30,7 @@ class AppNewsletterBuildCommand extends Command
 
     /**
      * AppNewsletterBuildCommand constructor.
+     *
      * @param StoreService $storeService
      * @param BuildService $buildService
      */
@@ -66,16 +67,18 @@ class AppNewsletterBuildCommand extends Command
         } catch (\Throwable $throwable) {
             $consoleInteract->error([
                 'Unable to save news',
-                $throwable->getMessage()
+                $throwable->getMessage(),
             ]);
         }
     }
 
     /**
      * @param $input
-     * @return string
+     *
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return string
      */
     private function getNewsLetter($input)
     {

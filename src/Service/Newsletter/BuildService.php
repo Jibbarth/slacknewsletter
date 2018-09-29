@@ -7,6 +7,7 @@ use App\Service\StoreMessageService;
 
 /**
  * Class BuildService
+ *
  * @package App\Service\Newsletter
  */
 class BuildService
@@ -57,9 +58,10 @@ class BuildService
     }
 
     /**
-     * @return string
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return string
      */
     public function buildAndArchive()
     {
@@ -81,6 +83,8 @@ class BuildService
         foreach ($this->slackChannels as $channel) {
             try {
                 $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel['name']);
+
+                $channelMessages = $this->removeDuplicationInMessages($channelMessages);
 
                 if (\count($channelMessages) > 0) {
                     $messages[$channel['name']] = [
@@ -110,14 +114,30 @@ class BuildService
 
     /**
      * @param array $messages
+     *
      * @return array
      */
-    protected function addTopContributors(array $messages)
+    protected function addTopContributors(array $messages): array
     {
-        foreach ($messages as $channel => &$section) {
-            $section['topContributors'] = $this->browseService->getTopContributors($section['messages']);
+        foreach ($messages as $channel => $section) {
+            $messages[$channel]['topContributors'] = $this->browseService->getTopContributors($section['messages']);
         }
 
+        return $messages;
+    }
+
+    /**
+     * @param array $messages
+     *
+     * @return array
+     */
+    protected function removeDuplicationInMessages(array $messages): array
+    {
+        // In case browse method retrieve twice same message
+        $messages = \array_unique($messages, SORT_REGULAR);
+
+        // TODO : Filter duplicate link to avoid returning twice in the same part.
+        // IE some users like reshare same content -_-'
         return $messages;
     }
 }

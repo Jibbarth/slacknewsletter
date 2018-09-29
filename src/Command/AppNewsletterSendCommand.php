@@ -38,6 +38,7 @@ class AppNewsletterSendCommand extends Command
 
     /**
      * AppNewsletterBuildCommand constructor.
+     *
      * @param StoreService $newsStoreService
      * @param Swift_Mailer $mailer
      * @param array $newsReceivers
@@ -67,6 +68,7 @@ class AppNewsletterSendCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     *
      * @throws \League\Flysystem\FileNotFoundException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -75,7 +77,7 @@ class AppNewsletterSendCommand extends Command
         $consoleInteract = new SymfonyStyle($input, $output);
         $subject = 'Newsletter ' . Carbon::now()->format('#W // Y');
         $message = (new \Swift_Message($subject))
-            ->setFrom($this->mailSender, "NewsLetters")
+            ->setFrom($this->mailSender, 'NewsLetters')
             ->setTo($this->newsReceivers);
 
         $message->setBody($this->newsStoreService->getNewsContent(), 'text/html');
