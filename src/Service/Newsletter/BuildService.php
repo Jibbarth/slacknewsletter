@@ -117,8 +117,8 @@ class BuildService
      */
     protected function addTopContributors(array $messages)
     {
-        foreach ($messages as $section) {
-            $section['topContributors'] = $this->browseService->getTopContributors($section['messages']);
+        foreach ($messages as $channel => $section) {
+            $messages[$channel]['topContributors'] = $this->browseService->getTopContributors($section['messages']);
         }
 
         return $messages;
