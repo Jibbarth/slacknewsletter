@@ -8,7 +8,6 @@ parameters:
     locale: 'en'
     news_receivers: '%env(json:file:RECEIVERS_FILE)%'
 
-
 services:
     _defaults:
         autowire: true

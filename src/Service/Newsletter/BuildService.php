@@ -84,6 +84,8 @@ class BuildService
             try {
                 $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel['name']);
 
+                $channelMessages = $this->removeDuplicationInMessages($channelMessages);
+
                 if (\count($channelMessages) > 0) {
                     $messages[$channel['name']] = [
                         'messages' => $channelMessages,
@@ -115,12 +117,27 @@ class BuildService
      *
      * @return array
      */
-    protected function addTopContributors(array $messages)
+    protected function addTopContributors(array $messages): array
     {
         foreach ($messages as $channel => $section) {
             $messages[$channel]['topContributors'] = $this->browseService->getTopContributors($section['messages']);
         }
 
+        return $messages;
+    }
+
+    /**
+     * @param array $messages
+     *
+     * @return array
+     */
+    protected function removeDuplicationInMessages(array $messages): array
+    {
+        // In case browse method retrieve twice same message
+        $messages = \array_unique($messages, SORT_REGULAR);
+
+        // TODO : Filter duplicate link to avoid returning twice in the same part.
+        // IE some users like reshare same content -_-'
         return $messages;
     }
 }
