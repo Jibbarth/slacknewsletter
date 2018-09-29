@@ -2,6 +2,7 @@
 
 This application allows you to generate a newsletter from your [Slack](https://slack.com) channels. 
 It goes through the channels looking for links, combines them into a html file, and sends it by email.
+It's ideal for keeping track of your finds when the historical Slack reaches its limit.
 
 ## Installation & Configuration
 
@@ -45,7 +46,7 @@ For example :
 * [Embed](https://github.com/oscarotero/Embed)
 * [Carbon](https://carbon.nesbot.com/)
 
-Thank to theirs awesome work. You can also thank them by running `composer thanks` after installation
+Thank to theirs awesome work. 
 
 ## Customize the newsletter
 
@@ -86,8 +87,8 @@ Also, while creating your PR, please write a description which gives the context
 
 ## TODOs
 
-- [ ] Make installation as simple as a `composer create-project jibbarth/slacknewsletter`
-- [ ] Browse private channel
+- [x] Make installation as simple as a `composer create-project barth/slacknewsletter`
+- [x] Browse private channel
 - [ ] Write Tests Suite
 - [ ] Make sure it'll work with [Slack App](https://api.slack.com/apps) and provide a configuration guide
 - [ ] Add translations

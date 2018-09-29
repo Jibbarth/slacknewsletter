@@ -197,7 +197,7 @@ class BrowseService
      *
      * @return array
      * @SuppressWarnings(PHPMD.StaticAccess)
-s     */
+     */
     protected function getMessageContent(array $message): array
     {
         // The Regular Expression filter
