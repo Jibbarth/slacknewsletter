@@ -86,7 +86,7 @@ class AppNewsletterBrowseCommand extends Command
         foreach ($messages as $channel => &$section) {
             try {
                 if (\count($section) > 0) {
-                    $this->storeMessageService->saveChannel($channel, $section);
+                    $this->storeMessageService->saveChannel((string) $channel, $section);
                     $consoleInteract->success([
                         'Successfully parse channel ' . $channel,
                         \count($section) . ' messages saved',

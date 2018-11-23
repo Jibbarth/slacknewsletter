@@ -73,14 +73,15 @@ class AppNewsletterBuildCommand extends Command
     }
 
     /**
-     * @param $input
+     * @param \Symfony\Component\Console\Input\InputInterface $input
      *
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
-     *
+     * @throws \LogicException
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @return string
      */
-    private function getNewsLetter($input)
+    private function getNewsLetter(InputInterface $input)
     {
         if ($input->getOption('no-archive')) {
             return $this->buildService->build();

@@ -88,11 +88,11 @@ class StoreMessageService
     }
 
     /**
-     * @param $channel
+     * @param string $channel
      *
      * @return string
      */
-    private function getChannelDirectoryPath($channel): string
+    private function getChannelDirectoryPath(string $channel): string
     {
         return static::CURRENT_FOLDER . $channel;
     }

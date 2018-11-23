@@ -85,12 +85,10 @@ class BrowseService
             'channel' => $channel,
             'count' => $max,
             'inclusive' => true,
+            'oldest' => $oldest,
         ];
 
-        if (!\is_null($oldest)) {
-            $commandOption['oldest'] = $oldest;
-        }
-        if (!\is_null($latest)) {
+        if (null !== $latest) {
             $commandOption['latest'] = $latest;
         }
 
@@ -224,11 +222,11 @@ class BrowseService
     }
 
     /**
-     * @param $link
+     * @param string $link
      *
      * @return bool
      */
-    protected function isLinkBlackListed($link)
+    protected function isLinkBlackListed(string $link): bool
     {
         foreach ($this->blacklistUrls as $blacklistUrl) {
             if (\strpos($link, $blacklistUrl) > -1) {
