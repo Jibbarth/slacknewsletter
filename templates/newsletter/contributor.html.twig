@@ -5,7 +5,7 @@
             <tr>
                 <td width="150">
                     <span style="font-size:18px; font-weight: bold; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#313131;">
-                        Top Contributors
+                        {{ 'app.top_contributors' | trans }}
                     </span>
                     <br/>
                     <hr align="left"
@@ -14,7 +14,7 @@
             </tr>
         </table>
         <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0"
-        style="  position:relative;padding:20px;">
+        style="  position:relative;padding:0 20px;">
             <tr align="left" style="max-width: 375px">
                 <td>
                     {% for contributor in contributors %}

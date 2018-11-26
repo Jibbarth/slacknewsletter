@@ -1,0 +1,5 @@
+app.newsletter_title: '%company% Newsletter'
+app.join_chanel: 'Join channel'
+app.top_contributors: 'Top contributors'
+app.newsletter_sent_by: 'This newsletter was sent by %company%.'
+app.read_article: 'Read article'

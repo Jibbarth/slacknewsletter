@@ -5,7 +5,6 @@ parameters:
     env(CHANNELS_FILE): '%kernel.project_dir%/config/channels.json'
     env(RECEIVERS_FILE): '%kernel.project_dir%/config/receivers.json'
     slack_channels: '%env(json:file:CHANNELS_FILE)%'
-    locale: 'en'
     news_receivers: '%env(json:file:RECEIVERS_FILE)%'
 
 services:

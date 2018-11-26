@@ -90,6 +90,7 @@ class BuildService
                     $messages[$channel['name']] = [
                         'messages' => $channelMessages,
                         'title' => $channel['name'],
+                        'link' => $channel['link'],
                     ];
                     if (isset($channel['description'])) {
                         $messages[$channel['name']]['description'] = $channel['description'];

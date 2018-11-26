@@ -6,6 +6,8 @@ parameters:
         logo: "http://directorofawesome.com/wp-content/uploads/2017/09/slacklogo.png"
         company_name: 'Awesome Company'
 
+        base_slack_url: 'https://awesome.slack.com'
+
     blacklist_urls:
         - "slack.com/?redir="
         - "slack.com/files/"
@@ -14,3 +16,4 @@ parameters:
     mail_sender: "news@example.com"
 
     days_to_browse: 1
+    locale: 'en'
