@@ -4,6 +4,9 @@
                style="padding:20px;">
             <tr>
                 <td width="100%">
+                    {% if article.thumb_url is not defined and article.image_url is defined %}
+                        {% set article = article|merge({'thumb_url': article.image_url}) %}
+                    {% endif %}
                     {% if article.thumb_url is defined %}
                     <table width="120" align="left" class="resp-full-table"
                            style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" border="0"
