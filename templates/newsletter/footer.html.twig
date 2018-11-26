@@ -5,7 +5,7 @@
                 <tr>
                     <td width="100%" class="resp-full-td" style="text-align: center;">
                         <span style="font-size:12px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#aeb2b3">
-                            This newsletter was sent by {{ tpl.company_name }}.
+                            {{ 'app.newsletter_sent_by' | trans({'%company%': tpl.company_name}) }}
                             <br>
                         </span>
                         <hr align="left" style="margin-left:0px; text-align:left; background-color:#aeb2b3; color:#aeb2b3; height: 1px; border: 0 none;" />
