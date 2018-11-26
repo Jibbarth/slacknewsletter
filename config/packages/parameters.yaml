@@ -14,3 +14,4 @@ parameters:
     mail_sender: "news@example.com"
 
     days_to_browse: 1
+    locale: 'en'
