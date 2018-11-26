@@ -14,4 +14,15 @@
                 </table>
             </td>
         </tr>
+        {% if tpl.summary is defined %}
+        <tr>
+            <td>
+                <div class="resp-full-table" style="margin-top:20px; padding:1px 10px; border-left: 2px solid {{ tpl.main_color }};">
+                    <p style="font-size:15px; font-style:italic; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#333">
+                        {{ tpl.summary | raw | nl2br }}
+                    </p>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
     </table>
