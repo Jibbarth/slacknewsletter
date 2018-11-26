@@ -17,11 +17,12 @@
         "league/flysystem": "^1.0",
         "nesbot/carbon": "^1.24",
         "symfony/console": "*",
+        "symfony/dotenv": "*",
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "*",
         "symfony/swiftmailer-bundle": "^3.2",
+        "symfony/translation": "*",
         "symfony/twig-bundle": "^4.0",
-        "symfony/dotenv": "*",
         "symfony/yaml": "*"
     },
     "require-dev": {
