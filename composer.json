@@ -12,6 +12,7 @@
     "require": {
         "php": "^7.1.3",
         "ext-iconv": "*",
+        "ext-json": "*",
         "embed/embed": "^3.3",
         "frlnc/php-slack": "^1.0",
         "league/flysystem": "^1.0",
@@ -23,7 +24,8 @@
         "symfony/swiftmailer-bundle": "^3.2",
         "symfony/translation": "*",
         "symfony/twig-bundle": "^4.0",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+        "wyrihaximus/html-compress": "^1.4"
     },
     "require-dev": {
         "barth/dev-pack": "^1.0",

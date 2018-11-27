@@ -6,15 +6,28 @@
     </style>
 {% endblock %}
 
+{% block title %}{{ 'app.newsletter_title'| trans({'%company%' : tpl.company_name}) }}{% endblock %}
 
 {% block body %}
-<div align="center" style="background-color:{{ tpl.background_color }};">
-    {% include 'newsletter/header.html.twig' with {'tpl' : tpl} only %}
-
-    {% for section in messages %}
-        {% include 'newsletter/section.html.twig' with {'section' : section, 'tpl' : tpl } only %}
-    {% endfor %}
-
-    {% include 'newsletter/footer.html.twig' with {'tpl' : tpl} only  %}
-</div>
+    <div align="center" style="background-color:{{ tpl.background_color }};">
+        <table id="email-container" width="660" align="center" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>
+                    {% include 'newsletter/header.html.twig' with {'tpl' : tpl} only %}
+                </td>
+            </tr>
+            {% for section in messages %}
+                <tr>
+                    <td>
+                        {% include 'newsletter/section.html.twig' with {'section' : section, 'tpl' : tpl } only %}
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>
+                    {% include 'newsletter/footer.html.twig' with {'tpl' : tpl} only %}
+                </td>
+            </tr>
+        </table>
+    </div>
 {% endblock body %}

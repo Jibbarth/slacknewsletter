@@ -1,12 +1,13 @@
-<br>
-<table id="email-container" width="660" align="center" style="border-right:1px solid #e2e8ea; border-bottom:1px solid #e2e8ea; border-left:1px solid #e2e8ea; background-color:#ffffff;" border="0" cellspacing="0" cellpadding="0">
+<table width="660" align="center"
+       style="margin-bottom: 30px; border-right:1px solid #e2e8ea; border-bottom:1px solid #e2e8ea; border-left:1px solid #e2e8ea; background-color:#ffffff;"
+       border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td style="background-color:{{ tpl.main_color }};
-            {% if section.image is defined %} background-image: url({{ section.image }}); background-size: cover{% endif %}">
+        {% if section.image is defined %} background-image: url({{ section.image }}); background-size: cover{% endif %}">
             <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td class="resp-full-td" valign="top" style="padding:20px 20px 0; text-align:center;">
-                        <span style="font-size:36px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}">
+                        <span style="font-size:36px;  font-weight:100; color:{{ tpl.section_title_color }}">
                             {{ section.title }}
                         </span>
                         <hr align="center"
@@ -14,18 +15,19 @@
                     </td>
                 </tr>
                 {% if section.description is defined %}
-                <tr>
-                    <td class="resp-full-td" valign="top" style="padding:20px; text-align:center;">
-                        <span style="font-size:18px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}">
+                    <tr>
+                        <td class="resp-full-td" valign="top" style="padding:20px; text-align:center;">
+                        <span style="font-size:18px;  font-weight:100; color:{{ tpl.section_title_color }}">
                             {{ section.description | raw | nl2br }}
                         </span>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 {% endif %}
                 {% if tpl.base_slack_url is defined %}
                     <tr>
                         <td class="resp-full-td" style="padding: 0 20px 20px 0; text-align:right;">
-                            <a style="font-size:13px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}" href="{{ tpl.base_slack_url }}/messages/{{ section.link }}">{{ 'app.join_chanel' | trans }}</a>
+                            <a style="font-size:13px;  font-weight:100; color:{{ tpl.section_title_color }}"
+                               href="{{ tpl.base_slack_url }}/messages/{{ section.link }}">{{ 'app.join_chanel' | trans }}</a>
                         </td>
                     </tr>
                 {% endif %}
@@ -33,7 +35,7 @@
         </td>
     </tr>
 
-    {% for article in section.messages  %}
+    {% for article in section.messages %}
         {% include 'newsletter/article.html.twig' with {'article' : article, 'tpl' : tpl} only %}
     {% endfor %}
     <tr>
@@ -42,4 +44,3 @@
         {% endif %}
     </tr>
 </table>
-<br>

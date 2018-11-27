@@ -1,28 +1,29 @@
-
-    <table id="email-container" width="660" align="center" style="padding:20px 0px;" border="0" cellspacing="0" cellpadding="0">
+<table width="660" align="center" style="padding:20px 0px;" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="50%" style="text-align:left;">
+                        <img width="150" src="{{ tpl.logo }}" alt="Logo" border="0">
+                    </td>
+                    <td width="50%" style="text-align:right;">
+                        <span
+                            style="font-size:18px;  color:#333">{{ 'app.newsletter_title'| trans({'%company%' : tpl.company_name}) }}</span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% if tpl.summary is defined %}
         <tr>
             <td>
-                <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td width="50%" style="text-align:left;">
-                            <img width="150" src="{{ tpl.logo }}" alt="Logo" border="0">
-                        </td>
-                        <td width="50%" style="text-align:right;">
-                           <span style="font-size:18px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#333">{{ 'app.newsletter_title'| trans({'%company%' : tpl.company_name}) }}</span>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        {% if tpl.summary is defined %}
-        <tr>
-            <td>
-                <div class="resp-full-table" style="margin-top:20px; padding:1px 10px; border-left: 2px solid {{ tpl.main_color }};">
-                    <p style="font-size:15px; font-style:italic; font-family:'Helvetica Neue', helvetica, arial, sans-serif; color:#333">
+                <div class="resp-full-table"
+                     style="margin-top:20px; padding:1px 10px; border-left: 2px solid {{ tpl.main_color }};">
+                    <p style="font-size:15px; font-style:italic;  color:#333">
                         {{ tpl.summary | raw | nl2br }}
                     </p>
                 </div>
             </td>
         </tr>
-        {% endif %}
-    </table>
+    {% endif %}
+</table>
