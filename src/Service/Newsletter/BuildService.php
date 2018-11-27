@@ -44,6 +44,7 @@ class BuildService
     public function build()
     {
         $messages = $this->getMessagesToDisplay();
+        $compresser = \WyriHaximus\HtmlCompress\Factory::construct();
 
         // TODO : option to disable/enable top contributors
         $messages = $this->addTopContributors($messages);
@@ -54,7 +55,7 @@ class BuildService
 
         $newsletter = $this->renderService->render($messages);
 
-        return $newsletter;
+        return $compresser->compress($newsletter);
     }
 
     /**
