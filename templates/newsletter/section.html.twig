@@ -5,7 +5,7 @@
             <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td class="resp-full-td" valign="top" style="padding:20px 20px 0; text-align:center;">
-                        <span style="font-size:36px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}">
+                        <span style="font-size:36px;  font-weight:100; color:{{ tpl.section_title_color }}">
                             {{ section.title }}
                         </span>
                         <hr align="center"
@@ -15,7 +15,7 @@
                 {% if section.description is defined %}
                 <tr>
                     <td class="resp-full-td" valign="top" style="padding:20px; text-align:center;">
-                        <span style="font-size:18px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}">
+                        <span style="font-size:18px;  font-weight:100; color:{{ tpl.section_title_color }}">
                             {{ section.description | raw | nl2br }}
                         </span>
                     </td>
@@ -24,7 +24,7 @@
                 {% if tpl.base_slack_url is defined %}
                     <tr>
                         <td class="resp-full-td" style="padding: 0 20px 20px 0; text-align:right;">
-                            <a style="font-size:13px; font-family:'Helvetica Neue', helvetica, arial, sans-serif; font-weight:100; color:{{ tpl.section_title_color }}" href="{{ tpl.base_slack_url }}/messages/{{ section.link }}">{{ 'app.join_chanel' | trans }}</a>
+                            <a style="font-size:13px;  font-weight:100; color:{{ tpl.section_title_color }}" href="{{ tpl.base_slack_url }}/messages/{{ section.link }}">{{ 'app.join_chanel' | trans }}</a>
                         </td>
                     </tr>
                 {% endif %}
