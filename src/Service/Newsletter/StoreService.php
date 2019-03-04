@@ -62,14 +62,20 @@ class StoreService
 
     /**
      * @throws \League\Flysystem\FileNotFoundException
+     * @throws \LogicException
      *
-     * @return bool|false|string
+     * @return string
      */
-    public function getNewsContent()
+    public function getNewsContent(): string
     {
         $newsPath = $this->getNewsPath();
 
-        return $this->filesystem->read($newsPath);
+        $content = $this->filesystem->read($newsPath);
+        if (!$content) {
+            throw new \LogicException('Unable to get News Content');
+        }
+
+        return $content;
     }
 
     /**
