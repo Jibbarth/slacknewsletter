@@ -36,3 +36,15 @@ services:
         bind:
             $newsReceivers: '%news_receivers%'
             $mailSender: '%mail_sender%'
+
+    Symfony\Component\Mailer\Mailer:
+        arguments: ['@mailer.transport']
+    Symfony\Component\Mailer\MailerInterface: '@Symfony\Component\Mailer\Mailer'
+    mailer.transport:
+        class: Symfony\Component\Mailer\Transport\TransportInterface
+        factory:
+            - 'Symfony\Component\Mailer\Transport'
+            - fromDsn
+        arguments:
+            - '%env(MAILER_DSN)%'
+            - '@event_dispatcher'

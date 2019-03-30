@@ -19,9 +19,12 @@
         "league/flysystem": "^1.0",
         "nesbot/carbon": "^1.24",
         "symfony/console": "*",
+        "symfony/contracts": "^1.1@dev",
         "symfony/dotenv": "*",
+        "symfony/event-dispatcher": "^4.3@dev",
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "*",
+        "symfony/mailer": "^4.3@dev",
         "symfony/mime": "^4.3@dev",
         "symfony/translation": "*",
         "symfony/twig-bundle": "^4.0",
@@ -80,5 +83,6 @@
             "allow-contrib": true,
             "require": "4.*"
         }
-    }
+    },
+    "minimum-stability": "stable"
 }
