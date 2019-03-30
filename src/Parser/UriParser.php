@@ -2,13 +2,6 @@
 
 namespace App\Parser;
 
-/**
- * Class UriParser
- *
- * @package App\Parser
- *
- * @author Jibé Barth <barth.jib@gmail.com>
- */
 class UriParser
 {
     private const URI_PATTERN = '#\bhttps?://[^\s()<>]+(?:\([\w]+\)|([^[:punct:]\s]|/))#';

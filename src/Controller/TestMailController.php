@@ -7,11 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class TestMailController
- *
- * @package App\Controller
- */
 class TestMailController extends Controller
 {
     /**
@@ -21,7 +16,7 @@ class TestMailController extends Controller
      *
      * @return Response
      */
-    public function index(BuildService $buildService)
+    public function index(BuildService $buildService): Response
     {
         $newsletter = $buildService->build();
 

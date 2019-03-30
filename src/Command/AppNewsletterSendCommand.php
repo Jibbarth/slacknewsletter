@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Newsletter\StoreService;
+use App\Storage\NewsletterStorage;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,16 +13,11 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\NamedAddress;
 
-/**
- * Class AppNewsletterBrowseCommand
- *
- * @package App\Command
- */
 class AppNewsletterSendCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:send';
     /**
-     * @var StoreService
+     * @var NewsletterStorage
      */
     private $newsStoreService;
     /**
@@ -38,17 +33,9 @@ class AppNewsletterSendCommand extends Command
      */
     private $mailer;
 
-    /**
-     * AppNewsletterBuildCommand constructor.
-     *
-     * @param StoreService $newsStoreService
-     * @param array $newsReceivers
-     * @param string $mailSender
-     * @param MailerInterface $mailer
-     */
     public function __construct(
         MailerInterface $mailer,
-        StoreService $newsStoreService,
+        NewsletterStorage $newsStoreService,
         array $newsReceivers,
         string $mailSender
     ) {
@@ -59,7 +46,7 @@ class AppNewsletterSendCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addOption('no-archive', null, InputOption::VALUE_NONE, 'no archive news after send')
@@ -67,13 +54,6 @@ class AppNewsletterSendCommand extends Command
         ;
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @throws \League\Flysystem\Exception
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $consoleInteract = new SymfonyStyle($input, $output);

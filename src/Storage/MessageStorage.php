@@ -1,45 +1,27 @@
 <?php
 
-namespace App\Service;
+namespace App\Storage;
 
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
-/**
- * Class StoreMessageService
- *
- * @package App\Service
- */
-class StoreMessageService
+class MessageStorage
 {
-    const CURRENT_FOLDER = 'messages/current/';
-    const ARCHIVE_FOLDER = 'messages/archive/';
+    private const CURRENT_FOLDER = 'messages/current/';
+    private const ARCHIVE_FOLDER = 'messages/archive/';
 
-    /**
-     * @var string
-     */
-    private $publicDirectory;
     /**
      * @var Filesystem
      */
     private $filesystem;
 
-    public function __construct(
-        string $publicDir
-    ) {
+    public function __construct(string $publicDir)
+    {
         $localAdapter = new Local($publicDir);
         $this->filesystem = new Filesystem($localAdapter);
-        $this->publicDirectory = $publicDir;
     }
 
-    /**
-     * @param string $channel
-     * @param array $messages
-     *
-     * @throws \League\Flysystem\FileExistsException
-     * @throws \League\Flysystem\FileNotFoundException
-     */
-    public function saveChannel(string $channel, array $messages)
+    public function saveChannel(string $channel, array $messages): void
     {
         $channelDirectory = $this->getChannelDirectoryPath($channel);
         $this->filesystem->createDir($channelDirectory);
@@ -53,14 +35,6 @@ class StoreMessageService
         $this->filesystem->write($messagesFile, \json_encode($messages));
     }
 
-    /**
-     * @param string $channel
-     *
-     * @throws \League\Flysystem\FileExistsException
-     * @throws \League\Flysystem\FileNotFoundException
-     *
-     * @return array
-     */
     public function retrieveMessagesForChannel(string $channel): array
     {
         $messagesFile = $this->getMessageFilePath($channel);
@@ -71,13 +45,7 @@ class StoreMessageService
         return \json_decode($this->filesystem->read($messagesFile), true);
     }
 
-    /**
-     * @param string $channel
-     *
-     * @throws \League\Flysystem\FileExistsException
-     * @throws \League\Flysystem\FileNotFoundException
-     */
-    public function archiveChannel(string $channel)
+    public function archiveChannel(string $channel): void
     {
         $channelArchive = static::ARCHIVE_FOLDER . $channel;
         $this->filesystem->copy(
@@ -87,21 +55,11 @@ class StoreMessageService
         $this->filesystem->delete($this->getMessageFilePath($channel));
     }
 
-    /**
-     * @param string $channel
-     *
-     * @return string
-     */
     private function getChannelDirectoryPath(string $channel): string
     {
         return static::CURRENT_FOLDER . $channel;
     }
 
-    /**
-     * @param string $channel
-     *
-     * @return string
-     */
     private function getMessageFilePath(string $channel): string
     {
         $channelDirectory = $this->getChannelDirectoryPath($channel);

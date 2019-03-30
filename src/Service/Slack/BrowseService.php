@@ -10,11 +10,6 @@ use Frlnc\Slack\Http\SlackResponseFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-/**
- * Class BrowseService
- *
- * @package App\Service\Slack
- */
 class BrowseService
 {
     /**
@@ -30,13 +25,6 @@ class BrowseService
      */
     private $messageParser;
 
-    /**
-     * BrowseChannel constructor.
-     *
-     * @param LoggerInterface $logger
-     * @param \App\Parser\SlackMessageParser $messageParser
-     * @param string $slackToken
-     */
     public function __construct(
         LoggerInterface $logger,
         SlackMessageParser $messageParser,
@@ -50,15 +38,6 @@ class BrowseService
         $this->messageParser = $messageParser;
     }
 
-    /**
-     * @param string $channel
-     * @param int $oldest timestamp to begin retrieve
-     * @param int $max
-     * @param array $messages
-     * @param int|null $latest
-     *
-     * @return array
-     */
     public function getChannelHistory(
         string $channel,
         int $oldest,

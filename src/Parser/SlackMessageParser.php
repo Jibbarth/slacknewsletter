@@ -4,13 +4,6 @@ namespace App\Parser;
 
 use Embed\Embed;
 
-/**
- * Class SlackMessageParser
- *
- * @package App\Parser
- *
- * @author Jibé Barth <barth.jib@gmail.com>
- */
 final class SlackMessageParser
 {
     /**
@@ -30,11 +23,6 @@ final class SlackMessageParser
         $this->blacklistUrls = $blacklistUrls;
     }
 
-    /**
-     * @param array $message
-     *
-     * @return array
-     */
     public function getParsedMessage(array $message): ?array
     {
         // Get attachment info directly

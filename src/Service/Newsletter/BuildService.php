@@ -3,13 +3,8 @@
 namespace App\Service\Newsletter;
 
 use App\Service\Slack\BrowseService;
-use App\Service\StoreMessageService;
+use App\Storage\MessageStorage;
 
-/**
- * Class BuildService
- *
- * @package App\Service\Newsletter
- */
 class BuildService
 {
     /**
@@ -21,7 +16,7 @@ class BuildService
      */
     private $slackChannels;
     /**
-     * @var StoreMessageService
+     * @var MessageStorage
      */
     private $storeMessageService;
     /**
@@ -31,7 +26,7 @@ class BuildService
 
     public function __construct(
         RenderService $renderService,
-        StoreMessageService $storeMessageService,
+        MessageStorage $storeMessageService,
         BrowseService $browseService,
         array $slackChannels
     ) {
@@ -58,13 +53,7 @@ class BuildService
         return $compresser->compress($newsletter);
     }
 
-    /**
-     * @throws \League\Flysystem\FileExistsException
-     * @throws \League\Flysystem\FileNotFoundException
-     *
-     * @return string
-     */
-    public function buildAndArchive()
+    public function buildAndArchive(): string
     {
         $newsletter = $this->build();
 
@@ -75,10 +64,7 @@ class BuildService
         return $newsletter;
     }
 
-    /**
-     * @return array
-     */
-    public function getMessagesToDisplay()
+    public function getMessagesToDisplay(): array
     {
         $messages = [];
         foreach ($this->slackChannels as $channel) {
@@ -114,11 +100,6 @@ class BuildService
         return $messages;
     }
 
-    /**
-     * @param array $messages
-     *
-     * @return array
-     */
     protected function addTopContributors(array $messages): array
     {
         foreach ($messages as $channel => $section) {
@@ -128,11 +109,6 @@ class BuildService
         return $messages;
     }
 
-    /**
-     * @param array $messages
-     *
-     * @return array
-     */
     protected function removeDuplicationInMessages(array $messages): array
     {
         // In case browse method retrieve twice same message

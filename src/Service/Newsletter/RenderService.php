@@ -4,11 +4,6 @@ namespace App\Service\Newsletter;
 
 use Twig\Environment;
 
-/**
- * Class RenderService
- *
- * @package App\Service\Newsletter
- */
 class RenderService
 {
     /**
@@ -28,7 +23,7 @@ class RenderService
         $this->mailTemplate = $mailTemplate;
     }
 
-    public function render(array $messages)
+    public function render(array $messages): string
     {
         $html = $this->twig->render('newsletter.html.twig', [
             'tpl' => $this->mailTemplate,
