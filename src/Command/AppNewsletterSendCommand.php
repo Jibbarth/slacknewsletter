@@ -4,12 +4,14 @@ namespace App\Command;
 
 use App\Service\Newsletter\StoreService;
 use Carbon\Carbon;
-use Swift_Mailer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\NamedAddress;
 
 /**
  * Class AppNewsletterBrowseCommand
@@ -24,10 +26,6 @@ class AppNewsletterSendCommand extends Command
      */
     private $newsStoreService;
     /**
-     * @var Swift_Mailer
-     */
-    private $mailer;
-    /**
      * @var array
      */
     private $newsReceivers;
@@ -35,23 +33,26 @@ class AppNewsletterSendCommand extends Command
      * @var string
      */
     private $mailSender;
+    /**
+     * @var \Symfony\Component\Mailer\MailerInterface
+     */
+    private $mailer;
 
     /**
      * AppNewsletterBuildCommand constructor.
      *
      * @param StoreService $newsStoreService
-     * @param Swift_Mailer $mailer
      * @param array $newsReceivers
      * @param string $mailSender
      */
     public function __construct(
+        MailerInterface $mailer,
         StoreService $newsStoreService,
-        Swift_Mailer $mailer,
         array $newsReceivers,
         string $mailSender
     ) {
-        $this->newsStoreService = $newsStoreService;
         $this->mailer = $mailer;
+        $this->newsStoreService = $newsStoreService;
         $this->newsReceivers = $newsReceivers;
         $this->mailSender = $mailSender;
         parent::__construct();
@@ -69,18 +70,24 @@ class AppNewsletterSendCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @throws \League\Flysystem\FileNotFoundException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \League\Flysystem\Exception
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $consoleInteract = new SymfonyStyle($input, $output);
         $subject = 'Newsletter ' . Carbon::now()->format('#W // Y');
-        $message = (new \Swift_Message($subject))
-            ->setFrom($this->mailSender, 'NewsLetters')
-            ->setTo($this->newsReceivers);
+        $sender = new NamedAddress($this->mailSender, 'NewsLetters');
 
-        $message->setBody($this->newsStoreService->getNewsContent(), 'text/html');
+        $message = (new Email())
+            ->subject($subject)
+            ->addFrom($sender)
+            ->html($this->newsStoreService->getNewsContent());
+
+        foreach ($this->newsReceivers as $receiver) {
+            $message->addTo($receiver);
+        }
+
         $this->mailer->send($message);
 
         if (!$input->getOption('no-archive')) {
