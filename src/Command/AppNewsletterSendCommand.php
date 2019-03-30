@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\NamedAddress;
 
@@ -32,6 +33,10 @@ class AppNewsletterSendCommand extends Command
      * @var string
      */
     private $mailSender;
+    /**
+     * @var \Symfony\Component\Mailer\MailerInterface
+     */
+    private $mailer;
 
     /**
      * AppNewsletterBuildCommand constructor.
@@ -41,10 +46,12 @@ class AppNewsletterSendCommand extends Command
      * @param string $mailSender
      */
     public function __construct(
+        MailerInterface $mailer,
         StoreService $newsStoreService,
         array $newsReceivers,
         string $mailSender
     ) {
+        $this->mailer = $mailer;
         $this->newsStoreService = $newsStoreService;
         $this->newsReceivers = $newsReceivers;
         $this->mailSender = $mailSender;
@@ -64,7 +71,7 @@ class AppNewsletterSendCommand extends Command
      * @param OutputInterface $output
      *
      * @throws \League\Flysystem\Exception
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -76,12 +83,12 @@ class AppNewsletterSendCommand extends Command
             ->subject($subject)
             ->addFrom($sender)
             ->html($this->newsStoreService->getNewsContent());
+
         foreach ($this->newsReceivers as $receiver) {
             $message->addTo($receiver);
         }
 
-        // TODO : Use a transport to send mail
-        // dump($message->toString());
+        $this->mailer->send($message);
 
         if (!$input->getOption('no-archive')) {
             $this->newsStoreService->archiveNews();
