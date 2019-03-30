@@ -75,7 +75,9 @@ class AppNewsletterBrowseCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $consoleInteract = new SymfonyStyle($input, $output);
-        $daysToBrowse = (int) $input->getOption('days');
+        /** @var int $daysToBrowse */
+        $daysToBrowse = $input->getOption('days');
+
         $timestamp = Carbon::now()->subDays($daysToBrowse)->getTimestamp();
 
         $messages = [];
