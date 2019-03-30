@@ -3,75 +3,41 @@
 namespace App\Service\Slack;
 
 use App\Constant\SlackCommand;
-use Embed\Embed;
+use App\Parser\SlackMessageParser;
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-/**
- * Class BrowseService
- *
- * @package App\Service\Slack
- */
 class BrowseService
 {
-    /**
-     * @var string
-     */
-    private $slackToken;
-
-    /**
-     * @var CurlInteractor
-     */
-    private $interactor;
-
     /**
      * @var Commander
      */
     private $commander;
     /**
-     * @var array
-     */
-    private $blacklistUrls;
-    /**
      * @var LoggerInterface
      */
     private $logger;
-
     /**
-     * BrowseChannel constructor.
-     *
-     * @param string $slackToken
-     * @param array $blacklistUrls
-     * @param LoggerInterface $logger
+     * @var \App\Parser\SlackMessageParser
      */
+    private $messageParser;
+
     public function __construct(
-        string $slackToken,
-        array $blacklistUrls,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SlackMessageParser $messageParser,
+        string $slackToken
     ) {
-        $this->slackToken = $slackToken;
+        $interactor = new CurlInteractor();
+        $interactor->setResponseFactory(new SlackResponseFactory());
 
-        $this->interactor = new CurlInteractor();
-        $this->interactor->setResponseFactory(new SlackResponseFactory());
-
-        $this->commander = new Commander($this->slackToken, $this->interactor);
-        $this->blacklistUrls = $blacklistUrls;
+        $this->commander = new Commander($slackToken, $interactor);
         $this->logger = $logger;
+        $this->messageParser = $messageParser;
     }
 
-    /**
-     * @param string $channel
-     * @param int $oldest timestamp to begin retrieve
-     * @param int $max
-     * @param array $messages
-     * @param int|null $latest
-     *
-     * @return array
-     */
     public function getChannelHistory(
         string $channel,
         int $oldest,
@@ -108,7 +74,7 @@ class BrowseService
                     $lastTimeStamp = $message['ts'];
                 }
 
-                $newMessage = $this->getParsedMessage($message);
+                $newMessage = $this->messageParser->getParsedMessage($message);
 
                 $newMessage['ts'] = $message['ts'];
                 $newMessage['author'] = $message['user'];
@@ -125,13 +91,7 @@ class BrowseService
         return $messages;
     }
 
-    /**
-     * @param array $messages
-     * @param int $max
-     *
-     * @return array
-     */
-    public function getTopContributors(array $messages, $max = 5)
+    public function getTopContributors(array $messages, int $max = 5): array
     {
         $authors = [];
         foreach ($messages as $message) {
@@ -174,84 +134,5 @@ class BrowseService
             default:
                 throw new \InvalidArgumentException('Unknow channel type for ' . $channel);
         }
-    }
-
-    /**
-     * @param array $message
-     *
-     * @return array
-     */
-    protected function getParsedMessage(array $message): array
-    {
-        if (isset($message['attachments'])) {
-            return $this->getAttachmentDetail($message);
-        }
-
-        return $this->getMessageContent($message);
-    }
-
-    /**
-     * @param array $message
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     */
-    protected function getMessageContent(array $message): array
-    {
-        // The Regular Expression filter
-        $regexUrl = '#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#';
-
-        if (!\preg_match($regexUrl, $message['text'], $url)) {
-            throw new NotFoundHttpException('No link found in "' . $message['text'] . '"');
-        }
-
-        if ($this->isLinkBlackListed($url[0])) {
-            throw new BadRequestHttpException('Unauthorized url');
-        }
-
-        $info = Embed::create($url[0]);
-
-        $content = [
-            'title' => $info->getTitle(),
-            'title_link' => $info->getUrl(),
-            'text' => $info->getDescription(),
-            'thumb_url' => $info->getImage(),
-        ];
-
-        return $content;
-    }
-
-    /**
-     * @param string $link
-     *
-     * @return bool
-     */
-    protected function isLinkBlackListed(string $link): bool
-    {
-        foreach ($this->blacklistUrls as $blacklistUrl) {
-            if (\strpos($link, $blacklistUrl) > -1) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array $message
-     *
-     * @return array
-     */
-    private function getAttachmentDetail(array $message): array
-    {
-        $attachment = $message['attachments'][0];
-        if (!isset($attachment['title'], $attachment['title_link'])) {
-            throw  new NotFoundHttpException('No link found in "' . $message['text'] . '"');
-        }
-        if ($this->isLinkBlackListed($attachment['title_link'])) {
-            throw new BadRequestHttpException('Unauthorized url');
-        }
-
-        return $attachment;
     }
 }

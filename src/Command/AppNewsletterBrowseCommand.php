@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Service\Slack\BrowseService;
-use App\Service\StoreMessageService;
+use App\Storage\MessageStorage;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,11 +11,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class AppNewsletterBrowseCommand
- *
- * @package App\Command
- */
 class AppNewsletterBrowseCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:browse';
@@ -33,21 +28,13 @@ class AppNewsletterBrowseCommand extends Command
      */
     private $daysToBrowse;
     /**
-     * @var StoreMessageService
+     * @var MessageStorage
      */
     private $storeMessageService;
 
-    /**
-     * AppNewsletterBuildCommand constructor.
-     *
-     * @param \App\Service\Slack\BrowseService $browseService
-     * @param StoreMessageService $storeMessageService
-     * @param array $slackChannels
-     * @param int $daysToBrowse
-     */
     public function __construct(
         BrowseService $browseService,
-        StoreMessageService $storeMessageService,
+        MessageStorage $storeMessageService,
         array $slackChannels,
         int $daysToBrowse
     ) {
@@ -58,7 +45,7 @@ class AppNewsletterBrowseCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Browse all slack channels defined in config/channels.json')
@@ -67,15 +54,12 @@ class AppNewsletterBrowseCommand extends Command
         ;
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $consoleInteract = new SymfonyStyle($input, $output);
-        $daysToBrowse = (int) $input->getOption('days');
+        /** @var int $daysToBrowse */
+        $daysToBrowse = $input->getOption('days');
+
         $timestamp = Carbon::now()->subDays($daysToBrowse)->getTimestamp();
 
         $messages = [];

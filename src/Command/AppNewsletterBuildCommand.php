@@ -2,48 +2,37 @@
 
 namespace App\Command;
 
-use App\Service\Newsletter\BuildService;
-use App\Service\Newsletter\StoreService;
+use App\Builder\NewsletterBuilder;
+use App\Storage\NewsletterStorage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class AppNewsletterBrowseCommand
- *
- * @package App\Command
- */
 class AppNewsletterBuildCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:build';
 
     /**
-     * @var BuildService
+     * @var NewsletterBuilder
      */
     private $buildService;
     /**
-     * @var StoreService
+     * @var NewsletterStorage
      */
     private $storeService;
 
-    /**
-     * AppNewsletterBuildCommand constructor.
-     *
-     * @param StoreService $storeService
-     * @param BuildService $buildService
-     */
     public function __construct(
-        StoreService $storeService,
-        BuildService $buildService
+        NewsletterStorage $storeService,
+        NewsletterBuilder $buildService
     ) {
         $this->storeService = $storeService;
         $this->buildService = $buildService;
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addOption('no-archive', null, InputOption::VALUE_NONE, 'no archive message after build')
@@ -51,10 +40,6 @@ class AppNewsletterBuildCommand extends Command
         ;
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $consoleInteract = new SymfonyStyle($input, $output);
@@ -72,16 +57,7 @@ class AppNewsletterBuildCommand extends Command
         }
     }
 
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     *
-     * @throws \League\Flysystem\FileExistsException
-     * @throws \League\Flysystem\FileNotFoundException
-     * @throws \LogicException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @return string
-     */
-    private function getNewsLetter(InputInterface $input)
+    private function getNewsLetter(InputInterface $input): string
     {
         if ($input->getOption('no-archive')) {
             return $this->buildService->build();

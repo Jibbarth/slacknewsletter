@@ -2,26 +2,21 @@
 
 namespace App\Controller;
 
-use App\Service\Newsletter\BuildService;
+use App\Builder\NewsletterBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class TestMailController
- *
- * @package App\Controller
- */
 class TestMailController extends Controller
 {
     /**
      * @Route("/test/mail", name="test_mail")
      *
-     * @param BuildService $buildService
+     * @param NewsletterBuilder $buildService
      *
      * @return Response
      */
-    public function index(BuildService $buildService)
+    public function index(NewsletterBuilder $buildService): Response
     {
         $newsletter = $buildService->build();
 
