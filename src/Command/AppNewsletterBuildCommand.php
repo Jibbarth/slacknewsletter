@@ -79,6 +79,7 @@ class AppNewsletterBuildCommand extends Command
      * @throws \League\Flysystem\FileNotFoundException
      * @throws \LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     *
      * @return string
      */
     private function getNewsLetter(InputInterface $input)

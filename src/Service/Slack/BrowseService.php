@@ -19,16 +19,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class BrowseService
 {
     /**
-     * @var string
-     */
-    private $slackToken;
-
-    /**
-     * @var CurlInteractor
-     */
-    private $interactor;
-
-    /**
      * @var Commander
      */
     private $commander;
@@ -53,12 +43,10 @@ class BrowseService
         array $blacklistUrls,
         LoggerInterface $logger
     ) {
-        $this->slackToken = $slackToken;
+        $interactor = new CurlInteractor();
+        $interactor->setResponseFactory(new SlackResponseFactory());
 
-        $this->interactor = new CurlInteractor();
-        $this->interactor->setResponseFactory(new SlackResponseFactory());
-
-        $this->commander = new Commander($this->slackToken, $this->interactor);
+        $this->commander = new Commander($slackToken, $interactor);
         $this->blacklistUrls = $blacklistUrls;
         $this->logger = $logger;
     }

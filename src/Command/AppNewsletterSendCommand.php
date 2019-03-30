@@ -44,6 +44,7 @@ class AppNewsletterSendCommand extends Command
      * @param StoreService $newsStoreService
      * @param array $newsReceivers
      * @param string $mailSender
+     * @param MailerInterface $mailer
      */
     public function __construct(
         MailerInterface $mailer,
