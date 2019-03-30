@@ -18,19 +18,14 @@ services:
             $blacklistUrls: '%blacklist_urls%'
             $daysToBrowse: '%days_to_browse%'
             $publicDir: '%kernel.project_dir%/public/'
+            $mailTemplate: '%mail_template%'
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests}'
 
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
-    App\Service\Newsletter\RenderService:
-        arguments:
-            - '@twig'
-            - '%mail_template%'
 
     App\Command\AppNewsletterSendCommand:
         bind:

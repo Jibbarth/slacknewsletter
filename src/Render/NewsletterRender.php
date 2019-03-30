@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service\Newsletter;
+namespace App\Render;
 
 use Twig\Environment;
 
-class RenderService
+class NewsletterRender
 {
     /**
      * @var Environment

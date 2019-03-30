@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Service\Newsletter;
+namespace App\Builder;
 
+use App\Render\NewsletterRender;
 use App\Service\Slack\BrowseService;
 use App\Storage\MessageStorage;
 
-class BuildService
+class NewsletterBuilder
 {
     /**
-     * @var RenderService
+     * @var NewsletterRender
      */
     private $renderService;
     /**
@@ -25,7 +26,7 @@ class BuildService
     private $browseService;
 
     public function __construct(
-        RenderService $renderService,
+        NewsletterRender $renderService,
         MessageStorage $storeMessageService,
         BrowseService $browseService,
         array $slackChannels

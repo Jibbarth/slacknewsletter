@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\Newsletter\BuildService;
+use App\Builder\NewsletterBuilder;
 use App\Storage\NewsletterStorage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ class AppNewsletterBuildCommand extends Command
     protected static $defaultName = 'app:newsletter:build';
 
     /**
-     * @var BuildService
+     * @var NewsletterBuilder
      */
     private $buildService;
     /**
@@ -25,7 +25,7 @@ class AppNewsletterBuildCommand extends Command
 
     public function __construct(
         NewsletterStorage $storeService,
-        BuildService $buildService
+        NewsletterBuilder $buildService
     ) {
         $this->storeService = $storeService;
         $this->buildService = $buildService;
