@@ -8,6 +8,7 @@ use App\Storage\MessageStorage;
 
 class NewsletterBuilder
 {
+    private const DEBUG = false;
     /**
      * @var NewsletterRender
      */
@@ -45,11 +46,16 @@ class NewsletterBuilder
         // TODO : option to disable/enable top contributors
         $messages = $this->addTopContributors($messages);
 
-        if (\count($messages) == 0) {
+        if (\count($messages) === 0) {
             throw new \LogicException('No articles to send. Did you launch app:newsletter:browse command ?');
         }
 
         $newsletter = $this->renderService->render($messages);
+
+        if (static::DEBUG) {
+            // Don't compress newsletter
+            return $newsletter;
+        }
 
         return $compresser->compress($newsletter);
     }
