@@ -29,6 +29,8 @@
         "symfony/translation": "*",
         "symfony/twig-bundle": "^4.0",
         "symfony/yaml": "*",
+        "twig/cssinliner-extension": "^2.0",
+        "twig/inky-extension": "^2.0",
         "wyrihaximus/html-compress": "^1.4"
     },
     "require-dev": {
