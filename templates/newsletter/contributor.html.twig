@@ -1,41 +1,37 @@
-<tr>
-    <td style="border-bottom: 1px solid #e2e8ea">
-        <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0"
-               style="padding:20px;">
-            <tr>
-                <td width="150">
-                    <span style="font-size:18px; font-weight: bold;  color:#313131;">
-                        {{ 'app.top_contributors' | trans }}
-                    </span>
-                    <br/>
-                    <hr align="left"
-                        style="width:150px; margin-left:0px; text-align:left; background-color:{{ tpl.main_color }}; color:{{ tpl.main_color }}; height: 2px; border: 0 none;"/>
-                </td>
-            </tr>
-        </table>
-        <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0"
-               style="position:relative;padding:0 20px;">
-            <tr align="left" style="max-width: 375px">
-                <td>
-                    {% for contributor in contributors %}
-                        <div
-                            style="position:relative;display: inline-block; margin-right: 15px; width:72px;height:72px;margin-bottom: 15px">
-                            <div style="max-height:0;max-width:0;overflow: visible;">
-                                <img src="{{ contributor.avatar }}"
-                                     style="border:none;padding:0px;width:72px;height:72px;border-radius:50%;display:block"
-                                     title="{{ contributor.author }}" alt="{{ contributor.author }}">
-                            </div>
-                            <div style="max-height:0;max-width:0;overflow: visible;">
-                            <span style="display:inline-block;margin-left:55px;font-size:.9em;background:#222222;
-                            color:white;width:22px;height:22px;text-align:center;line-height:22px;border-radius:50%;
-                            box-shadow:0 0 2px #333;font-weight: bold;margin-top: 55px;
-                            "
-                            >{{ contributor.nbContributions }}</span>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
+<wrapper bgcolor="#FFF">
+    <row><columns></columns></row>
+    <row>
+        <columns>
+            <h5>{{ 'app.top_contributors' | trans }}</h5>
+            <hr align="left"
+                style="width:150px; margin-left:0px; text-align:left; background-color:{{ tpl.main_color }}; color:{{ tpl.main_color }}; height: 2px; border: 0 none;"/>
+        </columns>
+    </row>
+    <row>
+        <columns>
+            {% for contributor in contributors %}
+                <!--[if gte mso 9]>
+                <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:72;height:95px;">
+                    <v:fill type="tile" src="" color="#222222" />
+                    <v:textbox inset="0,0,0,0">
+                <![endif]-->
+                <div style="position:relative;display: inline-block; width:72px;height:72px;margin-bottom: 15px;text-align: center;">
+                    <div style="max-height:0px;overflow: visible;">
+                        <img src="{{ contributor.avatar }}"
+                             style="border:none;padding:0px;width:72px;height:72px;border-radius:50%;display:block;background:#fff;"
+                             title="{{ contributor.author }}" alt="{{ contributor.author }}">
+                    </div>
+                    <div style="display:inline-block;margin-left:55px;font-size:.9em;text-align:center;font-weight: bold;margin-top: 55px;font-family:Helvetica, Arial, sans-serif;z-index: 1;">
+                        <span style="display:inline-block;width: 22px;height:22px;line-height:22px;border-radius:50%;background:#222222;color:white;box-shadow:0 0 2px #333;">
+                            {{ contributor.nbContributions }}
+                        </span>
+                    </div>
+                </div>
+                <!--[if gte mso 9]>
+                    </v:textbox>
+                </v:rect>
+                <![endif]-->
+            {% endfor %}
+        </columns>
+    </row>
+</wrapper>
