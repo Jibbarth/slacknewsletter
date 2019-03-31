@@ -1,29 +1,17 @@
-<table width="660" align="center" style="padding:20px 0px;" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td>
-            <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="50%" style="text-align:left;">
-                        <img width="150" src="{{ tpl.logo }}" alt="Logo" border="0">
-                    </td>
-                    <td width="50%" style="text-align:right;">
-                        <span
-                            style="font-size:18px;  color:#333">{{ 'app.newsletter_title'| trans({'%company%' : tpl.company_name}) }}</span>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    {% if tpl.summary is defined %}
-        <tr>
-            <td>
-                <div class="resp-full-table"
-                     style="margin-top:20px; padding:1px 10px; border-left: 2px solid {{ tpl.main_color }};">
-                    <p style="font-size:15px; font-style:italic;  color:#333">
-                        {{ tpl.summary | raw | nl2br }}
-                    </p>
-                </div>
-            </td>
-        </tr>
-    {% endif %}
-</table>
+<row class="collapse">
+    <columns small="6">
+        <img width="150" src="{{ tpl.logo }}" alt="Logo" border="0">
+    </columns>
+    <columns small="6" valign="middle" class="text-right">
+        <p class="text-right">{{ 'app.newsletter_title'| trans({'%company%' : tpl.company_name}) }}</p>
+    </columns>
+</row>
+<spacer size="16"></spacer>
+{% if tpl.summary is defined %}
+<row>
+    <columns  style="padding: 8px 0 8px 16px; border-left: 2px solid {{ tpl.main_color }};">
+        <p class="no-margin">{{ tpl.summary | raw | nl2br }}</p>
+    </columns>
+</row>
+<spacer size="16"></spacer>
+{% endif %}
