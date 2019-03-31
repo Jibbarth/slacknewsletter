@@ -59,15 +59,11 @@ class AppNewsletterSendCommand extends Command
         $consoleInteract = new SymfonyStyle($input, $output);
         $subject = 'Newsletter ' . Carbon::now()->format('#W // Y');
         $sender = new NamedAddress($this->mailSender, 'NewsLetters');
-
         $message = (new Email())
+            ->from($sender)
             ->subject($subject)
-            ->addFrom($sender)
             ->html($this->newsStoreService->getNewsContent());
-
-        foreach ($this->newsReceivers as $receiver) {
-            $message->addTo($receiver);
-        }
+        $message->getHeaders()->addMailboxListHeader('To', $this->newsReceivers);
 
         $this->mailer->send($message);
 
