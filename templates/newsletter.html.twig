@@ -1,11 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    <style type="text/css" media="screen">
-        {% include 'css/default.css.twig' %}
-    </style>
-{% endblock %}
-
 {% block title %}{{ 'app.newsletter_title'| trans({'%company%' : tpl.company_name}) }}{% endblock %}
 
 {% block body %}

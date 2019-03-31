@@ -4,15 +4,12 @@
         <meta charset="UTF-8"/>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width"/>
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{% endblock %}</title>
         <style type="text/css">html{min-height: 100%;background: {{ tpl.background_color }};}</style>
         {% block stylesheets %}{% endblock %}
     </head>
     <body style="margin:0;padding:0">
-        {% filter inky|inline_css %}
-        <style>
-            {% include 'css/zurb/email.css.twig' %}
-        </style>
+        {% filter inky|inline_css(include('css/zurb/email.css.twig')) %}
         <table class="body">
             <tr>
                 <td class="float-center" align="center" valign="top">
