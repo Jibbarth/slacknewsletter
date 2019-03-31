@@ -15,11 +15,9 @@
         <spacer size="16"></spacer>
         {% for section in messages %}
             {% include 'newsletter/section.html.twig' with {'section' : section, 'tpl' : tpl } only %}
+            <spacer size="16"></spacer>
         {% endfor %}
-        {#<tr>
-            <td>
-                {% include 'newsletter/footer.html.twig' with {'tpl' : tpl} only %}
-            </td>
-        </tr>#}
+        {% include 'newsletter/footer.html.twig' with {'tpl' : tpl} only %}
+        <spacer size="16"></spacer>
     </container>
 {% endblock body %}

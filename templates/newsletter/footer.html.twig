@@ -1,18 +1,15 @@
-<table width="600" align="center" style="padding:0 0 20px 0;" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td>
-            <table width="600" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="100%" class="resp-full-td" style="text-align: center;">
-                        <span style="font-size:12px;  color:#aeb2b3">
-                            {{ 'app.newsletter_sent_by' | trans({'%company%': tpl.company_name}) }}
-                            <br>
-                        </span>
-                        <hr align="left" style="margin-left:0px; text-align:left; background-color:#aeb2b3; color:#aeb2b3; height: 1px; border: 0 none;" />
-                        <img width="150" src="{{ tpl.logo }}" alt="Logo" border="0">
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+<row>
+    <columns>
+        <p class="text-center">
+            {{ 'app.newsletter_sent_by' | trans({'%company%': tpl.company_name}) }}
+        </p>
+        <hr align="left" style="margin-left:0px; text-align:left; background-color:#aeb2b3; color:#aeb2b3; height: 1px; border: 0 none;" />
+    </columns>
+</row>
+<row>
+    <columns></columns>
+    <columns large="3" small="6">
+        <img class="float-center" src="{{ tpl.logo }}" alt="Logo" border="0">
+    </columns>
+    <columns></columns>
+</row>
