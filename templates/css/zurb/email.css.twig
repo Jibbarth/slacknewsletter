@@ -86,18 +86,18 @@ table, tr, td {
 @media only screen {
     html {
         min-height: 100%;
-        background: {{ tpl.background_color }};
+        background: {{ tpl.background_color | raw }};
     }
 }
 
 table.body {
-    background: {{ tpl.background_color }};
+    background: {{ tpl.background_color | raw }};
     height: 100%;
     width: 100%;
 }
 
 table.container {
-    background: {{ tpl.background_color }};
+    background: {{ tpl.background_color | raw }};
     width: 662px;
     margin: 0 auto;
     Margin: 0 auto;
@@ -872,6 +872,7 @@ h4.text-right,
 h5.text-right,
 h6.text-right,
 p.text-right,
+a.text-right,
 span.text-right {
     text-align: right;
 }
@@ -1006,12 +1007,25 @@ h3,
 h4,
 h5,
 h6 {
-    color: {{ tpl.main_color }};
+    color: inherit;
     word-wrap: normal;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: normal;
     margin-bottom: 10px;
     Margin-bottom: 10px;
+}
+
+.section h1,
+.section h2,
+.section h3,
+.section h4,
+.section h5,
+.section h6,
+.section p,
+.section td,
+.section th,
+.section a {
+    color: {{ tpl.section_title_color | raw}};
 }
 
 h1 {
@@ -1043,8 +1057,8 @@ table.body,
 p,
 td,
 th {
-    font-size: 16px;
-    line-height: 1.3;
+    font-size: 14px;
+    line-height: 1.2;
 }
 
 p {
@@ -1052,9 +1066,13 @@ p {
     Margin-bottom: 10px;
 }
 
-p.no-margin {
+.no-margin {
     margin: 0;
     Margin: 0;
+}
+.no-padding{
+    padding: 0;
+    Padding: 0;
 }
 
 p.lead {
@@ -1077,7 +1095,7 @@ small {
     color: #cacaca;
 }
 
-a {
+{#a {
     color: #2199e8;
     text-decoration: none;
 }
@@ -1088,7 +1106,7 @@ a:hover {
 
 a:active {
     color: #147dc2;
-}
+}#}
 
 a:visited {
     color: #2199e8;

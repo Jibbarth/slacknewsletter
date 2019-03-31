@@ -1,67 +1,40 @@
-<tr>
-    <td style="border-bottom: 1px solid #e2e8ea">
-        <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0"
-               style="padding:20px;">
-            <tr>
-                <td width="100%">
-                    {% if article.thumb_url is not defined and article.image_url is defined %}
-                        {% set article = article|merge({'thumb_url': article.image_url}) %}
-                    {% endif %}
-                    {% if article.thumb_url is defined %}
-                        <table width="120" align="left" class="resp-full-table"
-                               style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" border="0"
-                               cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="100%" class="resp-full-td" style="text-align: center;">
-                                    <a href="{{ article.title_link }}">
-                                        <img src="{{ article.thumb_url }}" width="120px" style="border-radius:3px;"
-                                             border="0">
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                        <table width="1" align="left" class="resp-full-table" border="0" cellpadding="0"
-                               cellspacing="0">
-                            <tr>
-                                <td width="100%" height="20"></td>
-                            </tr>
-                        </table>
-                    {% endif %}
-                    <table width="480" align="right" class="resp-full-table"
-                           style="border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;" border="0"
-                           cellspacing="0" cellpadding="0">
-                        <tr>
-                            <td width="100%" class="resp-full-td" valign="top" style="text-align : justify;">
-                                <a href="{{ article.title_link }}" style="outline:none; text-decoration:none">
-                                    <span style="font-size:18px; font-weight: bold;  color:#313131;">
-                                        {{ article.title | raw }}
-                                    </span>
-                                </a>
-                                <br/>
-                                <hr align="left"
-                                    style="width:100px; margin-left:0px; text-align:left; background-color:{{ tpl.main_color }}; color:{{ tpl.main_color }}; height: 2px; border: 0 none;"/>
-                                <span style="font-size:14px;  color:#313131">
-                                    {% if article.text is defined %}
-                                        {{ article.text | raw }}
-                                    {% endif %}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="100%" class="resp-full-td" valign="top" style="padding-top:20px;">
-                                <table align="right" border="0" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                        <td style="background-color:{{ tpl.main_color }}; border-radius:3px; padding: 6px 12px;">
-                                            <a style=" color:#ffffff; text-align: center; text-decoration: none; display:block; font-weight : 200; font-size: 16px;"
-                                               href="{{ article.title_link }}">{{ 'app.read_article' | trans }}</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
+<wrapper bgcolor="#FFF" style="border-bottom: 1px solid #ccc">
+    <row><columns></columns></row>
+    <row>
+        {% if article.thumb_url is not defined and article.image_url is defined %}
+            {% set article = article|merge({'thumb_url': article.image_url}) %}
+        {% endif %}
+        {% if article.thumb_url is defined and article.thumb_url is not null %}
+            <columns small="12" large="3" valign="top">
+                <center>
+                    <a href="{{ article.title_link }}">
+                        <img class="float-center" src="{{ article.thumb_url }}" alt="{{ article.title }}" style="border-radius:3px;">
+                    </a>
+                </center>
+            </columns>
+        {% endif %}
+        <columns small="12" {% if article.thumb_url is defined %}large="9" {% endif %}>
+            <a href="{{ article.title_link }}" style="outline:none; text-decoration:none">
+                <h5 class="small-text-center no-margin"><b>{{ article.title | raw }}</b></h5>
+                <hr align="left"
+                    style="width:100px; margin-left:0px; text-align:left; background-color:{{ tpl.main_color }}; color:{{ tpl.main_color }}; height: 2px; border: 0 none;"/>
+            </a>
+            <p class="small-text-center" tyle="font-size:14px;  color:#313131">
+                {% if article.text is defined %}
+                    {{ article.text | raw }}
+                {% endif %}
+            </p>
+        </columns>
+    </row>
+    <row>
+        <columns large="11">&nbsp;</columns>
+        <columns large="3" class="text-right" style="display:inline-block; background-color:{{ tpl.main_color }}; border-radius:3px; padding: 6px 12px;">
+            <center>
+                <a style=" color:#ffffff; text-align: center; text-decoration: none; display:block; font-weight : 200; font-size: 16px;"
+                   href="{{ article.title_link }}">{{ 'app.read_article' | trans }}</a>
+            </center>
+        </columns>
+    </row>
+    <row><columns></columns></row>
+</wrapper>
+
