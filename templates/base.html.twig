@@ -1,12 +1,27 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UTF-8"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width"/>
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <style type="text/css">html{min-height: 100%;background: {{ tpl.background_color }};}</style>
         {% block stylesheets %}{% endblock %}
     </head>
     <body style="margin:0;padding:0">
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% filter inky|inline_css %}
+        <style>
+            {% include 'css/zurb/email.css.twig' %}
+        </style>
+        <table class="body">
+            <tr>
+                <td class="float-center" align="center" valign="top">
+                    <center>
+                    {% block body %}{% endblock %}
+                    </center>
+                </td>
+            </tr>
+        </table>
+        {% endfilter %}
     </body>
 </html>
