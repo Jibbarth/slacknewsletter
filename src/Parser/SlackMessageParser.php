@@ -67,7 +67,7 @@ final class SlackMessageParser
             (!\array_key_exists('title_link', $attachment) || !\array_key_exists('title', $attachment))
             && !$this->isLinkBlocklisted($attachment['original_url'])
         ) {
-            return  $this->parseContentFromUrl($attachment['original_url']);
+            return $this->parseContentFromUrl($attachment['original_url']);
         }
 
         if ($this->isLinkBlocklisted($attachment['title_link'])) {
