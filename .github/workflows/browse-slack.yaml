@@ -21,10 +21,11 @@ jobs:
                 run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-suggest
             -   name: Create Channels.json
                 run: echo $CHANNELS > config/channels.json
-            -   uses: actions/download-artifact@v2
+            -   name: mkdir -p public/messages/current
+            -   uses: actions/checkout@v2
+                working-directory: ./public/messages/current/
                 with:
-                    name: messages
-                    path: public/messages/current
+                    ref: browse
                 continue-on-error: true
             -   name: Launch browse
                 run: SLACK_TOKEN=${{ secrets.SLACK_TOKEN }} php bin/console app:newsletter:browse --ansi
@@ -32,3 +33,9 @@ jobs:
                 with:
                     name: messages
                     path: public/messages/current/
+            -   name: Update browsed message
+                uses: JamesIves/github-pages-deploy-action@releases/v3
+                with:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    BRANCH: browse
+                    FOLDER: public/messages/current/
