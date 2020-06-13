@@ -16,8 +16,13 @@ final class Article
 
     private ?Contributor $contributor;
 
-    public function __construct(string $url, string $title, string $content, ?string $imageUrl, ?Contributor $contributor = null)
-    {
+    public function __construct(
+        string $url,
+        string $title,
+        string $content,
+        ?string $imageUrl,
+        ?Contributor $contributor = null
+    ) {
         $this->url = $url;
         $this->title = $title;
         $this->content = $content;

@@ -11,7 +11,7 @@ final class UriParser
     public function getUriFromText(string $text): string
     {
         $url = [];
-        if (false === \preg_match(static::URI_PATTERN, $text, $url)) {
+        if (false === \preg_match(self::URI_PATTERN, $text, $url)) {
             throw new \LogicException('No URI found in "' . $text . '"');
         }
 
@@ -20,6 +20,6 @@ final class UriParser
 
     public function hasUriInText(string $text): bool
     {
-        return (bool) \preg_match(static::URI_PATTERN, $text);
+        return (bool) \preg_match(self::URI_PATTERN, $text);
     }
 }

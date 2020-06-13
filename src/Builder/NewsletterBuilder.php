@@ -63,17 +63,13 @@ final class NewsletterBuilder
         $messages = [];
         /** @var \App\Model\Channel $channel */
         foreach ($this->channelRepository->getAll() as $channel) {
-            try {
-                $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel->getName());
+            $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel->getName());
 
-                // TODO : remove duplication
-                //$channelMessages = $this->removeDuplicationInMessages($channelMessages);
+            // TODO : remove duplication
+            //$channelMessages = $this->removeDuplicationInMessages($channelMessages);
 
-                if (\count($channelMessages) > 0) {
-                    $messages[$channel->getName()] = new Section($channel, $channelMessages);
-                }
-            } catch (\Throwable $throwable) {
-                continue;
+            if (false === $channelMessages->isEmpty()) {
+                $messages[$channel->getName()] = new Section($channel, $channelMessages);
             }
         }
 

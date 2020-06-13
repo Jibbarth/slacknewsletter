@@ -12,10 +12,6 @@ final class TestMailController
 {
     /**
      * @Route("/test/mail", name="test_mail")
-     *
-     * @param NewsletterBuilder $buildService
-     *
-     * @return Response
      */
     public function index(NewsletterBuilder $buildService): Response
     {
