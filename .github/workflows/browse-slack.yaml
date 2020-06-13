@@ -1,0 +1,32 @@
+name: Browse channels
+on:
+    schedule:
+        #- cron: '0 8 * * *'
+        - cron: '*/5 * * * *'
+
+jobs:
+    browse:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout 🛎️
+                uses: actions/checkout@v2
+                with:
+                    persist-credentials: false
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    coverage: none
+            -   name: Composer install 📦
+                run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-suggest
+            -   uses: actions/download-artifact@v2
+                with:
+                    name: messages
+                    path: public/messages/current
+            -   name: Launch browse
+                run: php bin/console app:newsletter:browse
+                env:
+                    SLACK_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+            -   uses: actions/upload-artifact@v2
+                with:
+                    name: messages
+                    path: public/messages/current/
