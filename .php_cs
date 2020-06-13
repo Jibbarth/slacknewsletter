@@ -28,7 +28,7 @@ return PhpCsFixer\Config::create()
         'ordered_class_elements' => true,
         'ordered_imports' => true,
         'phpdoc_align' => ['align' => 'left'],
-        'phpdoc_add_missing_param_annotation' => ['only_untyped' => false],
+        'phpdoc_add_missing_param_annotation' => false,
         'phpdoc_order' => true,
         'phpdoc_no_package' => false,
         'phpdoc_summary' => false,

@@ -1,6 +1,6 @@
 # Slack Newsletter
 
-This application allows you to generate a newsletter from your [Slack](https://slack.com) channels. 
+This application allows you to generate a newsletter from your [Slack](https://slack.com) channels.
 It goes through the channels looking for links, combines them into a html file, and sends it by email.
 It's ideal for keeping track of your finds when the historical Slack reaches its limit.
 
@@ -19,11 +19,11 @@ SLACK_TOKEN=xoxp-XXXXXXXXX-XXXXXXX-XXXXXXXXX
 4. Choose your channels to browse and add them in `config/channels.json`.
 You can check out the `config/channels.json.dist` to see how add a new channels
 
-5. Add receivers for your newsletter in `config/receivers.json`
+5. Define receivers for your newsletter in RECEIVERS env var (ie in `.env.local`)
 
 6. (OPTIONNAL) : Pimp your newsletter by altering parameters in `config/package/parameters.yaml`
 
-7. Configure your cron to execute command to browse, build, and send newsletter. 
+7. Configure your cron to execute command to browse, build, and send newsletter.
 
 For example :
 
@@ -46,7 +46,7 @@ For example :
 * [Embed](https://github.com/oscarotero/Embed)
 * [Carbon](https://carbon.nesbot.com/)
 
-Thank to theirs awesome work. 
+Thank to theirs awesome work.
 
 ## Customize the newsletter
 
@@ -57,7 +57,7 @@ Before testing rendering, you have to retrieve some messages :
 ```bash
 php bin/console app:newsletter:browse -d 5
 ```
-> The `-d` or `--days` is to specified how many days to retrieve. 
+> The `-d` or `--days` is to specified how many days to retrieve.
 You can have lots of data by this way.
 
 To test the view in web-browser, launch the built-in web server :

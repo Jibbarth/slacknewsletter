@@ -18,23 +18,20 @@ use Symfony\Component\Mime\Email;
 final class AppNewsletterSendCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:send';
-    /**
-     * @var NewsletterStorage
-     */
-    private $newsStoreService;
-    /**
-     * @var array
-     */
-    private $newsReceivers;
-    /**
-     * @var string
-     */
-    private $mailSender;
-    /**
-     * @var \Symfony\Component\Mailer\MailerInterface
-     */
-    private $mailer;
 
+    private NewsletterStorage $newsStoreService;
+    /**
+     * @var array<string>
+     */
+    private array $newsReceivers;
+
+    private string $mailSender;
+
+    private MailerInterface $mailer;
+
+    /**
+     * @param array<string> $newsReceivers
+     */
     public function __construct(
         MailerInterface $mailer,
         NewsletterStorage $newsStoreService,
@@ -45,13 +42,19 @@ final class AppNewsletterSendCommand extends Command
         $this->newsStoreService = $newsStoreService;
         $this->newsReceivers = $newsReceivers;
         $this->mailSender = $mailSender;
+
         parent::__construct();
     }
 
     protected function configure(): void
     {
         $this
-            ->addOption('no-archive', null, InputOption::VALUE_NONE, 'no archive news after send')
+            ->addOption(
+                'no-archive',
+                null,
+                InputOption::VALUE_NONE,
+                'no archive news after send'
+            )
             ->setDescription('Send a mail with the generated news')
         ;
     }
@@ -69,10 +72,10 @@ final class AppNewsletterSendCommand extends Command
 
         $this->mailer->send($message);
 
-        if (!$input->getOption('no-archive')) {
+        if (false === $input->getOption('no-archive')) {
             $this->newsStoreService->archiveNews();
         }
-        $consoleInteract->success('Message sended to ' . \implode(',', $this->newsReceivers));
+        $consoleInteract->success('Newsletter sent to ' . \implode(',', $this->newsReceivers));
 
         return self::SUCCESS;
     }
