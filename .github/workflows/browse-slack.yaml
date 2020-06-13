@@ -22,6 +22,7 @@ jobs:
                 with:
                     name: messages
                     path: public/messages/current
+                continue-on-error: true
             -   name: Launch browse
                 run: php bin/console app:newsletter:browse
                 env:
