@@ -5,36 +5,28 @@ declare(strict_types=1);
 namespace App\Builder;
 
 use App\Render\NewsletterRender;
+use App\Repository\ChannelRepository;
 use App\Service\Slack\BrowseService;
 use App\Storage\MessageStorage;
 
 final class NewsletterBuilder
 {
-    /**
-     * @var NewsletterRender
-     */
-    private $renderService;
-    /**
-     * @var array
-     */
-    private $slackChannels;
-    /**
-     * @var MessageStorage
-     */
-    private $storeMessageService;
-    /**
-     * @var BrowseService
-     */
-    private $browseService;
+    private NewsletterRender $renderService;
+
+    private ChannelRepository $channelRepository;
+
+    private MessageStorage $storeMessageService;
+
+    private BrowseService $browseService;
 
     public function __construct(
         NewsletterRender $renderService,
         MessageStorage $storeMessageService,
         BrowseService $browseService,
-        array $slackChannels
+        ChannelRepository $channelRepository
     ) {
         $this->renderService = $renderService;
-        $this->slackChannels = $slackChannels;
+        $this->channelRepository = $channelRepository;
         $this->storeMessageService = $storeMessageService;
         $this->browseService = $browseService;
     }
@@ -60,8 +52,9 @@ final class NewsletterBuilder
     {
         $newsletter = $this->build();
 
-        foreach ($this->slackChannels as $channel) {
-            $this->storeMessageService->archiveChannel($channel['name']);
+        /** @var \App\Model\Channel $channel */
+        foreach ($this->channelRepository->getAll() as $channel) {
+            $this->storeMessageService->archiveChannel($channel->getName());
         }
 
         return $newsletter;
@@ -70,24 +63,23 @@ final class NewsletterBuilder
     public function getMessagesToDisplay(): array
     {
         $messages = [];
-        foreach ($this->slackChannels as $channel) {
+        /** @var \App\Model\Channel $channel */
+        foreach ($this->channelRepository->getAll() as $channel) {
             try {
-                $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel['name']);
+                $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel->getName());
 
                 $channelMessages = $this->removeDuplicationInMessages($channelMessages);
 
                 if (\count($channelMessages) > 0) {
-                    $messages[$channel['name']] = [
+                    $messages[$channel->getName()] = [
                         'messages' => $channelMessages,
-                        'title' => $channel['name'],
-                        'link' => $channel['link'],
+                        'title' => $channel->getName(),
+                        'link' => $channel->getLink(),
+                        'description' => $channel->getDescription(),
                     ];
-                    if (isset($channel['description'])) {
-                        $messages[$channel['name']]['description'] = $channel['description'];
-                    }
 
-                    if (isset($channel['image'])) {
-                        $messages[$channel['name']]['image'] = $channel['image'];
+                    if (null !== $channel->getImage()) {
+                        $messages[$channel->getName()]['image'] = $channel->getImage();
                     }
                 }
             } catch (\Throwable $throwable) {
