@@ -8,7 +8,5 @@ parameters:
         - %currentWorkingDirectory%/tests
         - %currentWorkingDirectory%/config
         - %currentWorkingDirectory%/public
-    autoload_files:
-        - %currentWorkingDirectory%/vendor/autoload.php
 
     ignoreErrors:
