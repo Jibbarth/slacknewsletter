@@ -27,7 +27,7 @@ jobs:
                 run: echo $CHANNELS > config/channels.json
             -   uses: actions/checkout@v2
                 with:
-                    path: public/messages/current/
+                    path: public/messages/
                     ref: browse
                 continue-on-error: true
             -   name: Build and Send
@@ -37,6 +37,6 @@ jobs:
                 with:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                     BRANCH: browse
-                    FOLDER: public/messages/current/
+                    FOLDER: public/messages/
                     CLEAN: true
                     SINGLE_COMMIT: true
