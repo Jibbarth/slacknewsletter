@@ -24,8 +24,8 @@ jobs:
                 run: echo $CHANNELS > config/channels.json
             -   run: mkdir -p public/messages/current
             -   uses: actions/checkout@v2
-                working-directory: ./public/messages/current/
                 with:
+                    path: public/messages/current/
                     ref: browse
                 continue-on-error: true
             -   name: Launch browse
