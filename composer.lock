@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa26bbe7e577762f46d7cb3eb1b74153",
+    "content-hash": "e9130ae81c55f2901b9a367e36ab71a1",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -6078,12 +6078,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jibbarth/dev-pack.git",
-                "reference": "f7cb65cbc1ad844aeadb9edd2da20f0538a3f362"
+                "reference": "547b8d4eb4461e8d519a0d080989c7a77eb6dd19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jibbarth/dev-pack/zipball/f7cb65cbc1ad844aeadb9edd2da20f0538a3f362",
-                "reference": "f7cb65cbc1ad844aeadb9edd2da20f0538a3f362",
+                "url": "https://api.github.com/repos/Jibbarth/dev-pack/zipball/547b8d4eb4461e8d519a0d080989c7a77eb6dd19",
+                "reference": "547b8d4eb4461e8d519a0d080989c7a77eb6dd19",
                 "shasum": ""
             },
             "require": {
@@ -6122,7 +6122,7 @@
                 "symfony",
                 "symfony-pack"
             ],
-            "time": "2020-06-07T15:17:05+00:00"
+            "time": "2020-06-13T11:23:00+00:00"
         },
         {
             "name": "composer/composer",

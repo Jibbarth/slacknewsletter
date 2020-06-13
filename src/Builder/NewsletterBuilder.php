@@ -97,7 +97,9 @@ final class NewsletterBuilder
     private function getTopContributorsForSection(Section $section, int $max = 5): array
     {
         $contributors = \array_map(
-            fn (Article $article): Contributor => $article->getContributor(),
+            static function (Article $article): Contributor {
+                return $article->getContributor();
+            },
             $section->getArticles()->toArray()
         );
 
@@ -112,12 +114,12 @@ final class NewsletterBuilder
             $contributorList[$contributor->getName()]['contributions']++;
         }
 
-        \usort($contributorList, static function (array $x, array $y) {
+        \usort($contributorList, static function (array $current, array $next) {
             // Sort by contributions (higher is first)
-            if ($x['contributions'] === $y['contributions']) {
+            if ($current['contributions'] === $next['contributions']) {
                 return 0;
             }
-            if ($x['contributions'] < $y['contributions']) {
+            if ($current['contributions'] < $next['contributions']) {
                 return 1;
             }
 
