@@ -56,7 +56,7 @@ final class AppNewsletterBrowseCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consoleInteract = new SymfonyStyle($input, $output);
         /** @var int $daysToBrowse */
@@ -82,5 +82,7 @@ final class AppNewsletterBrowseCommand extends Command
                 $consoleInteract->error('Unable to save channel ' . $channel . ' : ' . $throwable->getMessage());
             }
         }
+
+        return self::SUCCESS;
     }
 }

@@ -42,7 +42,7 @@ final class AppNewsletterBuildCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consoleInteract = new SymfonyStyle($input, $output);
 
@@ -56,7 +56,11 @@ final class AppNewsletterBuildCommand extends Command
                 'Unable to save news',
                 $throwable->getMessage(),
             ]);
+
+            return self::FAILURE;
         }
+
+        return self::SUCCESS;
     }
 
     private function getNewsLetter(InputInterface $input): string
