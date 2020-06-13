@@ -22,7 +22,7 @@ jobs:
                 run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-suggest
             -   name: Create Channels.json
                 run: echo $CHANNELS > config/channels.json
-            -   name: mkdir -p public/messages/current
+            -   run: mkdir -p public/messages/current
             -   uses: actions/checkout@v2
                 working-directory: ./public/messages/current/
                 with:
