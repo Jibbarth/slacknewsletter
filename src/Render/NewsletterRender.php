@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Render;
 
 use Twig\Environment;
 
-class NewsletterRender
+final class NewsletterRender
 {
     /**
      * @var Environment
@@ -25,11 +27,9 @@ class NewsletterRender
 
     public function render(array $messages): string
     {
-        $html = $this->twig->render('newsletter.html.twig', [
+        return $this->twig->render('newsletter.html.twig', [
             'tpl' => $this->mailTemplate,
             'messages' => $messages,
         ]);
-
-        return $html;
     }
 }

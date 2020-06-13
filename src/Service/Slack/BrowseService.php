@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Slack;
 
 use App\Constant\SlackCommand;
@@ -10,7 +12,7 @@ use Frlnc\Slack\Http\SlackResponseFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class BrowseService
+final class BrowseService
 {
     /**
      * @var Commander

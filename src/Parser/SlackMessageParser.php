@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Parser;
 
 use Embed\Embed;
@@ -50,7 +52,8 @@ final class SlackMessageParser
             throw  new \LogicException(\sprintf('Not a valuable attachment in "%s" (only media)', $message['text']));
         }
 
-        if (!isset($attachment['title_link'], $attachment['title'])
+        if (
+            !isset($attachment['title_link'], $attachment['title'])
             && !$this->isLinkBlackListed($attachment['original_url'])
         ) {
             return  $this->parseContentFromUrl($attachment['original_url']);
@@ -74,24 +77,22 @@ final class SlackMessageParser
         return $this->parseContentFromUrl($url);
     }
 
-    private function parseContentFromUrl(string  $url): array
+    private function parseContentFromUrl(string $url): array
     {
         $info = Embed::create($url);
 
-        $content = [
+        return [
             'title' => $info->getTitle(),
             'title_link' => $info->getUrl(),
             'text' => $info->getDescription(),
             'thumb_url' => $info->getImage(),
         ];
-
-        return $content;
     }
 
     private function isLinkBlackListed(string $link): bool
     {
         foreach ($this->blacklistUrls as $blacklistUrl) {
-            if (\strpos($link, $blacklistUrl) > -1) {
+            if (\mb_strpos($link, $blacklistUrl) > -1) {
                 return true;
             }
         }
@@ -105,7 +106,7 @@ final class SlackMessageParser
             if (!isset($attachment['text'])) {
                 return true;
             }
-            if (isset($attachment['is_animated']) && $attachment['is_animated'] === true) {
+            if (isset($attachment['is_animated']) && true === $attachment['is_animated']) {
                 return true;
             }
         }

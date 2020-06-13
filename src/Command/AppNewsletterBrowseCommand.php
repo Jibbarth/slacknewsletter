@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Service\Slack\BrowseService;
@@ -11,7 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class AppNewsletterBrowseCommand extends Command
+final class AppNewsletterBrowseCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:browse';
 
@@ -54,7 +56,7 @@ class AppNewsletterBrowseCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $consoleInteract = new SymfonyStyle($input, $output);
         /** @var int $daysToBrowse */
