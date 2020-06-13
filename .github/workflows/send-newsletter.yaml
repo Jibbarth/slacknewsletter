@@ -25,18 +25,18 @@ jobs:
                 run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-suggest
             -   name: Create Channels.json
                 run: echo $CHANNELS > config/channels.json
-            -   uses: actions/download-artifact@v2
+            -   uses: actions/checkout@v2
                 with:
-                    name: messages
-                    path: public/messages/current
+                    path: public/messages/current/
+                    ref: browse
                 continue-on-error: true
             -   name: Build and Send
                 run: php bin/console app:newsletter:build --ansi && php bin/console app:newsletter:send --ansi --no-archive
-            -   uses: actions/upload-artifact@v2
+            -   name: Update browsed message
+                uses: JamesIves/github-pages-deploy-action@releases/v3
                 with:
-                    name: messages
-                    path: public/messages/current/
-            -   uses: actions/upload-artifact@v2
-                with:
-                    name: latest-nl
-                    path: public/news/current/current.html
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    BRANCH: browse
+                    FOLDER: public/messages/current/
+                    CLEAN: true
+                    SINGLE_COMMIT: true
