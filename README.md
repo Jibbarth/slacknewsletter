@@ -1,4 +1,11 @@
+<p align="center">
+    <img src="https://repository-images.githubusercontent.com/129633240/a2815d80-adbe-11ea-9379-b3b04705d572" alt="Slack Newsletter Preview">
+</p>
+
 # Slack Newsletter
+
+![CI](https://github.com/Jibbarth/slacknewsletter/workflows/CI/badge.svg?branch=master)
+![Version](https://img.shields.io/packagist/v/barth/slacknewsletter)
 
 This application allows you to generate a newsletter from your [Slack](https://slack.com) channels.
 It goes through the channels looking for links, combines them into a html file, and sends it by email.
