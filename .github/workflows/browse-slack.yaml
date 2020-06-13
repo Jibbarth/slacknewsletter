@@ -28,7 +28,7 @@ jobs:
                     path: public/messages/current
                 continue-on-error: true
             -   name: Launch browse
-                run: php bin/console app:newsletter:browse
+                run: php bin/console app:newsletter:browse --ansi
                 env:
                     SLACK_TOKEN: ${{ secrets.ACCESS_TOKEN }}
             -   uses: actions/upload-artifact@v2
