@@ -37,3 +37,4 @@ jobs:
                     BRANCH: browse
                     FOLDER: public/messages/current/
                     CLEAN: true
+                    SINGLE_COMMIT: true
