@@ -70,12 +70,13 @@ final class BrowseService
         /** @var array<mixed> $body */
         $body = $response->getBody();
 
-        if (!\array_key_exists('ok', $body)) {
+        if (false === $body['ok'] ?? false) {
             throw new NotFoundHttpException($body['error']);
         }
         $hasMore = \array_key_exists('has_more', $body) && false !== $body['has_more'];
 
         $lastTimeStamp = $oldest;
+
         foreach ($body['messages'] as $message) {
             if ($hasMore) {
                 $lastTimeStamp = (int) $message['ts'];
