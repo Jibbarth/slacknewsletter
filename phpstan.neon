@@ -6,7 +6,7 @@ parameters:
     ergebnis:
         classesAllowedToBeExtended:
             - Symfony\Component\Console\Command\Command
-
+            - Ramsey\Collection\AbstractCollection
     excludes_analyse:
         - %currentWorkingDirectory%/src/Kernel.php
         - %currentWorkingDirectory%/src/Migrations
@@ -15,3 +15,7 @@ parameters:
         - %currentWorkingDirectory%/public
 
     ignoreErrors:
+        - "#^Method App\\\\Model\\\\.* has a nullable return type declaration\\.$#" # Authorize nullable return type for App\Model
+        - "#^Method App\\\\Model\\\\.* has parameter .* with a nullable type declaration\\.$#" # Authorize nullable return type for App\Model
+        - "#^Method App\\\\Model\\\\.* has parameter .* with null as default value\\.$#" # Authorize nullable return type for App\Model
+        - "#^Constructor in App\\\\Model\\\\.* has parameter .* with default value\\.$#" # Authorize default value in construct for App\Model

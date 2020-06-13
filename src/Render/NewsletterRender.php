@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Render;
 
+use App\Collection\SectionCollection;
 use Twig\Environment;
 
 final class NewsletterRender
@@ -25,7 +26,7 @@ final class NewsletterRender
         $this->mailTemplate = $mailTemplate;
     }
 
-    public function render(array $messages): string
+    public function render(SectionCollection $messages): string
     {
         return $this->twig->render('newsletter.html.twig', [
             'tpl' => $this->mailTemplate,

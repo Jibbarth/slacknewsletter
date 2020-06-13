@@ -12,8 +12,8 @@ services:
         autoconfigure: true
         public: false
         bind:
+            string $projectDir: '%kernel.project_dir%'
             $slackToken: '%slack_token%'
-            $slackChannels: '%slack_channels%'
             $blacklistUrls: '%blacklist_urls%'
             $daysToBrowse: '%days_to_browse%'
             $publicDir: '%kernel.project_dir%/public/'

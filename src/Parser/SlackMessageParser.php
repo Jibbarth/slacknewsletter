@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Parser;
 
+use App\Model\Newsletter\Article;
 use Embed\Embed;
 
 final class SlackMessageParser
 {
-    /**
-     * @var \App\Parser\UriParser
-     */
-    private $uriParser;
+    private UriParser $uriParser;
+
     /**
      * @var array
      */
     private $blacklistUrls;
+
+    private Embed $embedParser;
 
     public function __construct(
         UriParser $uriParser,
@@ -23,9 +24,10 @@ final class SlackMessageParser
     ) {
         $this->uriParser = $uriParser;
         $this->blacklistUrls = $blacklistUrls;
+        $this->embedParser = new Embed();
     }
 
-    public function getParsedMessage(array $message): ?array
+    public function getArticle(array $message): Article
     {
         // Get attachment info directly
         if (isset($message['attachments'])) {
@@ -44,7 +46,7 @@ final class SlackMessageParser
         throw new \LogicException(\sprintf('Unprocessable message "%s"', $message['text']));
     }
 
-    private function getAttachmentDetail(array $message): array
+    private function getAttachmentDetail(array $message): Article
     {
         $attachment = $message['attachments'][0];
 
@@ -63,10 +65,15 @@ final class SlackMessageParser
             throw new \LogicException('Unauthorized url');
         }
 
-        return $attachment;
+        return new Article(
+            $attachment['title_link'],
+            $attachment['title'],
+            $attachment['text'] ?? '',
+            $attachment['thumb_url'] ?? $attachment['image_url']
+        );
     }
 
-    private function getMessageContent(array $message): array
+    private function getMessageContent(array $message): Article
     {
         $url = $this->uriParser->getUriFromText($message['text']);
 
@@ -77,20 +84,21 @@ final class SlackMessageParser
         return $this->parseContentFromUrl($url);
     }
 
-    private function parseContentFromUrl(string $url): array
+    private function parseContentFromUrl(string $url): Article
     {
-        $info = Embed::create($url);
+        $info = $this->embedParser->get($url);
 
-        return [
-            'title' => $info->getTitle(),
-            'title_link' => $info->getUrl(),
-            'text' => $info->getDescription(),
-            'thumb_url' => $info->getImage(),
-        ];
+        return new Article(
+            (string) $info->__get('url'),
+            $info->__get('title'),
+            $info->__get('description'),
+            (string) $info->__get('image')
+        );
     }
 
     private function isLinkBlackListed(string $link): bool
     {
+        // TODO : change by blockList
         foreach ($this->blacklistUrls as $blacklistUrl) {
             if (\mb_strpos($link, $blacklistUrl) > -1) {
                 return true;

@@ -3,7 +3,7 @@
        border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td style="background-color:{{ tpl.main_color }};
-        {% if section.image is defined %} background-image: url({{ section.image }}); background-size: cover{% endif %}">
+        {% if section.image is not null %} background-image: url({{ section.image }}); background-size: cover{% endif %}">
             <table width="660" class="resp-full-table" align="center" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td class="resp-full-td" valign="top" style="padding:20px 20px 0; text-align:center;">
@@ -14,7 +14,7 @@
                             style="width:100px; margin:0 auto; background-color:{{ tpl.main_color }}; color:{{ tpl.main_color }}; height: 2px; border: 0 none;"/>
                     </td>
                 </tr>
-                {% if section.description is defined %}
+                {% if section.description is not null %}
                     <tr>
                         <td class="resp-full-td" valign="top" style="padding:20px; text-align:center;">
                         <span style="font-size:18px;  font-weight:100; color:{{ tpl.section_title_color }}">
@@ -35,7 +35,7 @@
         </td>
     </tr>
 
-    {% for article in section.messages %}
+    {% for article in section.articles %}
         {% include 'newsletter/article.html.twig' with {'article' : article, 'tpl' : tpl} only %}
     {% endfor %}
     <tr>

@@ -4,50 +4,40 @@ declare(strict_types=1);
 
 namespace App\Builder;
 
+use App\Collection\SectionCollection;
+use App\Model\Newsletter\Article;
+use App\Model\Newsletter\Contributor;
+use App\Model\Newsletter\Section;
 use App\Render\NewsletterRender;
-use App\Service\Slack\BrowseService;
+use App\Repository\ChannelRepository;
 use App\Storage\MessageStorage;
 
 final class NewsletterBuilder
 {
-    /**
-     * @var NewsletterRender
-     */
-    private $renderService;
-    /**
-     * @var array
-     */
-    private $slackChannels;
-    /**
-     * @var MessageStorage
-     */
-    private $storeMessageService;
-    /**
-     * @var BrowseService
-     */
-    private $browseService;
+    private NewsletterRender $renderService;
+
+    private ChannelRepository $channelRepository;
+
+    private MessageStorage $storeMessageService;
 
     public function __construct(
         NewsletterRender $renderService,
         MessageStorage $storeMessageService,
-        BrowseService $browseService,
-        array $slackChannels
+        ChannelRepository $channelRepository
     ) {
         $this->renderService = $renderService;
-        $this->slackChannels = $slackChannels;
+        $this->channelRepository = $channelRepository;
         $this->storeMessageService = $storeMessageService;
-        $this->browseService = $browseService;
     }
 
-    public function build()
+    public function build(): string
     {
         $messages = $this->getMessagesToDisplay();
         $compresser = \WyriHaximus\HtmlCompress\Factory::construct();
 
         // TODO : option to disable/enable top contributors
         $messages = $this->addTopContributors($messages);
-
-        if (0 == \count($messages)) {
+        if ($messages->isEmpty()) {
             throw new \LogicException('No articles to send. Did you launch app:newsletter:browse command ?');
         }
 
@@ -60,64 +50,91 @@ final class NewsletterBuilder
     {
         $newsletter = $this->build();
 
-        foreach ($this->slackChannels as $channel) {
-            $this->storeMessageService->archiveChannel($channel['name']);
+        /** @var \App\Model\Channel $channel */
+        foreach ($this->channelRepository->getAll() as $channel) {
+            $this->storeMessageService->archiveChannel($channel->getName());
         }
 
         return $newsletter;
     }
 
-    public function getMessagesToDisplay(): array
+    private function getMessagesToDisplay(): SectionCollection
     {
         $messages = [];
-        foreach ($this->slackChannels as $channel) {
+        /** @var \App\Model\Channel $channel */
+        foreach ($this->channelRepository->getAll() as $channel) {
             try {
-                $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel['name']);
+                $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel->getName());
 
-                $channelMessages = $this->removeDuplicationInMessages($channelMessages);
+                // TODO : remove duplication
+                //$channelMessages = $this->removeDuplicationInMessages($channelMessages);
 
                 if (\count($channelMessages) > 0) {
-                    $messages[$channel['name']] = [
-                        'messages' => $channelMessages,
-                        'title' => $channel['name'],
-                        'link' => $channel['link'],
-                    ];
-                    if (isset($channel['description'])) {
-                        $messages[$channel['name']]['description'] = $channel['description'];
-                    }
-
-                    if (isset($channel['image'])) {
-                        $messages[$channel['name']]['image'] = $channel['image'];
-                    }
+                    $messages[$channel->getName()] = new Section($channel, $channelMessages);
                 }
             } catch (\Throwable $throwable) {
+                continue;
             }
         }
 
-        foreach ($messages as $channel => $section) {
-            if (!isset($section['messages'])) {
-                unset($messages[$channel]);
-            }
-        }
-
-        return $messages;
+        return new SectionCollection($messages);
     }
 
-    protected function addTopContributors(array $messages): array
+    private function addTopContributors(SectionCollection $messages): SectionCollection
     {
-        foreach ($messages as $channel => $section) {
-            $messages[$channel]['topContributors'] = $this->browseService->getTopContributors($section['messages']);
+        $newCollection = new SectionCollection();
+        /** @var Section $section */
+        foreach ($messages as $section) {
+            $newCollection->add($section->withTopContributors($this->getTopContributorsForSection($section)));
         }
 
-        return $messages;
+        return $newCollection;
     }
 
-    protected function removeDuplicationInMessages(array $messages): array
+    /**
+     * @return array<array<string, \App\Model\Newsletter\Contributor|int>>
+     */
+    private function getTopContributorsForSection(Section $section, int $max = 5): array
+    {
+        $contributors = \array_map(
+            static function (Article $article): Contributor {
+                return $article->getContributor();
+            },
+            $section->getArticles()->toArray()
+        );
+
+        $contributorList = [];
+        foreach ($contributors as $contributor) {
+            if (!\array_key_exists($contributor->getName(), $contributorList)) {
+                $contributorList[$contributor->getName()] = [
+                    'contributor' => $contributor,
+                    'contributions' => 0,
+                ];
+            }
+            $contributorList[$contributor->getName()]['contributions']++;
+        }
+
+        \usort($contributorList, static function (array $current, array $next) {
+            // Sort by contributions (higher is first)
+            if ($current['contributions'] === $next['contributions']) {
+                return 0;
+            }
+            if ($current['contributions'] < $next['contributions']) {
+                return 1;
+            }
+
+            return -1;
+        });
+
+        return \array_slice($contributorList, 0, $max, true);
+    }
+
+    /*private function removeDuplicationInMessages(array $messages): array
     {
         // In case browse method retrieve twice same message
         return \array_unique($messages, SORT_REGULAR);
 
         // TODO : Filter duplicate link to avoid returning twice in the same part.
         // IE some users like reshare same content -_-'
-    }
+    }*/
 }
