@@ -1,7 +1,14 @@
-includes:
-    - vendor/phpstan/phpstan-symfony/extension.neon
 parameters:
-    level: 7
-    symfony:
-         #  appDevDebugProjectContainer.xml for Symfony < 4
-        container_xml_path: %currentWorkingDirectory%/var/cache/dev/srcApp_KernelDevDebugContainer.xml
+    level: max
+    paths:
+        - %currentWorkingDirectory%/src/
+    excludes_analyse:
+        - %currentWorkingDirectory%/src/Kernel.php
+        - %currentWorkingDirectory%/src/Migrations
+        - %currentWorkingDirectory%/tests
+        - %currentWorkingDirectory%/config
+        - %currentWorkingDirectory%/public
+    autoload_files:
+        - %currentWorkingDirectory%/vendor/autoload.php
+
+    ignoreErrors:
