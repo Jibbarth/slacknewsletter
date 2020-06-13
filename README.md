@@ -8,22 +8,22 @@ It's ideal for keeping track of your finds when the historical Slack reaches its
 
 1. Clone the project and launch `composer install` inside.
 
-2. Generate a [Token on your slack workspace](https://api.slack.com/custom-integrations/legacy-tokens) - _Currently only tested with legacy token_
+2. Generate a [Token on your slack workspace](https://github.com/Jibbarth/slacknewsletter/wiki/Generate-an-App-to-get-a-Token)
 
-3. In your `.env`, complete your smtp configuration and add your Slack token like that :
+3. In your `.env.local`, complete your smtp configuration, the receivers, and your Slack token like that :
 
 ```
+MAILER_DSN=smtp://awesome-smtp:25
+RECEIVERS=me@example.net,mailing-list@example.net
 SLACK_TOKEN=xoxp-XXXXXXXXX-XXXXXXX-XXXXXXXXX
 ```
 
 4. Choose your channels to browse and add them in `config/channels.json`.
 You can check out the `config/channels.json.dist` to see how add a new channels
 
-5. Define receivers for your newsletter in RECEIVERS env var (ie in `.env.local`)
+5. (OPTIONNAL) : Pimp your newsletter by altering parameters in `config/package/parameters.yaml`
 
-6. (OPTIONNAL) : Pimp your newsletter by altering parameters in `config/package/parameters.yaml`
-
-7. Configure your cron to execute command to browse, build, and send newsletter.
+6. Configure your cron to execute command to browse, build, and send newsletter.
 
 For example :
 
@@ -36,10 +36,9 @@ For example :
 
 ## Build With
 
-* [Symfony 4.0](http://symfony.com/)
-    * symfony/flex
+* [Symfony 5.1](http://symfony.com/)
     * symfony/console
-    * symfony/swiftmailer-bundle
+    * symfony/mailer
     * symfony/yaml
 * [FlySystem from The Php League](http://flysystem.thephpleague.com/)
 * [Frlnc Php Slack](https://github.com/Frlnc/php-slack)
@@ -60,10 +59,11 @@ php bin/console app:newsletter:browse -d 5
 > The `-d` or `--days` is to specified how many days to retrieve.
 You can have lots of data by this way.
 
-To test the view in web-browser, launch the built-in web server :
+To test the view in web-browser, launch a web server :
 
 ```bash
-php bin/console server:run
+symfony local:server:start -d # With Symfony CLI binary
+php -S localhost:8000 -t public # Using php built-in web-server
 ```
 and go to [http://127.0.0.1:8000/test/mail](http://127.0.0.1:8000/test/mail)
 
@@ -80,19 +80,18 @@ php bin/console app:newsletter:send --no-archive
 
 First of all, thank you for contributing ♥
 
-If you find any typo/misconfiguration/... please send me a PR or open an issue.
+If you find any typo/misconfiguration/... please send a PR or open an issue.
 
 Also, while creating your PR, please write a description which gives the context and/or explains why you are creating it.
-
 
 ## TODOs
 
 - [x] Make installation as simple as a `composer create-project barth/slacknewsletter`
 - [x] Browse private channel
+- [x] Make sure it'll work with [Slack App](https://api.slack.com/apps) and provide a configuration guide
 - [ ] Write Tests Suite
-- [ ] Make sure it'll work with [Slack App](https://api.slack.com/apps) and provide a configuration guide
 - [ ] Add translations
-- [ ] Easily extend with other Team Collaboration Software (HipChat...)
+- [ ] Easily extend with other Team Collaboration Software (Discord, HipChat...)
 
 
 
