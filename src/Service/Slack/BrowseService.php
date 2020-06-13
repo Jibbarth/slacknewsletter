@@ -6,12 +6,14 @@ namespace App\Service\Slack;
 
 use App\Collection\ArticleCollection;
 use App\Constant\SlackCommand;
+use App\Model\Newsletter\Contributor;
 use App\Parser\SlackMessageParser;
 use Frlnc\Slack\Core\Commander;
 use Frlnc\Slack\Http\CurlInteractor;
 use Frlnc\Slack\Http\SlackResponseFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Cache\CacheInterface;
 
 final class BrowseService
 {
@@ -21,9 +23,12 @@ final class BrowseService
 
     private SlackMessageParser $messageParser;
 
+    private CacheInterface $cache;
+
     public function __construct(
         LoggerInterface $logger,
         SlackMessageParser $messageParser,
+        CacheInterface $cache,
         string $slackToken
     ) {
         $interactor = new CurlInteractor();
@@ -32,8 +37,10 @@ final class BrowseService
         $this->commander = new Commander($slackToken, $interactor);
         $this->logger = $logger;
         $this->messageParser = $messageParser;
+        $this->cache = $cache;
     }
 
+    /** @phpstan-ignore-next-line */
     public function getChannelHistory(
         string $channel,
         int $oldest,
@@ -60,65 +67,47 @@ final class BrowseService
 
         $response = $this->commander->execute($channelCommand, $commandOption);
 
-        /** @var array $body */
+        /** @var array<mixed> $body */
         $body = $response->getBody();
 
-        if (!$body['ok']) {
+        if (\array_key_exists('ok', $body)) {
             throw new NotFoundHttpException($body['error']);
         }
 
         $lastTimeStamp = $oldest;
         foreach ($body['messages'] as $message) {
             try {
-                if ($body['has_more']) {
+                if (\array_key_exists('has_more', $body)) {
                     $lastTimeStamp = $message['ts'];
                 }
 
                 $article = $this->messageParser->getArticle($message);
-                $article = $article->withSharedBy($message['user'] ?? '');
+                $article = $article->withContributor($this->getContributor($message['user'] ?? ''));
                 $messages->add($article);
             } catch (\Throwable $throwable) {
                 $this->logger->notice($throwable->getMessage());
             }
         }
 
-        if ($body['has_more']) {
+        if (\array_key_exists('has_more', $body)) {
             $messages = $this->getChannelHistory($channel, $oldest, $max, $messages, $lastTimeStamp);
         }
 
         return $messages;
     }
 
-    public function getTopContributors(ArticleCollection $articleCollection, int $max = 5): array
+    private function getContributor(string $user): Contributor
     {
-        $authors = [];
-        /** @var \App\Model\Newsletter\Article $article */
-        foreach ($articleCollection as $article) {
-            $authors[] = $article->getSharedBy();
-        }
-
-        $contributorList = \array_count_values($authors);
-        \arsort($contributorList, SORT_NUMERIC);
-        $topContributors = [];
-
-        $count = 0;
-        foreach ($contributorList as $contributor => $nbContributions) {
-            if ($count >= $max) {
-                break;
-            }
-
-            $response = $this->commander->execute('users.info', ['user' => $contributor]);
-            /** @var array $body */
+        return $this->cache->get('user-' . $user, function () use ($user): Contributor {
+            $response = $this->commander->execute('users.info', ['user' => $user]);
+            /** @var array<mixed> $body */
             $body = $response->getBody();
-            $topContributors[] = [
-                'author' => $body['user']['profile']['real_name'],
-                'avatar' => $body['user']['profile']['image_72'],
-                'nbContributions' => $nbContributions,
-            ];
-            $count++;
-        }
 
-        return $topContributors;
+            return new Contributor(
+                $body['user']['profile']['real_name'] ?? 'Undefined',
+                $body['user']['profile']['image_72'] ?? ''
+            );
+        });
     }
 
     private function retrieveCommandForChannel(string $channel): string

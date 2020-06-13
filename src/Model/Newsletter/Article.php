@@ -14,15 +14,15 @@ final class Article
 
     private ?string $imageUrl;
 
-    private ?string $sharedBy;
+    private ?Contributor $contributor;
 
-    public function __construct(string $url, string $title, string $content, ?string $imageUrl, ?string $sharedBy = null)
+    public function __construct(string $url, string $title, string $content, ?string $imageUrl, ?Contributor $contributor = null)
     {
         $this->url = $url;
         $this->title = $title;
         $this->content = $content;
         $this->imageUrl = $imageUrl;
-        $this->sharedBy = $sharedBy;
+        $this->contributor = $contributor;
     }
 
     public function getUrl(): string
@@ -45,16 +45,20 @@ final class Article
         return $this->content;
     }
 
-    public function withSharedBy(string $sharedBy): self
+    public function withContributor(Contributor $contributor): self
     {
         $self = clone $this;
-        $self->sharedBy = $sharedBy;
+        $self->contributor = $contributor;
 
         return $self;
     }
 
-    public function getSharedBy(): ?string
+    public function getContributor(): Contributor
     {
-        return $this->sharedBy;
+        if (null === $this->contributor) {
+            throw new \LogicException(\sprintf('No contributor found for article "%s"', $this->getTitle()));
+        }
+
+        return $this->contributor;
     }
 }

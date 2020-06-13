@@ -19,6 +19,9 @@ final class Section
 
     private ArticleCollection $articles;
 
+    /**
+     * @var array<array<string, \App\Model\Newsletter\Contributor|int>>
+     */
     private array $topContributors = [];
 
     public function __construct(Channel $channel, ArticleCollection $articles)
@@ -63,6 +66,9 @@ final class Section
         return $this->getArticles();
     }
 
+    /**
+     * @param array<array<string, \App\Model\Newsletter\Contributor|int>> $topContributors
+     */
     public function withTopContributors(array $topContributors): self
     {
         $self = clone $this;
@@ -72,6 +78,9 @@ final class Section
         return $self;
     }
 
+    /**
+     * @return array<array<string, \App\Model\Newsletter\Contributor|int>>
+     */
     public function getTopContributors(): array
     {
         return $this->topContributors;

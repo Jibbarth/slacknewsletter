@@ -17,3 +17,5 @@ parameters:
     ignoreErrors:
         - "#^Method App\\\\Model\\\\.* has a nullable return type declaration\\.$#" # Authorize nullable return type for App\Model
         - "#^Method App\\\\Model\\\\.* has parameter .* with a nullable type declaration\\.$#" # Authorize nullable return type for App\Model
+        - "#^Method App\\\\Model\\\\.* has parameter .* with null as default value\\.$#" # Authorize nullable return type for App\Model
+        - "#^Constructor in App\\\\Model\\\\.* has parameter .* with default value\\.$#" # Authorize default value in construct for App\Model

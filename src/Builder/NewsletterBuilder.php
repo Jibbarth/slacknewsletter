@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Builder;
 
 use App\Collection\SectionCollection;
+use App\Model\Newsletter\Article;
+use App\Model\Newsletter\Contributor;
 use App\Model\Newsletter\Section;
 use App\Render\NewsletterRender;
 use App\Repository\ChannelRepository;
-use App\Service\Slack\BrowseService;
 use App\Storage\MessageStorage;
 
 final class NewsletterBuilder
@@ -19,18 +20,14 @@ final class NewsletterBuilder
 
     private MessageStorage $storeMessageService;
 
-    private BrowseService $browseService;
-
     public function __construct(
         NewsletterRender $renderService,
         MessageStorage $storeMessageService,
-        BrowseService $browseService,
         ChannelRepository $channelRepository
     ) {
         $this->renderService = $renderService;
         $this->channelRepository = $channelRepository;
         $this->storeMessageService = $storeMessageService;
-        $this->browseService = $browseService;
     }
 
     public function build(): string
@@ -40,8 +37,7 @@ final class NewsletterBuilder
 
         // TODO : option to disable/enable top contributors
         $messages = $this->addTopContributors($messages);
-
-        if (0 == \count($messages)) {
+        if ($messages->isEmpty()) {
             throw new \LogicException('No articles to send. Did you launch app:newsletter:browse command ?');
         }
 
@@ -62,7 +58,7 @@ final class NewsletterBuilder
         return $newsletter;
     }
 
-    public function getMessagesToDisplay(): SectionCollection
+    private function getMessagesToDisplay(): SectionCollection
     {
         $messages = [];
         /** @var \App\Model\Channel $channel */
@@ -86,12 +82,49 @@ final class NewsletterBuilder
 
     private function addTopContributors(SectionCollection $messages): SectionCollection
     {
+        $newCollection = new SectionCollection();
         /** @var Section $section */
-        foreach ($messages as &$section) {
-            $section = $section->withTopContributors($this->browseService->getTopContributors($section->getArticles()));
+        foreach ($messages as $section) {
+            $newCollection->add($section->withTopContributors($this->getTopContributorsForSection($section)));
         }
 
-        return $messages;
+        return $newCollection;
+    }
+
+    /**
+     * @return array<array<string, \App\Model\Newsletter\Contributor|int>>
+     */
+    private function getTopContributorsForSection(Section $section, int $max = 5): array
+    {
+        $contributors = \array_map(
+            fn (Article $article): Contributor => $article->getContributor(),
+            $section->getArticles()->toArray()
+        );
+
+        $contributorList = [];
+        foreach ($contributors as $contributor) {
+            if (!\array_key_exists($contributor->getName(), $contributorList)) {
+                $contributorList[$contributor->getName()] = [
+                    'contributor' => $contributor,
+                    'contributions' => 0,
+                ];
+            }
+            $contributorList[$contributor->getName()]['contributions']++;
+        }
+
+        \usort($contributorList, static function (array $x, array $y) {
+            // Sort by contributions (higher is first)
+            if ($x['contributions'] === $y['contributions']) {
+                return 0;
+            }
+            if ($x['contributions'] < $y['contributions']) {
+                return 1;
+            }
+
+            return -1;
+        });
+
+        return \array_slice($contributorList, 0, $max, true);
     }
 
     /*private function removeDuplicationInMessages(array $messages): array
