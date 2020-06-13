@@ -30,13 +30,10 @@ jobs:
                 continue-on-error: true
             -   name: Launch browse
                 run: SLACK_TOKEN=${{ secrets.SLACK_TOKEN }} php bin/console app:newsletter:browse --ansi
-            -   uses: actions/upload-artifact@v2
-                with:
-                    name: messages
-                    path: public/messages/current/
             -   name: Update browsed message
                 uses: JamesIves/github-pages-deploy-action@releases/v3
                 with:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                     BRANCH: browse
                     FOLDER: public/messages/current/
+                    CLEAN: true
