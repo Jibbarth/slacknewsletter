@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Builder;
 
+use App\Collection\SectionCollection;
+use App\Model\Newsletter\Section;
 use App\Render\NewsletterRender;
 use App\Repository\ChannelRepository;
 use App\Service\Slack\BrowseService;
@@ -31,7 +33,7 @@ final class NewsletterBuilder
         $this->browseService = $browseService;
     }
 
-    public function build()
+    public function build(): string
     {
         $messages = $this->getMessagesToDisplay();
         $compresser = \WyriHaximus\HtmlCompress\Factory::construct();
@@ -60,7 +62,7 @@ final class NewsletterBuilder
         return $newsletter;
     }
 
-    public function getMessagesToDisplay(): array
+    public function getMessagesToDisplay(): SectionCollection
     {
         $messages = [];
         /** @var \App\Model\Channel $channel */
@@ -68,48 +70,36 @@ final class NewsletterBuilder
             try {
                 $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel->getName());
 
-                $channelMessages = $this->removeDuplicationInMessages($channelMessages);
+                // TODO : remove duplication
+                //$channelMessages = $this->removeDuplicationInMessages($channelMessages);
 
                 if (\count($channelMessages) > 0) {
-                    $messages[$channel->getName()] = [
-                        'messages' => $channelMessages,
-                        'title' => $channel->getName(),
-                        'link' => $channel->getLink(),
-                        'description' => $channel->getDescription(),
-                    ];
-
-                    if (null !== $channel->getImage()) {
-                        $messages[$channel->getName()]['image'] = $channel->getImage();
-                    }
+                    $messages[$channel->getName()] = new Section($channel, $channelMessages);
                 }
             } catch (\Throwable $throwable) {
+                continue;
             }
         }
 
-        foreach ($messages as $channel => $section) {
-            if (!isset($section['messages'])) {
-                unset($messages[$channel]);
-            }
-        }
-
-        return $messages;
+        return new SectionCollection($messages);
     }
 
-    protected function addTopContributors(array $messages): array
+    private function addTopContributors(SectionCollection $messages): SectionCollection
     {
-        foreach ($messages as $channel => $section) {
-            $messages[$channel]['topContributors'] = $this->browseService->getTopContributors($section['messages']);
+        /** @var Section $section */
+        foreach ($messages as &$section) {
+            $section = $section->withTopContributors($this->browseService->getTopContributors($section->getMessages()));
         }
 
         return $messages;
     }
 
-    protected function removeDuplicationInMessages(array $messages): array
+    /*private function removeDuplicationInMessages(array $messages): array
     {
         // In case browse method retrieve twice same message
         return \array_unique($messages, SORT_REGULAR);
 
         // TODO : Filter duplicate link to avoid returning twice in the same part.
         // IE some users like reshare same content -_-'
-    }
+    }*/
 }
