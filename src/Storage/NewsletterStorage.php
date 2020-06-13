@@ -13,10 +13,7 @@ final class NewsletterStorage
     private const CURRENT_FOLDER = 'news/current/';
     private const ARCHIVE_FOLDER = 'news/archive/';
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    private Filesystem $filesystem;
 
     public function __construct(string $publicDir)
     {
@@ -47,7 +44,7 @@ final class NewsletterStorage
         $newsPath = $this->getNewsPath();
 
         $content = $this->filesystem->read($newsPath);
-        if (!$content) {
+        if (false === $content) {
             throw new \LogicException('Unable to get News Content');
         }
 
@@ -70,7 +67,7 @@ final class NewsletterStorage
         $this->filesystem->delete($this->getNewsPath());
     }
 
-    private function getNewsPath()
+    private function getNewsPath(): string
     {
         return static::CURRENT_FOLDER . 'current.html';
     }

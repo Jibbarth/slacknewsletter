@@ -9,15 +9,15 @@ use Twig\Environment;
 
 final class NewsletterRender
 {
+    private Environment $twig;
     /**
-     * @var Environment
+     * @var array<string, string>
      */
-    private $twig;
-    /**
-     * @var array
-     */
-    private $mailTemplate;
+    private array $mailTemplate;
 
+    /**
+     * @param array<string, string> $mailTemplate
+     */
     public function __construct(
         Environment $twig,
         array $mailTemplate

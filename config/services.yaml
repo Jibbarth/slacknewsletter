@@ -10,14 +10,15 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
         bind:
             string $projectDir: '%kernel.project_dir%'
-            $slackToken: '%slack_token%'
-            $blacklistUrls: '%blacklist_urls%'
-            $daysToBrowse: '%days_to_browse%'
-            $publicDir: '%kernel.project_dir%/public/'
-            $mailTemplate: '%mail_template%'
+            string $slackToken: '%slack_token%'
+            array $blocklistUrls: '%blocklist_urls%'
+            int $daysToBrowse: '%days_to_browse%'
+            string $publicDir: '%kernel.project_dir%/public/'
+            array $mailTemplate: '%mail_template%'
+            array $newsReceivers: '%news_receivers%'
+            string $mailSender: '%mail_sender%'
 
     App\:
         resource: '../src/*'
@@ -25,20 +26,3 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
-    App\Command\AppNewsletterSendCommand:
-        bind:
-            $newsReceivers: '%news_receivers%'
-            $mailSender: '%mail_sender%'
-
-    Symfony\Component\Mailer\Mailer:
-        arguments: ['@mailer.transport']
-    Symfony\Component\Mailer\MailerInterface: '@Symfony\Component\Mailer\Mailer'
-    mailer.transport:
-        class: Symfony\Component\Mailer\Transport\TransportInterface
-        factory:
-            - 'Symfony\Component\Mailer\Transport'
-            - fromDsn
-        arguments:
-            - '%env(MAILER_DSN)%'
-            - '@event_dispatcher'

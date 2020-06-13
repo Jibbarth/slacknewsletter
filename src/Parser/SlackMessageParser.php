@@ -12,30 +12,36 @@ final class SlackMessageParser
     private UriParser $uriParser;
 
     /**
-     * @var array
+     * @var array<string>
      */
-    private $blacklistUrls;
+    private $blocklistUrls;
 
     private Embed $embedParser;
 
+    /**
+     * @param array<string> $blocklistUrls
+     */
     public function __construct(
         UriParser $uriParser,
-        array $blacklistUrls
+        array $blocklistUrls
     ) {
         $this->uriParser = $uriParser;
-        $this->blacklistUrls = $blacklistUrls;
+        $this->blocklistUrls = $blocklistUrls;
         $this->embedParser = new Embed();
     }
 
+    /**
+     * @param array<mixed> $message
+     */
     public function getArticle(array $message): Article
     {
         // Get attachment info directly
-        if (isset($message['attachments'])) {
+        if (\array_key_exists('attachments', $message)) {
             return $this->getAttachmentDetail($message);
         }
 
         // Otherwise, regard in text if there is an url and try to retrieve data from it
-        if (!isset($message['text'])) {
+        if (!\array_key_exists('text', $message)) {
             throw new \LogicException('No text found');
         }
 
@@ -46,6 +52,9 @@ final class SlackMessageParser
         throw new \LogicException(\sprintf('Unprocessable message "%s"', $message['text']));
     }
 
+    /**
+     * @param array<mixed> $message
+     */
     private function getAttachmentDetail(array $message): Article
     {
         $attachment = $message['attachments'][0];
@@ -55,13 +64,13 @@ final class SlackMessageParser
         }
 
         if (
-            !isset($attachment['title_link'], $attachment['title'])
-            && !$this->isLinkBlackListed($attachment['original_url'])
+            (!\array_key_exists('title_link', $attachment) || !\array_key_exists('title', $attachment))
+            && !$this->isLinkBlocklisted($attachment['original_url'])
         ) {
-            return  $this->parseContentFromUrl($attachment['original_url']);
+            return $this->parseContentFromUrl($attachment['original_url']);
         }
 
-        if ($this->isLinkBlackListed($attachment['title_link'])) {
+        if ($this->isLinkBlocklisted($attachment['title_link'])) {
             throw new \LogicException('Unauthorized url');
         }
 
@@ -73,11 +82,14 @@ final class SlackMessageParser
         );
     }
 
+    /**
+     * @param array<mixed> $message
+     */
     private function getMessageContent(array $message): Article
     {
         $url = $this->uriParser->getUriFromText($message['text']);
 
-        if ($this->isLinkBlackListed($url)) {
+        if ($this->isLinkBlocklisted($url)) {
             throw new \LogicException('Unauthorized url');
         }
 
@@ -96,11 +108,11 @@ final class SlackMessageParser
         );
     }
 
-    private function isLinkBlackListed(string $link): bool
+    private function isLinkBlocklisted(string $link): bool
     {
         // TODO : change by blockList
-        foreach ($this->blacklistUrls as $blacklistUrl) {
-            if (\mb_strpos($link, $blacklistUrl) > -1) {
+        foreach ($this->blocklistUrls as $blocklistUrl) {
+            if (\mb_strpos($link, $blocklistUrl) > -1) {
                 return true;
             }
         }
@@ -108,13 +120,16 @@ final class SlackMessageParser
         return false;
     }
 
+    /**
+     * @param array<mixed> $attachment
+     */
     private function isJustMediaAttachment(array $attachment): bool
     {
-        if (!isset($attachment['title_link'], $attachment['title'])) {
-            if (!isset($attachment['text'])) {
+        if (!\array_key_exists('title_link', $attachment) || !\array_key_exists('title', $attachment)) {
+            if (!\array_key_exists('text', $attachment)) {
                 return true;
             }
-            if (isset($attachment['is_animated']) && true === $attachment['is_animated']) {
+            if (\array_key_exists('is_animated', $attachment) && true === $attachment['is_animated']) {
                 return true;
             }
         }

@@ -70,15 +70,16 @@ final class BrowseService
         /** @var array<mixed> $body */
         $body = $response->getBody();
 
-        if (\array_key_exists('ok', $body)) {
+        if (!\array_key_exists('ok', $body)) {
             throw new NotFoundHttpException($body['error']);
         }
+        $hasMore = \array_key_exists('has_more', $body) && false !== $body['has_more'];
 
         $lastTimeStamp = $oldest;
         foreach ($body['messages'] as $message) {
             try {
-                if (\array_key_exists('has_more', $body)) {
-                    $lastTimeStamp = $message['ts'];
+                if ($hasMore) {
+                    $lastTimeStamp = (int) $message['ts'];
                 }
 
                 $article = $this->messageParser->getArticle($message);
@@ -89,7 +90,7 @@ final class BrowseService
             }
         }
 
-        if (\array_key_exists('has_more', $body)) {
+        if ($hasMore) {
             $messages = $this->getChannelHistory($channel, $oldest, $max, $messages, $lastTimeStamp);
         }
 
