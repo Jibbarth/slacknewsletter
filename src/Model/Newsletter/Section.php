@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Newsletter;
 
+use App\Collection\ArticleCollection;
 use App\Model\Channel;
 
 final class Section
@@ -16,17 +17,17 @@ final class Section
 
     private ?string $image;
 
-    private array $messages;
+    private ArticleCollection $articles;
 
-    private array $topContributors;
+    private array $topContributors = [];
 
-    public function __construct(Channel $channel, array $messages)
+    public function __construct(Channel $channel, ArticleCollection $articles)
     {
         $this->title = $channel->getName();
         $this->link = $channel->getLink();
         $this->description = $channel->getDescription();
         $this->image = $channel->getImage();
-        $this->messages = $messages;
+        $this->articles = $articles;
     }
 
     public function getTitle(): string
@@ -49,9 +50,17 @@ final class Section
         return $this->image;
     }
 
-    public function getMessages(): array
+    public function getArticles(): ArticleCollection
     {
-        return $this->messages;
+        return $this->articles;
+    }
+
+    /**
+     * @deprecated Use GetArticles instead
+     */
+    public function getMessages(): ArticleCollection
+    {
+        return $this->getArticles();
     }
 
     public function withTopContributors(array $topContributors): self

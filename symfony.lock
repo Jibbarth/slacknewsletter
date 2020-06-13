@@ -182,6 +182,18 @@
     "nunomaduro/phpinsights": {
         "version": "v1.14.0"
     },
+    "nyholm/psr7": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "7c0a9352a57376f04f5444e74565102c3a23d0c7"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
+    },
     "object-calisthenics/phpcs-calisthenics-rules": {
         "version": "v3.7.0"
     },
@@ -205,6 +217,9 @@
     },
     "php-cs-fixer/diff": {
         "version": "v1.3.0"
+    },
+    "php-http/message-factory": {
+        "version": "v1.0.2"
     },
     "php-parallel-lint/php-parallel-lint": {
         "version": "v1.2.0"

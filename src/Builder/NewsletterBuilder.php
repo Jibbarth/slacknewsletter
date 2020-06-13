@@ -88,7 +88,7 @@ final class NewsletterBuilder
     {
         /** @var Section $section */
         foreach ($messages as &$section) {
-            $section = $section->withTopContributors($this->browseService->getTopContributors($section->getMessages()));
+            $section = $section->withTopContributors($this->browseService->getTopContributors($section->getArticles()));
         }
 
         return $messages;

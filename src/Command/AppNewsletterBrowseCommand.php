@@ -68,13 +68,13 @@ final class AppNewsletterBrowseCommand extends Command
             $messages[$channel->getName()] = $this->browseService->getChannelHistory($channel->getLink(), $timestamp);
         }
 
-        foreach ($messages as $channelName => $section) {
+        foreach ($messages as $channelName => $articleCollection) {
             try {
-                if (\count($section) > 0) {
-                    $this->storeMessageService->saveChannel($channelName, $section);
+                if (false === $articleCollection->isEmpty()) {
+                    $this->storeMessageService->saveChannel($channelName, $articleCollection);
                     $consoleInteract->success([
                         'Successfully parse channel ' . $channelName,
-                        \count($section) . ' messages saved',
+                        $articleCollection->count() . ' messages saved',
                     ]);
                 }
             } catch (\Throwable $throwable) {

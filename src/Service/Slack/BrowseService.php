@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Slack;
 
+use App\Collection\ArticleCollection;
 use App\Constant\SlackCommand;
 use App\Parser\SlackMessageParser;
 use Frlnc\Slack\Core\Commander;
@@ -14,18 +15,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class BrowseService
 {
-    /**
-     * @var Commander
-     */
-    private $commander;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var \App\Parser\SlackMessageParser
-     */
-    private $messageParser;
+    private Commander $commander;
+
+    private LoggerInterface $logger;
+
+    private SlackMessageParser $messageParser;
 
     public function __construct(
         LoggerInterface $logger,
@@ -44,10 +38,14 @@ final class BrowseService
         string $channel,
         int $oldest,
         int $max = 1000,
-        array $messages = [],
+        ArticleCollection $messages = null,
         int $latest = null
-    ): array {
+    ): ArticleCollection {
         $channelCommand = $this->retrieveCommandForChannel($channel);
+
+        if (null === $messages) {
+            $messages = new ArticleCollection([]);
+        }
 
         $commandOption = [
             'channel' => $channel,
@@ -76,11 +74,9 @@ final class BrowseService
                     $lastTimeStamp = $message['ts'];
                 }
 
-                $newMessage = $this->messageParser->getParsedMessage($message);
-
-                $newMessage['ts'] = $message['ts'];
-                $newMessage['author'] = $message['user'];
-                $messages[] = $newMessage;
+                $article = $this->messageParser->getArticle($message);
+                $article = $article->withSharedBy($message['user'] ?? '');
+                $messages->add($article);
             } catch (\Throwable $throwable) {
                 $this->logger->notice($throwable->getMessage());
             }
@@ -93,11 +89,12 @@ final class BrowseService
         return $messages;
     }
 
-    public function getTopContributors(array $messages, int $max = 5): array
+    public function getTopContributors(ArticleCollection $articleCollection, int $max = 5): array
     {
         $authors = [];
-        foreach ($messages as $message) {
-            $authors[] = $message['author'];
+        /** @var \App\Model\Newsletter\Article $article */
+        foreach ($articleCollection as $article) {
+            $authors[] = $article->getSharedBy();
         }
 
         $contributorList = \array_count_values($authors);
@@ -124,17 +121,17 @@ final class BrowseService
         return $topContributors;
     }
 
-    protected function retrieveCommandForChannel(string $channel): string
+    private function retrieveCommandForChannel(string $channel): string
     {
         $firstChannelLetter = \mb_substr($channel, 0, 1);
 
-        switch ($firstChannelLetter) {
-            case 'C':
-                return SlackCommand::CHANNEL_HISTORY;
-            case 'G':
-                return SlackCommand::GROUP_HISTORY;
-            default:
-                throw new \InvalidArgumentException('Unknow channel type for ' . $channel);
+        if ('C' === $firstChannelLetter) {
+            return SlackCommand::CHANNEL_HISTORY;
         }
+        if ('G' === $firstChannelLetter) {
+            return SlackCommand::GROUP_HISTORY;
+        }
+
+        throw new \InvalidArgumentException('Unknow channel type for ' . $channel);
     }
 }
