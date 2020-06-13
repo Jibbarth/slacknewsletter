@@ -3,12 +3,13 @@
 ###< IDE ###
 
 ###> symfony/framework-bundle ###
-.env.local
-.env.local.php
-.env.*.local
-public/bundles/
-var/
-vendor/
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
@@ -30,7 +31,6 @@ cghooks.lock
 ###< PROJECT ###
 
 ###> friendsofphp/php-cs-fixer ###
-/.php_cs
 /.php_cs.cache
 ###< friendsofphp/php-cs-fixer ###
 

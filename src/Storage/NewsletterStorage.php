@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Storage;
 
 use Carbon\Carbon;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
-class NewsletterStorage
+final class NewsletterStorage
 {
     private const CURRENT_FOLDER = 'news/current/';
     private const ARCHIVE_FOLDER = 'news/archive/';

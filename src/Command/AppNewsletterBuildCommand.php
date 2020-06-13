@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Builder\NewsletterBuilder;
@@ -10,7 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class AppNewsletterBuildCommand extends Command
+final class AppNewsletterBuildCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:build';
 
@@ -40,7 +42,7 @@ class AppNewsletterBuildCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consoleInteract = new SymfonyStyle($input, $output);
 
@@ -54,7 +56,11 @@ class AppNewsletterBuildCommand extends Command
                 'Unable to save news',
                 $throwable->getMessage(),
             ]);
+
+            return self::FAILURE;
         }
+
+        return self::SUCCESS;
     }
 
     private function getNewsLetter(InputInterface $input): string

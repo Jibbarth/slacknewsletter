@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Storage\NewsletterStorage;
@@ -10,10 +12,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\NamedAddress;
 
-class AppNewsletterSendCommand extends Command
+final class AppNewsletterSendCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:send';
     /**
@@ -54,11 +56,11 @@ class AppNewsletterSendCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consoleInteract = new SymfonyStyle($input, $output);
         $subject = 'Newsletter ' . Carbon::now()->format('#W // Y');
-        $sender = new NamedAddress($this->mailSender, 'NewsLetters');
+        $sender = new Address($this->mailSender, 'NewsLetters');
         $message = (new Email())
             ->from($sender)
             ->subject($subject)
@@ -71,5 +73,7 @@ class AppNewsletterSendCommand extends Command
             $this->newsStoreService->archiveNews();
         }
         $consoleInteract->success('Message sended to ' . \implode(',', $this->newsReceivers));
+
+        return self::SUCCESS;
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Builder;
 
 use App\Render\NewsletterRender;
 use App\Service\Slack\BrowseService;
 use App\Storage\MessageStorage;
 
-class NewsletterBuilder
+final class NewsletterBuilder
 {
     /**
      * @var NewsletterRender
@@ -45,7 +47,7 @@ class NewsletterBuilder
         // TODO : option to disable/enable top contributors
         $messages = $this->addTopContributors($messages);
 
-        if (\count($messages) == 0) {
+        if (0 == \count($messages)) {
             throw new \LogicException('No articles to send. Did you launch app:newsletter:browse command ?');
         }
 
@@ -113,10 +115,9 @@ class NewsletterBuilder
     protected function removeDuplicationInMessages(array $messages): array
     {
         // In case browse method retrieve twice same message
-        $messages = \array_unique($messages, SORT_REGULAR);
+        return \array_unique($messages, SORT_REGULAR);
 
         // TODO : Filter duplicate link to avoid returning twice in the same part.
         // IE some users like reshare same content -_-'
-        return $messages;
     }
 }

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Storage;
 
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
-class MessageStorage
+final class MessageStorage
 {
     private const CURRENT_FOLDER = 'messages/current/';
     private const ARCHIVE_FOLDER = 'messages/archive/';
