@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Repository\ChannelRepository;
 use App\Service\Slack\BrowseService;
 use App\Storage\MessageStorage;
 use Carbon\Carbon;
@@ -17,31 +18,22 @@ final class AppNewsletterBrowseCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:browse';
 
-    /**
-     * @var \App\Service\Slack\BrowseService
-     */
-    private $browseService;
-    /**
-     * @var array
-     */
-    private $slackChannels;
-    /**
-     * @var int
-     */
-    private $daysToBrowse;
-    /**
-     * @var MessageStorage
-     */
-    private $storeMessageService;
+    private BrowseService $browseService;
+
+    private MessageStorage $storeMessageService;
+
+    private ChannelRepository $channelRepository;
+
+    private int $daysToBrowse;
 
     public function __construct(
         BrowseService $browseService,
         MessageStorage $storeMessageService,
-        array $slackChannels,
+        ChannelRepository $channelRepository,
         int $daysToBrowse
     ) {
         $this->browseService = $browseService;
-        $this->slackChannels = $slackChannels;
+        $this->channelRepository = $channelRepository;
         $this->daysToBrowse = $daysToBrowse;
         $this->storeMessageService = $storeMessageService;
         parent::__construct();
@@ -52,7 +44,13 @@ final class AppNewsletterBrowseCommand extends Command
         $this
             ->setDescription('Browse all slack channels defined in config/channels.json')
             ->setHelp('This command must be launched at regular interval to avoid Slack history limitation.')
-            ->addOption('days', 'd', InputOption::VALUE_OPTIONAL, 'days to browse', $this->daysToBrowse)
+            ->addOption(
+                'days',
+                'd',
+                InputOption::VALUE_OPTIONAL,
+                'days to browse',
+                $this->daysToBrowse
+            )
         ;
     }
 
@@ -65,21 +63,22 @@ final class AppNewsletterBrowseCommand extends Command
         $timestamp = Carbon::now()->subDays($daysToBrowse)->getTimestamp();
 
         $messages = [];
-        foreach ($this->slackChannels as $channel) {
-            $messages[$channel['name']] = $this->browseService->getChannelHistory($channel['link'], $timestamp);
+        /** @var \App\Model\Channel $channel */
+        foreach ($this->channelRepository->getAll() as $channel) {
+            $messages[$channel->getName()] = $this->browseService->getChannelHistory($channel->getLink(), $timestamp);
         }
 
-        foreach ($messages as $channel => &$section) {
+        foreach ($messages as $channelName => $section) {
             try {
                 if (\count($section) > 0) {
-                    $this->storeMessageService->saveChannel((string) $channel, $section);
+                    $this->storeMessageService->saveChannel($channelName, $section);
                     $consoleInteract->success([
-                        'Successfully parse channel ' . $channel,
+                        'Successfully parse channel ' . $channelName,
                         \count($section) . ' messages saved',
                     ]);
                 }
             } catch (\Throwable $throwable) {
-                $consoleInteract->error('Unable to save channel ' . $channel . ' : ' . $throwable->getMessage());
+                $consoleInteract->error('Unable to save channel ' . $channelName . ' : ' . $throwable->getMessage());
             }
         }
 
