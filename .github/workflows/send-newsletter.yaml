@@ -7,6 +7,11 @@ on:
 jobs:
     build-and-send:
         runs-on: ubuntu-latest
+        env:
+            CHANNELS: ${{ secrets.CHANNELS }}
+            SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+            MAILER_DSN: ${{ secrets.MAILER_DSN }}
+            RECEIVERS: ${{ secrets.RECEIVERS }}
         steps:
             -   name: Checkout 🛎️
                 uses: actions/checkout@v2
@@ -20,8 +25,6 @@ jobs:
                 run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-suggest
             -   name: Create Channels.json
                 run: echo $CHANNELS > config/channels.json
-                env:
-                    CHANNELS: ${{ secrets.CHANNELS }}
             -   uses: actions/download-artifact@v2
                 with:
                     name: messages
@@ -29,10 +32,6 @@ jobs:
                 continue-on-error: true
             -   name: Build and Send
                 run: php bin/console app:newsletter:build --ansi && php bin/console app:newsletter:send --ansi --no-archive
-                env:
-                    SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-                    MAILER_DSN: ${{ secrets.MAILER_DSN }}
-                    RECEIVERS: ${{ secrets.RECEIVERS }}
             -   uses: actions/upload-artifact@v2
                 with:
                     name: messages

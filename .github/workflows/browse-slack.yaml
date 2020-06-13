@@ -7,6 +7,9 @@ on:
 jobs:
     browse:
         runs-on: ubuntu-latest
+        env:
+            CHANNELS: ${{ secrets.CHANNELS }}
+            SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
         steps:
             -   name: Checkout 🛎️
                 uses: actions/checkout@v2
@@ -19,9 +22,7 @@ jobs:
             -   name: Composer install 📦
                 run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-suggest
             -   name: Create Channels.json
-                run: echo $CHANNELS > config/channels.json && cat config/channels.json
-                env:
-                    CHANNELS: ${{ secrets.CHANNELS }}
+                run: echo $CHANNELS > config/channels.json
             -   uses: actions/download-artifact@v2
                 with:
                     name: messages
@@ -29,8 +30,6 @@ jobs:
                 continue-on-error: true
             -   name: Launch browse
                 run: php bin/console app:newsletter:browse --ansi
-                env:
-                    SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
             -   uses: actions/upload-artifact@v2
                 with:
                     name: messages
