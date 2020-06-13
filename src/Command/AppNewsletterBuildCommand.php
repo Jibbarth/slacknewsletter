@@ -65,7 +65,7 @@ final class AppNewsletterBuildCommand extends Command
 
     private function getNewsLetter(InputInterface $input): string
     {
-        if ($input->getOption('no-archive')) {
+        if (true === $input->getOption('no-archive')) {
             return $this->buildService->build();
         }
 
