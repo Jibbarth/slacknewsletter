@@ -34,6 +34,7 @@
     },
     "require-dev": {
         "barth/dev-pack": "dev-master",
+        "nunomaduro/phpinsights": "dev-master",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/debug-pack": "^1.0",
         "symfony/var-dumper": "*"

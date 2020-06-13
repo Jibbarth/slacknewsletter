@@ -65,9 +65,6 @@
     "doctrine/event-manager": {
         "version": "v1.0.0"
     },
-    "doctrine/inflector": {
-        "version": "v1.3.0"
-    },
     "doctrine/lexer": {
         "version": "1.2.1"
     },
@@ -128,9 +125,6 @@
     "jalle19/php-yui-compressor": {
         "version": "1.0.1"
     },
-    "jean85/pretty-package-versions": {
-        "version": "1.2"
-    },
     "justinrainbow/json-schema": {
         "version": "5.2.10"
     },
@@ -173,17 +167,11 @@
     "nette/di": {
         "version": "v2.4.15"
     },
-    "nette/finder": {
-        "version": "v2.5.0"
-    },
     "nette/neon": {
         "version": "v3.0.0"
     },
     "nette/php-generator": {
         "version": "v3.2.2"
-    },
-    "nette/robot-loader": {
-        "version": "v3.1.1"
     },
     "nette/utils": {
         "version": "v3.1.2"

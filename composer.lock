@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae1c3a5711d7d748de32a39709d96bb6",
+    "content-hash": "2be269ef2aeac18e9368dbb232091ab7",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -6374,16 +6374,16 @@
         },
         {
             "name": "nunomaduro/phpinsights",
-            "version": "v1.14.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/phpinsights.git",
-                "reference": "4e9672fdb78b7d0ea2708f6303ca134986d6af1a"
+                "reference": "36f19188463bf069ad9cc47038920a0739f50b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/phpinsights/zipball/4e9672fdb78b7d0ea2708f6303ca134986d6af1a",
-                "reference": "4e9672fdb78b7d0ea2708f6303ca134986d6af1a",
+                "url": "https://api.github.com/repos/nunomaduro/phpinsights/zipball/36f19188463bf069ad9cc47038920a0739f50b62",
+                "reference": "36f19188463bf069ad9cc47038920a0739f50b62",
                 "shasum": ""
             },
             "require": {
@@ -6392,16 +6392,19 @@
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-tokenizer": "*",
-                "friendsofphp/php-cs-fixer": "^2.15",
+                "friendsofphp/php-cs-fixer": "^2.16.1",
                 "justinrainbow/json-schema": "^5.1",
                 "league/container": "^3.2",
                 "object-calisthenics/phpcs-calisthenics-rules": "^3.7",
-                "php": "^7.2",
+                "php": "^7.4",
+                "php-parallel-lint/php-parallel-lint": "^1.1",
                 "phploc/phploc": "^5.0|^6.0",
                 "psr/container": "^1.0",
+                "psr/simple-cache": "^1.0",
                 "sensiolabs/security-checker": "^6.0",
                 "slevomat/coding-standard": "^6.0",
-                "squizlabs/php_codesniffer": "^3.4",
+                "squizlabs/php_codesniffer": "^3.5",
+                "symfony/cache": "^4.4|^5.0",
                 "symfony/console": "^4.2|^5.0",
                 "symfony/finder": "^4.2|^5.0"
             },
@@ -6412,8 +6415,9 @@
                 "mockery/mockery": "^1.0",
                 "phpstan/phpstan-strict-rules": "^0.12",
                 "phpunit/phpunit": "^8.0|^9.0",
+                "rector/rector": "^0.7.11",
                 "symfony/var-dumper": "^4.2|^5.0",
-                "symplify/easy-coding-standard": "^7.1",
+                "symplify/easy-coding-standard": "^7.2.3",
                 "thecodingmachine/phpstan-strict-rules": "^0.12.0"
             },
             "suggest": {
@@ -6468,7 +6472,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-03-10T20:43:15+00:00"
+            "time": "2020-06-07T09:03:42+00:00"
         },
         {
             "name": "object-calisthenics/phpcs-calisthenics-rules",
@@ -7280,6 +7284,54 @@
                 }
             ],
             "time": "2020-04-20T06:00:37+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "time": "2017-10-23T01:57:42+00:00"
         },
         {
             "name": "sebastian/finder-facade",
@@ -8457,7 +8509,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "barth/dev-pack": 20
+        "barth/dev-pack": 20,
+        "nunomaduro/phpinsights": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
