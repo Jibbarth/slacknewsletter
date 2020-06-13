@@ -7,6 +7,7 @@ on:
 jobs:
     browse:
         runs-on: ubuntu-latest
+            CHANNELS: ${{ secrets.CHANNELS }}
         steps:
             -   name: Checkout 🛎️
                 uses: actions/checkout@v2
@@ -19,7 +20,7 @@ jobs:
             -   name: Composer install 📦
                 run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-suggest
             -   name: Create Channels.json
-                run: echo ${{ secrets.CHANNELS }} > config/channels.json
+                run: echo $CHANNELS > config/channels.json
             -   uses: actions/download-artifact@v2
                 with:
                     name: messages
