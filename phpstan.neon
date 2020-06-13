@@ -6,7 +6,7 @@ parameters:
     ergebnis:
         classesAllowedToBeExtended:
             - Symfony\Component\Console\Command\Command
-
+            - Ramsey\Collection\AbstractCollection
     excludes_analyse:
         - %currentWorkingDirectory%/src/Kernel.php
         - %currentWorkingDirectory%/src/Migrations

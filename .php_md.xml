@@ -9,7 +9,9 @@
     <!-- Import All rules-->
     <rule ref="rulesets/codesize.xml"/>
     <rule ref="rulesets/design.xml"/>
-    <rule ref="rulesets/cleancode.xml"/>
+    <rule ref="rulesets/cleancode.xml">
+        <exclude name="MissingImport" />
+    </rule>
     <rule ref="rulesets/controversial.xml"/>
     <rule ref="rulesets/unusedcode.xml"/>
     <rule ref="rulesets/naming.xml"/>
