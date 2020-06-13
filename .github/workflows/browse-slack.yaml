@@ -2,7 +2,7 @@ name: Browse channels
 on:
     schedule:
         #- cron: '0 8 * * *'
-        - cron: '*/5 * * *'
+        - cron: '*/5 * * * *'
 
 jobs:
     browse:
