@@ -14,7 +14,7 @@ final class SlackMessageParser
     /**
      * @var array<string>
      */
-    private $blocklistUrls;
+    private array $blocklistUrls;
 
     private Embed $embedParser;
 

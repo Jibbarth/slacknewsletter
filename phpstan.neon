@@ -13,6 +13,7 @@ parameters:
         - %currentWorkingDirectory%/tests
         - %currentWorkingDirectory%/config
         - %currentWorkingDirectory%/public
+        - %currentWorkingDirectory%/phpinsights.php
 
     ignoreErrors:
         - "#^Method App\\\\Model\\\\.* has a nullable return type declaration\\.$#" # Authorize nullable return type for App\Model

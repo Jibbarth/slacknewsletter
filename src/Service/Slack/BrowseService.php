@@ -45,8 +45,8 @@ final class BrowseService
         string $channel,
         int $oldest,
         int $max = 1000,
-        ArticleCollection $messages = null,
-        int $latest = null
+        ?ArticleCollection $messages = null,
+        ?int $latest = null
     ): ArticleCollection {
         $channelCommand = $this->retrieveCommandForChannel($channel);
 
@@ -77,11 +77,11 @@ final class BrowseService
 
         $lastTimeStamp = $oldest;
         foreach ($body['messages'] as $message) {
-            try {
-                if ($hasMore) {
-                    $lastTimeStamp = (int) $message['ts'];
-                }
+            if ($hasMore) {
+                $lastTimeStamp = (int) $message['ts'];
+            }
 
+            try {
                 $article = $this->messageParser->getArticle($message);
                 $article = $article->withContributor($this->getContributor($message['user'] ?? ''));
                 $messages->add($article);

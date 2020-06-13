@@ -69,14 +69,16 @@ final class AppNewsletterBrowseCommand extends Command
         }
 
         foreach ($messages as $channelName => $articleCollection) {
+            if ($articleCollection->isEmpty()) {
+                continue;
+            }
+
             try {
-                if (false === $articleCollection->isEmpty()) {
-                    $this->storeMessageService->saveChannel($channelName, $articleCollection);
-                    $consoleInteract->success([
-                        'Successfully parse channel ' . $channelName,
-                        $articleCollection->count() . ' messages saved',
-                    ]);
-                }
+                $this->storeMessageService->saveChannel($channelName, $articleCollection);
+                $consoleInteract->success([
+                    'Successfully parse channel ' . $channelName,
+                    $articleCollection->count() . ' messages saved',
+                ]);
             } catch (\Throwable $throwable) {
                 $consoleInteract->error('Unable to save channel ' . $channelName . ' : ' . $throwable->getMessage());
             }

@@ -57,7 +57,7 @@ final class MessageStorage
 
     public function archiveChannel(string $channel): void
     {
-        $channelArchive = static::ARCHIVE_FOLDER . $channel;
+        $channelArchive = self::ARCHIVE_FOLDER . $channel;
         $this->filesystem->copy(
             $this->getMessageFilePath($channel),
             $channelArchive . \DIRECTORY_SEPARATOR . \date('Y') . \DIRECTORY_SEPARATOR . \date('Y-m-d_hi') . '.json'
@@ -67,7 +67,7 @@ final class MessageStorage
 
     private function getChannelDirectoryPath(string $channel): string
     {
-        return static::CURRENT_FOLDER . $channel;
+        return self::CURRENT_FOLDER . $channel;
     }
 
     private function getMessageFilePath(string $channel): string

@@ -16,14 +16,9 @@ final class AppNewsletterBuildCommand extends Command
 {
     protected static $defaultName = 'app:newsletter:build';
 
-    /**
-     * @var NewsletterBuilder
-     */
-    private $buildService;
-    /**
-     * @var NewsletterStorage
-     */
-    private $storeService;
+    private NewsletterBuilder $buildService;
+
+    private NewsletterStorage $storeService;
 
     public function __construct(
         NewsletterStorage $storeService,
