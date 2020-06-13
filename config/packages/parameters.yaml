@@ -11,7 +11,7 @@ parameters:
             We attach particular importance to the technological watch which is at the heart of our business.
             Here is a weekly summary of what we shared on Slack.
 
-    blacklist_urls:
+    blocklist_urls:
         - "slack.com/?redir="
         - "slack.com/files/"
         - "giphy.com/"
