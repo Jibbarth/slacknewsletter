@@ -1,7 +1,7 @@
 name: Slack Newsletter Workflow
 on:
     schedule:
-        - cron: '0 9 * * *'
+        - cron: '0 10 * * *'
 
 jobs:
     slacknewsletter:
@@ -31,7 +31,7 @@ jobs:
                 run: SLACK_TOKEN=${{ secrets.SLACK_TOKEN }} php bin/console app:newsletter:browse --ansi
             -   name: Build and Send
                 run: |
-                    [[ $(date +'%u') -eq 1 ]] && (php bin/console app:newsletter:build --ansi && MAILER_DSN=${{ secrets.MAILER_DSN }} php bin/console app:newsletter:send --ansi --no-archive) || echo 'skip'
+                    [[ $(date +'%u') -eq 1 ]] && (php bin/console app:newsletter:build --ansi && MAILER_DSN=${{ secrets.MAILER_DSN }} RECEIVERS=${{ secrets.RECEIVERS }} php bin/console app:newsletter:send --ansi --no-archive) || echo 'skip'
             -   name: Update browsed message
                 uses: JamesIves/github-pages-deploy-action@releases/v3
                 with:
