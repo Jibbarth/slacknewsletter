@@ -41,6 +41,9 @@
     "composer/xdebug-handler": {
         "version": "1.4.2"
     },
+    "dealerdirect/phpcodesniffer-composer-installer": {
+        "version": "v0.7.0"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -133,6 +136,9 @@
     },
     "league/flysystem": {
         "version": "1.0.69"
+    },
+    "league/mime-type-detection": {
+        "version": "1.5.1"
     },
     "linkorb/jsmin-php": {
         "version": "1.0.0"
@@ -257,6 +263,9 @@
     "phpstan/phpstan-symfony": {
         "version": "0.12.6"
     },
+    "phpunit/php-file-iterator": {
+        "version": "3.0.5"
+    },
     "phpunit/php-timer": {
         "version": "3.1.4"
     },
@@ -289,6 +298,9 @@
     },
     "sclable/xml-lint": {
         "version": "0.2.4"
+    },
+    "sebastian/cli-parser": {
+        "version": "1.0.1"
     },
     "sebastian/finder-facade": {
         "version": "2.0.0"
