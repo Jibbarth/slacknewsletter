@@ -28,6 +28,7 @@
         "symfony/framework-bundle": "^5.1",
         "symfony/mailer": "^5.1",
         "symfony/mime": "^5.1",
+        "symfony/monolog-bundle": "^3.6",
         "symfony/serializer": "5.1.*",
         "symfony/serializer-pack": "^1.0",
         "symfony/translation": "^5.1",
@@ -68,7 +69,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
@@ -83,7 +85,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "5.1.*"
+            "require": "^5.1"
         }
     },
     "minimum-stability": "stable"
