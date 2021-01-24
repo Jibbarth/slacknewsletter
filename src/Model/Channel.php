@@ -11,7 +11,7 @@ final class Channel
     private string $description;
     private ?string $image;
 
-    public function __construct(string $name, string $link, string $description, ?string $image)
+    public function __construct(string $name, string $link, string $description, ?string $image = null)
     {
         $this->name = $name;
         $this->link = $link;

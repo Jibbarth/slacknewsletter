@@ -18,6 +18,7 @@ return [
         \PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
         \SlevomatCodingStandard\Sniffs\ControlStructures\DisallowYodaComparisonSniff::class,
         \NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
+        \NunoMaduro\PhpInsights\Domain\Insights\ForbiddenSecurityIssues::class,
         \SlevomatCodingStandard\Sniffs\Classes\SuperfluousTraitNamingSniff::class,
         \PHP_CodeSniffer\Standards\Generic\Sniffs\Commenting\TodoSniff::class,
     ],

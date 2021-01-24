@@ -37,6 +37,5 @@ grumphp:
     phpstan:
       level: ~
       configuration: phpstan.neon
-    securitychecker: ~
     xmllint: ~
     yamllint: ~
