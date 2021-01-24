@@ -26,6 +26,9 @@
     "barth/dev-pack": {
         "version": "9999999-dev"
     },
+    "clue/stream-filter": {
+        "version": "v1.5.0"
+    },
     "composer/ca-bundle": {
         "version": "1.2.9"
     },
@@ -116,9 +119,6 @@
             ".php_cs.dist"
         ]
     },
-    "frlnc/php-slack": {
-        "version": "1.0.3"
-    },
     "gitonomy/gitlib": {
         "version": "v1.2.3"
     },
@@ -131,6 +131,15 @@
     "jalle19/php-yui-compressor": {
         "version": "1.0.1"
     },
+    "jane-php/json-schema-runtime": {
+        "version": "v6.3.2"
+    },
+    "jane-php/open-api-runtime": {
+        "version": "v6.3.2"
+    },
+    "jolicode/slack-php-api": {
+        "version": "v4.0.0"
+    },
     "justinrainbow/json-schema": {
         "version": "5.2.10"
     },
@@ -142,6 +151,12 @@
     },
     "league/mime-type-detection": {
         "version": "1.7.0"
+    },
+    "league/uri": {
+        "version": "6.4.0"
+    },
+    "league/uri-interfaces": {
+        "version": "2.2.0"
     },
     "linkorb/jsmin-php": {
         "version": "1.0.0"
@@ -239,8 +254,29 @@
     "php-cs-fixer/diff": {
         "version": "v1.3.1"
     },
+    "php-http/client-common": {
+        "version": "2.3.0"
+    },
+    "php-http/discovery": {
+        "version": "1.13.0"
+    },
+    "php-http/httplug": {
+        "version": "2.2.0"
+    },
+    "php-http/message": {
+        "version": "1.10.0"
+    },
     "php-http/message-factory": {
         "version": "v1.0.2"
+    },
+    "php-http/multipart-stream-builder": {
+        "version": "1.1.2"
+    },
+    "php-http/promise": {
+        "version": "1.1.0"
+    },
+    "php-jsonpointer/php-jsonpointer": {
+        "version": "v3.0.2"
     },
     "php-parallel-lint/php-parallel-lint": {
         "version": "v1.2.0"
