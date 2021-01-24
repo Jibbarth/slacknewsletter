@@ -87,8 +87,11 @@ final class BrowseService
     /**
      * @param array<\JoliCode\Slack\Api\Model\ObjsMessage> $messages
      */
-    private function processArrayOfMessages(array $messages, string $channel, ArticleCollection $articleCollection): void
-    {
+    private function processArrayOfMessages(
+        array $messages,
+        string $channel,
+        ArticleCollection $articleCollection
+    ): void {
         foreach ($messages as $message) {
             try {
                 $article = $this->messageParser->getArticle($message);
@@ -98,28 +101,29 @@ final class BrowseService
                 $this->logger->notice($throwable->getMessage());
             }
 
-            if (null !== $message->getThreadTs()) {
-                $response = $this->client->conversationsReplies([
-                    'channel' => $channel,
-                    'inclusive' => false,
-                    'ts' => $message->getThreadTs(),
-                ]);
-
-                if (!$response instanceof ConversationsRepliesGetResponse200) {
-                    continue;
-                }
-                // Currently, conversationsReplies don't return array of ObjsMessage, just an old plain array
-                $threadMessages = $this->serializer->denormalize($response->getMessages(), ObjsMessage::class . '[]');
-                // Remove first message, already treated
-                $threadMessages = \array_slice($threadMessages, 1);
-                $threadMessages = \array_map(static function (ObjsMessage $currentMessage): ObjsMessage {
-                    // Disable thread to avoid infinite loop
-                    $currentMessage->setThreadTs(null);
-
-                    return $currentMessage;
-                }, $threadMessages);
-                $this->processArrayOfMessages($threadMessages, $channel, $articleCollection);
+            if (null === $message->getThreadTs()) {
+                continue;
             }
+            $response = $this->client->conversationsReplies([
+                'channel' => $channel,
+                'inclusive' => false,
+                'ts' => $message->getThreadTs(),
+            ]);
+
+            if (!$response instanceof ConversationsRepliesGetResponse200) {
+                continue;
+            }
+            // Currently, conversationsReplies don't return array of ObjsMessage, just an old plain array
+            $threadMessages = $this->serializer->denormalize($response->getMessages(), ObjsMessage::class . '[]');
+            // Remove first message, already treated
+            $threadMessages = \array_slice($threadMessages, 1);
+            $threadMessages = \array_map(static function (ObjsMessage $currentMessage): ObjsMessage {
+                // Disable thread to avoid infinite loop
+                $currentMessage->setThreadTs(null);
+
+                return $currentMessage;
+            }, $threadMessages);
+            $this->processArrayOfMessages($threadMessages, $channel, $articleCollection);
         }
     }
 

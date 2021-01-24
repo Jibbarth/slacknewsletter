@@ -40,7 +40,10 @@ final class SlackMessageParser
         }
 
         if (null !== $message->getBlocks() && [] !== $message->getBlocks()) {
-            $linksBlock = \array_values(\array_filter($message->getBlocks()[0]->offsetGet('elements')[0]['elements'], fn (array $block) => 'link' === $block['type']));
+            $linksBlock = \array_values(\array_filter(
+                $message->getBlocks()[0]->offsetGet('elements')[0]['elements'],
+                static fn (array $block) => 'link' === $block['type']
+            ));
             if (\count($linksBlock) > 0) {
                 return $this->parseContentFromUrl($linksBlock[0]['url']);
             }
