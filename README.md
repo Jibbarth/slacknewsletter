@@ -43,12 +43,12 @@ For example :
 
 ## Build With
 
-* [Symfony 5.1](http://symfony.com/)
+* [Symfony 5.2](http://symfony.com/)
     * symfony/console
     * symfony/mailer
     * symfony/yaml
 * [FlySystem from The Php League](http://flysystem.thephpleague.com/)
-* [Frlnc Php Slack](https://github.com/Frlnc/php-slack)
+* [jolicode/slack-php-api](https://github.com/jolicode/slack-php-api)
 * [Embed](https://github.com/oscarotero/Embed)
 * [Carbon](https://carbon.nesbot.com/)
 
