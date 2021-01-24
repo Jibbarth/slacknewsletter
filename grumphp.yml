@@ -24,7 +24,7 @@ grumphp:
         - 'src'
         - 'tests'
     phpcsfixer2:
-      config: '.php_cs'
+      config: '.php_cs.dist'
       verbose: true
       diff: true
       triggered_by: ['php']

@@ -60,7 +60,7 @@ final class SlackMessageParser
         $attachment = $message['attachments'][0];
 
         if ($this->isJustMediaAttachment($attachment)) {
-            throw  new \LogicException(\sprintf('Not a valuable attachment in "%s" (only media)', $message['text']));
+            throw new \LogicException(\sprintf('Not a valuable attachment in "%s" (only media)', $message['text']));
         }
 
         if (
