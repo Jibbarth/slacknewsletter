@@ -6,23 +6,23 @@ namespace App\Command;
 
 use App\Builder\NewsletterBuilder;
 use App\Storage\NewsletterStorage;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'app:newsletter:build', description: 'Build the newsletter on parsed channels located in public/current')]
 final class AppNewsletterBuildCommand extends Command
 {
-    protected static $defaultName = 'app:newsletter:build';
-
     private NewsletterBuilder $buildService;
 
     private NewsletterStorage $storeService;
 
     public function __construct(
         NewsletterStorage $storeService,
-        NewsletterBuilder $buildService
+        NewsletterBuilder $buildService,
     ) {
         $this->storeService = $storeService;
         $this->buildService = $buildService;

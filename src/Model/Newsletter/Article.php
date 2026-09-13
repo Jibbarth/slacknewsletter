@@ -21,7 +21,7 @@ final class Article
         string $title,
         string $content,
         ?string $imageUrl,
-        ?Contributor $contributor = null
+        ?Contributor $contributor = null,
     ) {
         $this->url = $url;
         $this->title = $title;

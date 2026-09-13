@@ -6,8 +6,8 @@ namespace App\Storage;
 
 use App\Collection\ArticleCollection;
 use App\Model\Newsletter\Article;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class MessageStorage
@@ -22,7 +22,7 @@ final class MessageStorage
     public function __construct(SerializerInterface $serializer, string $publicDir)
     {
         // TODO: use flysystem services provider
-        $localAdapter = new Local($publicDir);
+        $localAdapter = new LocalFilesystemAdapter($publicDir);
         $this->filesystem = new Filesystem($localAdapter);
         $this->serializer = $serializer;
     }
@@ -51,7 +51,7 @@ final class MessageStorage
         return new ArticleCollection($this->serializer->deserialize(
             $this->filesystem->read($messagesFile),
             Article::class . '[]',
-            'json'
+            'json',
         ));
     }
 
@@ -60,7 +60,7 @@ final class MessageStorage
         $channelArchive = self::ARCHIVE_FOLDER . $channel;
         $this->filesystem->copy(
             $this->getMessageFilePath($channel),
-            $channelArchive . \DIRECTORY_SEPARATOR . \date('Y') . \DIRECTORY_SEPARATOR . \date('Y-m-d_hi') . '.json'
+            $channelArchive . \DIRECTORY_SEPARATOR . \date('Y') . \DIRECTORY_SEPARATOR . \date('Y-m-d_hi') . '.json',
         );
         $this->filesystem->delete($this->getMessageFilePath($channel));
     }
