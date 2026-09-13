@@ -46,3 +46,4 @@ cghooks.lock
 ###< phpunit/phpunit ###
 
 .php-cs-fixer.cache
+config/reference.php
