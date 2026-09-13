@@ -44,3 +44,5 @@ cghooks.lock
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+.php-cs-fixer.cache
