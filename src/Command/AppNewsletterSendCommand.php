@@ -36,7 +36,7 @@ final class AppNewsletterSendCommand extends Command
         MailerInterface $mailer,
         NewsletterStorage $newsStoreService,
         array $newsReceivers,
-        string $mailSender
+        string $mailSender,
     ) {
         $this->mailer = $mailer;
         $this->newsStoreService = $newsStoreService;
@@ -53,7 +53,7 @@ final class AppNewsletterSendCommand extends Command
                 'no-archive',
                 null,
                 InputOption::VALUE_NONE,
-                'no archive news after send'
+                'no archive news after send',
             )
             ->setDescription('Send a mail with the generated news')
         ;

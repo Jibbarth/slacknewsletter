@@ -22,7 +22,7 @@ final class AppNewsletterBuildCommand extends Command
 
     public function __construct(
         NewsletterStorage $storeService,
-        NewsletterBuilder $buildService
+        NewsletterBuilder $buildService,
     ) {
         $this->storeService = $storeService;
         $this->buildService = $buildService;

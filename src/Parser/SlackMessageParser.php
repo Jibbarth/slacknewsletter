@@ -25,7 +25,7 @@ final class SlackMessageParser
      */
     public function __construct(
         UriParser $uriParser,
-        array $blocklistUrls
+        array $blocklistUrls,
     ) {
         $this->uriParser = $uriParser;
         $this->blocklistUrls = $blocklistUrls;
@@ -42,7 +42,7 @@ final class SlackMessageParser
         if (null !== $message->getBlocks() && [] !== $message->getBlocks()) {
             $linksBlock = \array_values(\array_filter(
                 $message->getBlocks()[0]->offsetGet('elements')[0]['elements'],
-                static fn (array $block) => 'link' === $block['type']
+                static fn (array $block) => 'link' === $block['type'],
             ));
             if (\count($linksBlock) > 0) {
                 return $this->parseContentFromUrl($linksBlock[0]['url']);
@@ -82,7 +82,7 @@ final class SlackMessageParser
             $attachment->getTitleLink() ?? '',
             $attachment->getTitle() ?? '',
             $attachment->getText() ?? $attachment->getFallback() ?? '',
-            $attachment->getThumbUrl() ?? $attachment->getImageUrl()
+            $attachment->getThumbUrl() ?? $attachment->getImageUrl(),
         );
     }
 
@@ -105,7 +105,7 @@ final class SlackMessageParser
             (string) $info->__get('url'),
             $info->__get('title'),
             $info->__get('description') ?? '',
-            (string) $info->__get('image')
+            (string) $info->__get('image'),
         );
     }
 

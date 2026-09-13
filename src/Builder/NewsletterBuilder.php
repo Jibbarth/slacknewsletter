@@ -23,7 +23,7 @@ final class NewsletterBuilder
     public function __construct(
         NewsletterRender $renderService,
         MessageStorage $storeMessageService,
-        ChannelRepository $channelRepository
+        ChannelRepository $channelRepository,
     ) {
         $this->renderService = $renderService;
         $this->channelRepository = $channelRepository;
@@ -92,7 +92,7 @@ final class NewsletterBuilder
             static function (Article $article): Contributor {
                 return $article->getContributor();
             },
-            $section->getArticles()->toArray()
+            $section->getArticles()->toArray(),
         );
 
         $contributorList = [];

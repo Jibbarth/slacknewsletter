@@ -20,7 +20,7 @@ final class NewsletterRender
      */
     public function __construct(
         Environment $twig,
-        array $mailTemplate
+        array $mailTemplate,
     ) {
         $this->twig = $twig;
         $this->mailTemplate = $mailTemplate;

@@ -30,7 +30,7 @@ final class AppNewsletterBrowseCommand extends Command
         BrowseService $browseService,
         MessageStorage $storeMessageService,
         ChannelRepository $channelRepository,
-        int $daysToBrowse
+        int $daysToBrowse,
     ) {
         $this->browseService = $browseService;
         $this->channelRepository = $channelRepository;
@@ -49,7 +49,7 @@ final class AppNewsletterBrowseCommand extends Command
                 'd',
                 InputOption::VALUE_OPTIONAL,
                 'days to browse',
-                $this->daysToBrowse
+                $this->daysToBrowse,
             )
         ;
     }

@@ -51,7 +51,7 @@ final class MessageStorage
         return new ArticleCollection($this->serializer->deserialize(
             $this->filesystem->read($messagesFile),
             Article::class . '[]',
-            'json'
+            'json',
         ));
     }
 
@@ -60,7 +60,7 @@ final class MessageStorage
         $channelArchive = self::ARCHIVE_FOLDER . $channel;
         $this->filesystem->copy(
             $this->getMessageFilePath($channel),
-            $channelArchive . \DIRECTORY_SEPARATOR . \date('Y') . \DIRECTORY_SEPARATOR . \date('Y-m-d_hi') . '.json'
+            $channelArchive . \DIRECTORY_SEPARATOR . \date('Y') . \DIRECTORY_SEPARATOR . \date('Y-m-d_hi') . '.json',
         );
         $this->filesystem->delete($this->getMessageFilePath($channel));
     }

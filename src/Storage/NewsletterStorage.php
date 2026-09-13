@@ -62,7 +62,7 @@ final class NewsletterStorage
 
         $this->filesystem->copy(
             $this->getNewsPath(),
-            \sprintf('%s/%s/%s', self::ARCHIVE_FOLDER, $now->year, $newsName)
+            \sprintf('%s/%s/%s', self::ARCHIVE_FOLDER, $now->year, $newsName),
         );
         $this->filesystem->delete($this->getNewsPath());
     }

@@ -26,7 +26,7 @@ final class ChannelRepository
         $channels = $serializer->deserialize(
             \Safe\file_get_contents($filePath),
             Channel::class . '[]',
-            'json'
+            'json',
         );
         $this->collection = new ChannelCollection($channels);
     }

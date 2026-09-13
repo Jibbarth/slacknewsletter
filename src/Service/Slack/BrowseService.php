@@ -33,7 +33,7 @@ final class BrowseService
         LoggerInterface $logger,
         SlackMessageParser $messageParser,
         CacheInterface $cache,
-        string $slackToken
+        string $slackToken,
     ) {
         $this->client = \JoliCode\Slack\ClientFactory::create($slackToken);
         $this->logger = $logger;
@@ -52,7 +52,7 @@ final class BrowseService
         float $oldest,
         int $max = 1000,
         ?ArticleCollection $messages = null,
-        ?int $latest = null
+        ?int $latest = null,
     ): ArticleCollection {
         if (null === $messages) {
             $messages = new ArticleCollection([]);
@@ -90,7 +90,7 @@ final class BrowseService
     private function processArrayOfMessages(
         array $messages,
         string $channel,
-        ArticleCollection $articleCollection
+        ArticleCollection $articleCollection,
     ): void {
         foreach ($messages as $message) {
             try {
@@ -139,7 +139,7 @@ final class BrowseService
 
             return new Contributor(
                 $profile->getRealName() ?? 'Undefined',
-                $profile->getImage72() ?? ''
+                $profile->getImage72() ?? '',
             );
         });
     }
