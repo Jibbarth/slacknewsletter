@@ -11,18 +11,5 @@ services:
         autowire: true
         autoconfigure: true
         bind:
-            string $projectDir: '%kernel.project_dir%'
-            string $slackToken: '%slack_token%'
-            array $blocklistUrls: '%blocklist_urls%'
-            int $daysToBrowse: '%days_to_browse%'
             string $publicDir: '%kernel.project_dir%/public/'
-            array $mailTemplate: '%mail_template%'
-            array $newsReceivers: '%news_receivers%'
-            string $mailSender: '%mail_sender%'
 
-    App\:
-        resource: '../src/*'
-
-    App\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
