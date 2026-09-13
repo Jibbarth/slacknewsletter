@@ -33,7 +33,6 @@ final class NewsletterBuilder
     public function build(): string
     {
         $messages = $this->getMessagesToDisplay();
-        $compresser = \WyriHaximus\HtmlCompress\Factory::construct();
 
         // TODO : option to disable/enable top contributors
         $messages = $this->addTopContributors($messages);
@@ -43,7 +42,7 @@ final class NewsletterBuilder
 
         $newsletter = $this->renderService->render($messages);
 
-        return $compresser->compress($newsletter);
+        return preg_replace('/\s+/', ' ', $newsletter);
     }
 
     public function buildAndArchive(): string
@@ -64,9 +63,6 @@ final class NewsletterBuilder
         /** @var \App\Model\Channel $channel */
         foreach ($this->channelRepository->getAll() as $channel) {
             $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel->getName());
-
-            // TODO : remove duplication
-            //$channelMessages = $this->removeDuplicationInMessages($channelMessages);
 
             if (false === $channelMessages->isEmpty()) {
                 $messages[$channel->getName()] = new Section($channel, $channelMessages);
@@ -125,12 +121,4 @@ final class NewsletterBuilder
         return \array_slice($contributorList, 0, $max, true);
     }
 
-    /*private function removeDuplicationInMessages(array $messages): array
-    {
-        // In case browse method retrieve twice same message
-        return \array_unique($messages, SORT_REGULAR);
-
-        // TODO : Filter duplicate link to avoid returning twice in the same part.
-        // IE some users like reshare same content -_-'
-    }*/
 }

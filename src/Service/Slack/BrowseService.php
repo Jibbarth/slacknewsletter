@@ -62,11 +62,11 @@ final class BrowseService
             'channel' => $channel,
             //'count' => $max,
             'inclusive' => true,
-            'oldest' => $oldest,
+            'oldest' => (string) $oldest,
         ];
 
         if (null !== $latest) {
-            $parameters['latest'] = $latest;
+            $parameters['latest'] = (string) $latest;
         }
 
         $response = $this->client->conversationsHistory($parameters);

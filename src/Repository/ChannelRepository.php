@@ -18,7 +18,9 @@ final class ChannelRepository
     {
         $filePath = \sprintf('%s/config/%s', $projectDir, self::FILENAME);
         if (!\file_exists($filePath)) {
-            throw new \LogicException('Unable to find ' . self::FILENAME);
+            $this->collection = new ChannelCollection([]);
+
+            return;
         }
 
         $channels = $serializer->deserialize(
