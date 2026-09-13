@@ -1,6 +1,6 @@
 {
     "name": "barth/slacknewsletter",
-    "type": "project",
+    "type": "symfony-bundle",
     "authors": [
         {
             "name": "Jibé Barth",
@@ -8,7 +8,7 @@
         }
     ],
     "description": "Self managed newsletter for Slack",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "php": "^8.4",
         "ext-iconv": "*",
@@ -57,7 +57,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "Barth\\SlackNewsletterBundle\\": "src/"
         }
     },
     "autoload-dev": {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Storage;
+namespace Barth\SlackNewsletterBundle\Storage;
 
-use App\Collection\ArticleCollection;
-use App\Model\Newsletter\Article;
+use Barth\SlackNewsletterBundle\Collection\ArticleCollection;
+use Barth\SlackNewsletterBundle\Model\Newsletter\Article;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use Symfony\Component\Serializer\SerializerInterface;

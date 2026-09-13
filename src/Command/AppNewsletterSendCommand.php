@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Barth\SlackNewsletterBundle\Command;
 
-use App\Storage\NewsletterStorage;
+use Barth\SlackNewsletterBundle\Storage\NewsletterStorage;
 use Carbon\Carbon;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -68,9 +69,13 @@ final class AppNewsletterSendCommand extends Command
             ->from($sender)
             ->subject($subject)
             ->html($this->newsStoreService->getNewsContent());
-        $message->getHeaders()->addMailboxListHeader('To', $this->newsReceivers);
 
-        $this->mailer->send($message);
+        $recipients = array_map(
+            static fn (string $receiver): Address => new Address($receiver),
+            $this->newsReceivers,
+        );
+
+        $this->mailer->send($message, new Envelope($sender, $recipients));
 
         if (false === $input->getOption('no-archive')) {
             $this->newsStoreService->archiveNews();

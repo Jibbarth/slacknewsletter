@@ -1,0 +1,2 @@
+slack_newsletter:
+    resource: "@SlackNewsletterBundle/config/bundle/routing.php"

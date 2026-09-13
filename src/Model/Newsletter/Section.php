@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Newsletter;
+namespace Barth\SlackNewsletterBundle\Model\Newsletter;
 
-use App\Collection\ArticleCollection;
-use App\Model\Channel;
+use Barth\SlackNewsletterBundle\Collection\ArticleCollection;
+use Barth\SlackNewsletterBundle\Model\Channel;
 
 final class Section
 {
@@ -20,7 +20,7 @@ final class Section
     private ArticleCollection $articles;
 
     /**
-     * @var array<array<string, \App\Model\Newsletter\Contributor|int>>
+     * @var array<array<string, \Barth\SlackNewsletterBundle\Model\Newsletter\Contributor|int>>
      */
     private array $topContributors = [];
 
@@ -67,7 +67,7 @@ final class Section
     }
 
     /**
-     * @param array<array<string, \App\Model\Newsletter\Contributor|int>> $topContributors
+     * @param array<array<string, \Barth\SlackNewsletterBundle\Model\Newsletter\Contributor|int>> $topContributors
      */
     public function withTopContributors(array $topContributors): self
     {
@@ -79,7 +79,7 @@ final class Section
     }
 
     /**
-     * @return array<array<string, \App\Model\Newsletter\Contributor|int>>
+     * @return array<array<string, \Barth\SlackNewsletterBundle\Model\Newsletter\Contributor|int>>
      */
     public function getTopContributors(): array
     {

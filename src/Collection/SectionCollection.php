@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Collection;
+namespace Barth\SlackNewsletterBundle\Collection;
 
-use App\Model\Newsletter\Section;
+use Barth\SlackNewsletterBundle\Model\Newsletter\Section;
 use Ramsey\Collection\AbstractCollection;
 
 /**

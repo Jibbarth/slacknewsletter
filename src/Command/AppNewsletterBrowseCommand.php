@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Barth\SlackNewsletterBundle\Command;
 
-use App\Repository\ChannelRepository;
-use App\Service\Slack\BrowseService;
-use App\Storage\MessageStorage;
+use Barth\SlackNewsletterBundle\Repository\ChannelRepository;
+use Barth\SlackNewsletterBundle\Service\Slack\BrowseService;
+use Barth\SlackNewsletterBundle\Storage\MessageStorage;
 use Carbon\Carbon;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -63,7 +63,7 @@ final class AppNewsletterBrowseCommand extends Command
         $timestamp = Carbon::now()->subDays($daysToBrowse)->getTimestamp();
 
         $messages = [];
-        /** @var \App\Model\Channel $channel */
+        /** @var \Barth\SlackNewsletterBundle\Model\Channel $channel */
         foreach ($this->channelRepository->getAll() as $channel) {
             $messages[$channel->getName()] = $this->browseService->getChannelHistory($channel->getLink(), $timestamp);
         }

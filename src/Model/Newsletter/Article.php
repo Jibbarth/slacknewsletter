@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Newsletter;
+namespace Barth\SlackNewsletterBundle\Model\Newsletter;
 
 final class Article
 {

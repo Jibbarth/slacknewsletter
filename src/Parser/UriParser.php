@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Parser;
+namespace Barth\SlackNewsletterBundle\Parser;
 
 final class UriParser
 {

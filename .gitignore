@@ -47,3 +47,7 @@ cghooks.lock
 
 .php-cs-fixer.cache
 config/reference.php
+
+###> Tooling ###
+/.opencode/
+/.specify/
