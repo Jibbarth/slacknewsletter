@@ -11,94 +11,148 @@ This application allows you to generate a newsletter from your [Slack](https://s
 It goes through the channels looking for links, combines them into a html file, and sends it by email.
 It's ideal for keeping track of your finds when the historical Slack reaches its limit.
 
-## Installation & Configuration
+## Installation
 
-1. Clone the project and launch `composer install` inside.
+Install the bundle via Composer:
 
-2. Generate a [Token on your slack workspace](https://github.com/Jibbarth/slacknewsletter/wiki/Generate-an-App-to-get-a-Token)
+```bash
+composer require barth/slacknewsletter
+```
 
-3. In your `.env.local`, complete your smtp configuration, the receivers, and your Slack token like that :
+If Symfony Flex is not enabled, register the bundle manually in `config/bundles.php`:
+
+```php
+return [
+    // ...
+    Barth\SlackNewsletterBundle\SlackNewsletterBundle::class => ['all' => true],
+];
+```
+
+## Configuration
+
+Create `config/packages/slack_newsletter.yaml`:
+
+```yaml
+slack_newsletter:
+    slack_token: '%env(SLACK_TOKEN)%'
+    blocklist_urls: []
+    days_to_browse: 7
+    mail_sender: 'newsletter@example.com'
+    news_receivers:
+        - 'me@example.net'
+        - 'team@example.net'
+    channels:
+        - { name: 'general', link: 'CXXXXXXX', description: 'General discussions' }
+        - { name: 'tech', link: 'CYYYYYYYY', description: 'Technical topics', image: 'https://example.com/tech.png' }
+    mail_template:
+        main_color: '#333'
+        background_color: '#f7f7f7'
+        company_name: 'Your Company'
+        base_slack_url: 'https://yourworkspace.slack.com'
+```
+
+**Configuration Keys:**
+- `slack_token`: Slack API token (required). Generate one at [Slack Apps](https://github.com/Jibbarth/slacknewsletter/wiki/Generate-an-App-to-get-a-Token).
+- `blocklist_urls`: Array of URL patterns to exclude (optional).
+- `days_to_browse`: Days of history to retrieve (default: 7).
+- `mail_sender`: From address for emails (required).
+- `news_receivers`: Array of recipient emails (required).
+- `channels`: Array of Slack channels with `name`, `link` (channel ID), `description`, and optional `image`.
+- `mail_template`: Template customization (all fields optional).
+
+**Migrating from `channels.json`?** Use the environment preprocessor:
+
+```yaml
+slack_newsletter:
+    channels: '%env(json:file:resolve:CHANNELS_FILE)%'
+```
+
+And in `.env`:
+```
+CHANNELS_FILE=config/channels.json
+```
+
+Set environment variables in `.env.local`:
 
 ```
 MAILER_DSN=smtp://awesome-smtp:25
-RECEIVERS=me@example.net,mailing-list@example.net
 SLACK_TOKEN=xoxp-XXXXXXXXX-XXXXXXX-XXXXXXXXX
 ```
 
-4. Choose your channels to browse and add them in `config/channels.json`.
-You can check out the `config/channels.json.dist` to see how add a new channels
+## Usage
 
-5. (OPTIONNAL) : Pimp your newsletter by altering parameters in `config/package/parameters.yaml`
+The bundle provides three commands:
 
-6. Configure your cron to execute command to browse, build, and send newsletter.
-
-For example :
-
+**1. Browse channels and store messages:**
 ```bash
-## Every day at 8am, browse channels and store them
+php bin/console app:newsletter:browse
+```
+Options:
+- `-d, --days=DAYS`: Override `days_to_browse` config (e.g., `-d 5`).
+
+**2. Build the newsletter HTML:**
+```bash
+php bin/console app:newsletter:build
+```
+Options:
+- `--no-archive`: Keep messages after building (don't move to archive).
+
+**3. Send the newsletter via email:**
+```bash
+php bin/console app:newsletter:send
+```
+Options:
+- `--no-archive`: Keep newsletter after sending (don't move to archive).
+
+**Cron example:**
+```bash
+# Every day at 8am, browse channels
 0 8 * * * php bin/console app:newsletter:browse
-## Every monday at 8:05 am, build the newsletter and send it
+# Every Monday at 8:05am, build and send
 5 8 * * 1 php bin/console app:newsletter:build && php bin/console app:newsletter:send
 ```
 
-## Build With
+## Testing
 
-* [Symfony 5.2](http://symfony.com/)
-    * symfony/console
-    * symfony/mailer
-    * symfony/yaml
-* [FlySystem from The Php League](http://flysystem.thephpleague.com/)
+No automated test suite yet. Manual testing:
+
+1. Browse channels: `php bin/console app:newsletter:browse -d 5`
+2. Build newsletter: `php bin/console app:newsletter:build --no-archive`
+3. View in browser: `symfony server:start -d` → [http://127.0.0.1:8000/test/mail](http://127.0.0.1:8000/test/mail)
+4. Send test email: `php bin/console app:newsletter:send --no-archive`
+
+The `--no-archive` flag prevents archiving for repeated testing.
+
+## Customization
+
+Override templates by copying from `vendor/barth/slacknewsletter/templates/` to your project's `templates/bundles/SlackNewsletterBundle/`.
+
+## Contributing
+
+Contributions welcome. Fork, branch, PR. Include context in your PR description.
+
+## License
+
+MIT License. See `composer.json` or [LICENSE](LICENSE) file.
+
+## Built With
+
+* [Symfony 8.0](http://symfony.com/)
+* [FlySystem](http://flysystem.thephpleague.com/)
 * [jolicode/slack-php-api](https://github.com/jolicode/slack-php-api)
 * [Embed](https://github.com/oscarotero/Embed)
 * [Carbon](https://carbon.nesbot.com/)
 
-Thank to theirs awesome work.
+## Versioning
 
-## Customize the newsletter
+- **Major**: breaking changes allowed.
+- **Minor**: backward‑compatible changes only.
+- **Patch**: bug fixes only.
 
-If you want to customize the newsletter, all templates are in `templates` folder.
-
-Before testing rendering, you have to retrieve some messages :
-
-```bash
-php bin/console app:newsletter:browse -d 5
-```
-> The `-d` or `--days` is to specified how many days to retrieve.
-You can have lots of data by this way.
-
-To test the view in web-browser, launch a web server :
-
-```bash
-symfony local:server:start -d # With Symfony CLI binary
-php -S localhost:8000 -t public # Using php built-in web-server
-```
-and go to [http://127.0.0.1:8000/test/mail](http://127.0.0.1:8000/test/mail)
-
-But you probably have to send emails to test compatibility with emails viewer.
-
-You can launch theses commands to avoid archivation of messages and builded news.
-
-```bash
-php bin/console app:newsletter:build --no-archive
-php bin/console app:newsletter:send --no-archive
-```
-
-## Contribute
-
-First of all, thank you for contributing ♥
-
-If you find any typo/misconfiguration/... please send a PR or open an issue.
-
-Also, while creating your PR, please write a description which gives the context and/or explains why you are creating it.
-
-## TODOs
-
-- [x] Make installation as simple as a `composer create-project barth/slacknewsletter`
-- [x] Browse private channel
-- [x] Make sure it'll work with [Slack App](https://api.slack.com/apps) and provide a configuration guide
-- [ ] Write Tests Suite
-- [ ] Add translations
-- [ ] Easily extend with other Team Collaboration Software (Discord, HipChat...)
+**Minimum Requirements:**
+- PHP >= 8.4
+- Symfony >= 8.0
+- Composer >= 2.0
 
 
 
