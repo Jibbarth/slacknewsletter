@@ -18,10 +18,12 @@ jobs:
                     persist-credentials: false
             - uses: shivammathur/setup-php@v2
               with:
-                  php-version: 7.4
+                  php-version: 8.4
                   coverage: none
-            - run: composer install --no-progress
-            - name: Grumphp
-              run: vendor/bin/grumphp run --ansi
-            - name: PHPInsights
-              run: vendor/bin/phpinsights -n --ansi
+            - run: composer install --no-progress --no-interaction
+            - name: PHP CS Fixer
+              run: vendor/bin/php-cs-fixer fix --dry-run --diff
+            - name: Lint YAML
+              run: bin/console lint:yaml config/
+            - name: Lint container
+              run: bin/console lint:container --env=prod

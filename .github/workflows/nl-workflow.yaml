@@ -9,16 +9,13 @@ jobs:
         env:
             CHANNELS: ${{ secrets.CHANNELS }}
         steps:
-            -   name: Checkout 🛎️
-                uses: actions/checkout@v2
-                with:
-                    persist-credentials: false
+            -   uses: actions/checkout@v4
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 7.4
+                    php-version: 8.4
                     coverage: none
-            -   name: Composer install 📦
-                run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-suggest
+            -   name: Composer install
+                run: composer install --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
             -   name: Create Channels.json
                 run: echo $CHANNELS > config/channels.json
             -   run: mkdir -p public/messages/
