@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Slack;
+namespace Barth\SlackNewsletterBundle\Service\Slack;
 
-use App\Collection\ArticleCollection;
-use App\Model\Newsletter\Contributor;
-use App\Parser\SlackMessageParser;
+use Barth\SlackNewsletterBundle\Collection\ArticleCollection;
+use Barth\SlackNewsletterBundle\Model\Newsletter\Contributor;
+use Barth\SlackNewsletterBundle\Parser\SlackMessageParser;
 use JoliCode\Slack\Api\Client;
 use JoliCode\Slack\Api\Model\ConversationsHistoryGetResponse200;
 use JoliCode\Slack\Api\Model\ConversationsRepliesGetResponse200;

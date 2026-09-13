@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Render;
+namespace Barth\SlackNewsletterBundle\Render;
 
-use App\Collection\SectionCollection;
+use Barth\SlackNewsletterBundle\Collection\SectionCollection;
 use Twig\Environment;
 
 final class NewsletterRender

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Builder;
+namespace Barth\SlackNewsletterBundle\Builder;
 
-use App\Collection\SectionCollection;
-use App\Model\Newsletter\Article;
-use App\Model\Newsletter\Contributor;
-use App\Model\Newsletter\Section;
-use App\Render\NewsletterRender;
-use App\Repository\ChannelRepository;
-use App\Storage\MessageStorage;
+use Barth\SlackNewsletterBundle\Collection\SectionCollection;
+use Barth\SlackNewsletterBundle\Model\Newsletter\Article;
+use Barth\SlackNewsletterBundle\Model\Newsletter\Contributor;
+use Barth\SlackNewsletterBundle\Model\Newsletter\Section;
+use Barth\SlackNewsletterBundle\Render\NewsletterRender;
+use Barth\SlackNewsletterBundle\Repository\ChannelRepository;
+use Barth\SlackNewsletterBundle\Storage\MessageStorage;
 
 final class NewsletterBuilder
 {
@@ -49,7 +49,7 @@ final class NewsletterBuilder
     {
         $newsletter = $this->build();
 
-        /** @var \App\Model\Channel $channel */
+        /** @var \Barth\SlackNewsletterBundle\Model\Channel $channel */
         foreach ($this->channelRepository->getAll() as $channel) {
             $this->storeMessageService->archiveChannel($channel->getName());
         }
@@ -60,7 +60,7 @@ final class NewsletterBuilder
     private function getMessagesToDisplay(): SectionCollection
     {
         $messages = [];
-        /** @var \App\Model\Channel $channel */
+        /** @var \Barth\SlackNewsletterBundle\Model\Channel $channel */
         foreach ($this->channelRepository->getAll() as $channel) {
             $channelMessages = $this->storeMessageService->retrieveMessagesForChannel($channel->getName());
 
@@ -84,7 +84,7 @@ final class NewsletterBuilder
     }
 
     /**
-     * @return array<array<string, \App\Model\Newsletter\Contributor|int>>
+     * @return array<array<string, \Barth\SlackNewsletterBundle\Model\Newsletter\Contributor|int>>
      */
     private function getTopContributorsForSection(Section $section, int $max = 5): array
     {

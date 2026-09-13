@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Parser;
+namespace Barth\SlackNewsletterBundle\Parser;
 
-use App\Model\Newsletter\Article;
+use Barth\SlackNewsletterBundle\Model\Newsletter\Article;
 use Embed\Embed;
 use JoliCode\Slack\Api\Model\ObjsMessage;
 use JoliCode\Slack\Api\Model\ObjsMessageAttachmentsItem;

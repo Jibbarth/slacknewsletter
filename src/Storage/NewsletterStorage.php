@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Storage;
+namespace Barth\SlackNewsletterBundle\Storage;
 
 use Carbon\Carbon;
 use League\Flysystem\Filesystem;

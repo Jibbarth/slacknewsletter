@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Barth\SlackNewsletterBundle\Command;
 
-use App\Builder\NewsletterBuilder;
-use App\Storage\NewsletterStorage;
+use Barth\SlackNewsletterBundle\Builder\NewsletterBuilder;
+use Barth\SlackNewsletterBundle\Storage\NewsletterStorage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
