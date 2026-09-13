@@ -72,7 +72,7 @@ final class AppNewsletterSendCommand extends Command
 
         $recipients = array_map(
             static fn (string $receiver): Address => new Address($receiver),
-            $this->newsReceivers
+            $this->newsReceivers,
         );
 
         $this->mailer->send($message, new Envelope($sender, $recipients));

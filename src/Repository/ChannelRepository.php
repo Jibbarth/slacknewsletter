@@ -14,7 +14,7 @@ final class ChannelRepository
     public function __construct(array $channelsData)
     {
         $channels = \array_map(
-            static fn(array $data): Channel => new Channel(
+            static fn (array $data): Channel => new Channel(
                 $data['name'],
                 $data['link'],
                 $data['description'],
