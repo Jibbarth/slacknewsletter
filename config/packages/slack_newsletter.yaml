@@ -1,0 +1,24 @@
+slack_newsletter:
+    slack_token: '%env(SLACK_TOKEN)%'
+    blocklist_urls:
+        - 'http://example.com'
+    days_to_browse: 1
+    mail_sender: 'noreply@example.com'
+    news_receivers:
+        - 'user@example.com'
+    channels: []
+        # Example:
+        # - name: 'general'
+        #   link: 'https://yourworkspace.slack.com/archives/C1234567890'
+        #   description: 'General channel'
+        #   image: null
+        # Or migrate from channels.json:
+        # channels: '%env(json:file:resolve:CHANNELS_FILE)%'
+    mail_template:
+        main_color: '#333'
+        background_color: '#f7f7f7'
+        section_title_color: '#FFF'
+        logo: ~
+        company_name: ~
+        base_slack_url: ~
+        summary: ~
