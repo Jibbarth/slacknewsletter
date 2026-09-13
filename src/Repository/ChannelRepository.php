@@ -2,31 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Barth\SlackNewsletterBundle\Repository;
 
-use App\Collection\ChannelCollection;
-use App\Model\Channel;
-use Symfony\Component\Serializer\SerializerInterface;
+use Barth\SlackNewsletterBundle\Collection\ChannelCollection;
+use Barth\SlackNewsletterBundle\Model\Channel;
 
 final class ChannelRepository
 {
-    private const FILENAME = 'channels.json';
-
     private ChannelCollection $collection;
 
-    public function __construct(SerializerInterface $serializer, string $projectDir)
+    public function __construct(array $channelsData)
     {
-        $filePath = \sprintf('%s/config/%s', $projectDir, self::FILENAME);
-        if (!\file_exists($filePath)) {
-            $this->collection = new ChannelCollection([]);
-
-            return;
-        }
-
-        $channels = $serializer->deserialize(
-            \Safe\file_get_contents($filePath),
-            Channel::class . '[]',
-            'json',
+        $channels = \array_map(
+            static fn(array $data): Channel => new Channel(
+                $data['name'],
+                $data['link'],
+                $data['description'],
+                $data['image'] ?? null,
+            ),
+            $channelsData,
         );
         $this->collection = new ChannelCollection($channels);
     }
