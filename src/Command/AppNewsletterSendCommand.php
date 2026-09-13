@@ -6,6 +6,7 @@ namespace App\Command;
 
 use App\Storage\NewsletterStorage;
 use Carbon\Carbon;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,10 +16,9 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
+#[AsCommand(name: 'app:newsletter:send', description: 'Send a mail with the generated news')]
 final class AppNewsletterSendCommand extends Command
 {
-    protected static $defaultName = 'app:newsletter:send';
-
     private NewsletterStorage $newsStoreService;
     /**
      * @var array<string>

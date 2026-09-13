@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Storage;
 
 use Carbon\Carbon;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 
 final class NewsletterStorage
 {
@@ -17,7 +17,7 @@ final class NewsletterStorage
 
     public function __construct(string $publicDir)
     {
-        $localAdapter = new Local($publicDir);
+        $localAdapter = new LocalFilesystemAdapter($publicDir);
         $this->filesystem = new Filesystem($localAdapter);
     }
 

@@ -6,13 +6,11 @@ namespace App\Controller;
 
 use App\Builder\NewsletterBuilder;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class TestMailController
 {
-    /**
-     * @Route("/test/mail", name="test_mail")
-     */
+    #[Route('/test/mail', name: 'test_mail')]
     public function index(NewsletterBuilder $buildService): Response
     {
         $newsletter = $buildService->build();

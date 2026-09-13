@@ -6,8 +6,8 @@ namespace App\Storage;
 
 use App\Collection\ArticleCollection;
 use App\Model\Newsletter\Article;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class MessageStorage
@@ -22,7 +22,7 @@ final class MessageStorage
     public function __construct(SerializerInterface $serializer, string $publicDir)
     {
         // TODO: use flysystem services provider
-        $localAdapter = new Local($publicDir);
+        $localAdapter = new LocalFilesystemAdapter($publicDir);
         $this->filesystem = new Filesystem($localAdapter);
         $this->serializer = $serializer;
     }
